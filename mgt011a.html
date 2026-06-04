@@ -191,6 +191,7 @@ a{color:var(--accent);text-decoration:none}
   <button class="tab" onclick="sw('je',this)">Journal Drills</button>
   <button class="tab" onclick="sw('formulas',this)">Formula Sheet</button>
   <button class="tab" onclick="sw('mistakes',this)">Common Mistakes</button>
+  <button class="tab" onclick="sw('cquiz',this)">Chapter Quizzes</button>
 </div>
 
 <!-- ===== NOTES ===== -->
@@ -898,6 +899,37 @@ Dr. Deferred Revenue 2,400
 </div>
 </div>
 
+
+<!-- ===== CHAPTER QUIZZES ===== -->
+<div id="panel-cquiz" class="panel">
+<div id="cq-setup">
+  <p class="flabel">Select a chapter quiz</p>
+  <div class="fpills" style="margin-bottom:1.5rem">
+    <button class="fp on" onclick="setCQ(0,this)">Chapter 1</button>
+    <button class="fp" onclick="setCQ(1,this)">Chapter 2</button>
+    <button class="fp" onclick="setCQ(2,this)">Chapter 3</button>
+    <button class="fp" onclick="setCQ(3,this)">Chapter 5</button>
+    <button class="fp" onclick="setCQ(4,this)">Chapter 6</button>
+    <button class="fp" onclick="setCQ(5,this)">Chapter 7</button>
+    <button class="fp" onclick="setCQ(6,this)">Ch. 8 &amp; 9</button>
+  </div>
+  <button class="btn btn-p" onclick="startCQ()" style="width:100%;justify-content:center;padding:.75rem">Start Quiz &rarr;</button>
+</div>
+<div id="cq-active" style="display:none">
+  <div class="qhdr"><span class="qnum" id="cq-num">Q 1 of 5</span><span class="qscore" id="cq-sc">0 correct</span></div>
+  <div class="pbar"><div class="pfill" id="cq-bar" style="width:0%"></div></div>
+  <div class="qbox" id="cq-text"></div>
+  <div class="opts" id="cq-opts"></div>
+  <div class="exp" id="cq-exp"></div>
+  <button class="btn btn-p" id="cq-next" onclick="nextCQ()" style="display:none;width:100%;justify-content:center">Next &rarr;</button>
+</div>
+<div id="cq-result" style="display:none;text-align:center;padding:3rem 1rem">
+  <div class="score-big" id="cq-rpct"></div>
+  <p style="color:var(--muted);margin-bottom:1.5rem" id="cq-rmsg"></p>
+  <button class="btn btn-o" onclick="resetCQ()">Try again</button>
+</div>
+</div>
+
 </div><!-- study -->
 
 <footer class="footer">
@@ -1337,6 +1369,121 @@ function showFullEntry(){
 function prevJE(){if(jeI>0){jeI--;renderJE();}}
 function nextJE(){jeI=(jeI+1)%JE.length;renderJE();}
 renderJE();
+
+const CQ_BANKS = [
+  // Chapter 1
+  [
+    {q:"What are the obligations or debts that a business must pay at some future time because of past transactions or events called, and how are they presented?",opts:["Expenses on the income statement","Equity on the balance sheet","Dividends on the statement of stockholders equity","Liabilities on the balance sheet"],ans:3,exp:"Liabilities are obligations from past transactions, presented on the balance sheet. Examples: accounts payable, notes payable, salaries payable."},
+    {q:"Which of the following activities is an example of an investing activity?",opts:["Selling merchandise online","Receiving a loan from a bank","Purchasing a delivery truck","Issuing shares of stock in exchange for cash"],ans:2,exp:"Investing activities involve purchasing or selling long-term assets. Selling merchandise = operating. Receiving a loan and issuing stock = financing."},
+    {q:"Assets must always equal the sum of liabilities plus stockholders' equity.",opts:["True","False"],ans:0,exp:"True. This is the fundamental accounting equation: Assets = Liabilities + Equity. Every transaction keeps it balanced."},
+    {q:"Which financial statement is net income (revenue minus expenses) calculated on?",opts:["Balance Sheet","Income Statement","Statement of Equity","Statement of Cash Flows"],ans:1,exp:"Net income is calculated on the Income Statement. The balance sheet shows financial position; the other statements cover equity changes and cash flows."},
+    {q:"What are the resources of a company called? (Examples: cash, building, machinery, furniture, supplies)",opts:["Revenue","Asset","Equity","Liabilities"],ans:1,exp:"Resources owned by a company are called Assets. They appear on the left/top of the balance sheet."},
+  ],
+  // Chapter 2
+  [
+    {q:"Which of the following accounts has a credit normal balance (increased by a credit)?",opts:["Salaries expense","Inventory","Dividends","Revenue"],ans:3,exp:"Revenue has a credit normal balance. Assets, expenses, and dividends all have debit normal balances. Liabilities, equity, and revenue have credit normal balances."},
+    {q:"The Cash T-account of Franklin, Inc. has a beginning balance of $100,000. During the year, $40,000 was debited and $55,000 was credited. What is the ending balance of Cash?",opts:["$85,000","$115,000","$195,000","Cannot be determined"],ans:0,exp:"Cash has a debit normal balance. $100,000 + $40,000 (debit) - $55,000 (credit) = $85,000."},
+    {q:"Recording cash paid for inventory purchased involves:",opts:["Debiting Inventory and crediting Accounts Payable","Debiting Accounts Payable and crediting Inventory","Debiting Cash and crediting Accounts Payable","Debiting Inventory and crediting Cash"],ans:3,exp:"Paying cash for inventory: Inventory (asset) increases via debit, Cash (asset) decreases via credit."},
+    {q:"Debits to which accounts result in an increased balance (debit normal balance)?",opts:["Assets and expenses","Revenues and assets","Assets and common stock","Common stock and expenses"],ans:0,exp:"Assets and expenses both have debit normal balances — debiting them increases their balance. Revenue, liabilities, and equity have credit normal balances."},
+    {q:"If a company receives $200,000 cash in exchange for common stock, the effect on the accounting equation is:",opts:["Assets, liabilities and equity are all unchanged","Assets and equity increase","Assets decrease and liabilities decrease","Assets increase and equity decreases"],ans:1,exp:"Cash (asset) increases $200,000 and Common Stock (equity) increases $200,000. Both sides of the equation increase equally."},
+  ],
+  // Chapter 3
+  [
+    {q:"Williams Company: Beg. RE $20,000; Total Revenue $100,000; Total Expenses $30,000; Dividends $10,000. What is ending retained earnings?",opts:["$60,000","$70,000","$80,000","$40,000"],ans:2,exp:"Beg RE + Revenue - Expenses - Dividends = End RE. $20,000 + $100,000 - $30,000 - $10,000 = $80,000."},
+    {q:"Which of the following is a permanent account?",opts:["Sales revenue","Dividends","Retained earnings","Salaries expense"],ans:2,exp:"Retained Earnings is a permanent account — it carries its balance forward year to year. Revenue, expenses, and dividends are temporary accounts closed at year-end."},
+    {q:"Bosa Company purchased a machine for $225,000 on January 1, 2024. Useful life 5 years. Which is part of the adjusting entry on January 31, 2024?",opts:["Credit machine $3,750","Debit depreciation expense $45,000","Credit depreciation expense $45,000","Credit accumulated depreciation $3,750"],ans:3,exp:"Annual dep = $225,000 / 5 = $45,000. Monthly = $45,000 / 12 = $3,750. Entry: Dr. Dep. Expense $3,750 / Cr. Accumulated Depreciation $3,750."},
+    {q:"Kittle Company Dec 31: Sales Revenue $150,000; Salaries Exp $21,000; Supplies Exp $5,000; Dividends $7,500. Which would be part of closing entries?",opts:["Debit supplies expense $5,000","Debit salaries expense $21,000","Debit sales revenue $150,000","Debit dividends $7,500"],ans:2,exp:"To close revenue accounts, you DEBIT them (to zero them out) and credit Income Summary. Expenses are closed by crediting them. Debit Sales Revenue $150,000 is correct."},
+    {q:"On April 1, 2024, Ward Company paid $120,000 in advance for one year of advertising. How much advertising expense on the December 31, 2024 income statement?",opts:["$120,000","$80,000","$90,000","$30,000"],ans:2,exp:"April 1 to December 31 = 9 months used. $120,000 × (9/12) = $90,000 advertising expense for the year."},
+  ],
+  // Chapter 5
+  [
+    {q:"Revenue $20,000; Sales Returns $3,000; Sales Allowances $1,500; Sales Discounts $500; COGS $4,000; Salaries Expense $2,000. What is net revenue?",opts:["$9,000","$20,000","$15,000","$19,000"],ans:2,exp:"Net Revenue = Total Revenue - Returns - Allowances - Discounts = $20,000 - $3,000 - $1,500 - $500 = $15,000. COGS and Salaries are not deducted from revenue."},
+    {q:"Which of the following is NOT a contra revenue account?",opts:["Sales revenue","Sales Returns","Sales Discounts","Sales Allowances"],ans:0,exp:"Sales Revenue is a revenue account, not a contra revenue account. Sales Returns, Discounts, and Allowances are all contra revenue accounts (debit normal balance)."},
+    {q:"Gray Company calculates $3,600 for the allowance for doubtful accounts. AR = $112,800; Allowance has a $600 credit balance before adjustment. Bad debt expense for the year?",opts:["$480","$3,000","$3,360","$3,840"],ans:1,exp:"Required ending AFUA = $3,600. Current AFUA = $600 credit. Adjustment needed = $3,600 - $600 = $3,000. Bad debt expense = $3,000."},
+    {q:"Which is the adjusting journal entry at year-end to estimate uncollectible accounts receivable?",opts:["Dr. Bad Debt Expense / Cr. Allowance for Doubtful Accounts","Dr. Allowance for Doubtful Accounts / Cr. Accounts Receivable","Dr. Bad Debt Expense / Cr. Accounts Receivable","Dr. Allowance for Doubtful Accounts / Cr. Bad Debt Expense"],ans:0,exp:"Year-end estimation entry: Dr. Bad Debt Expense / Cr. Allowance for Doubtful Accounts. The write-off entry uses Dr. Allowance / Cr. AR."},
+    {q:"Sally Company has $15,000 in allowance for doubtful accounts. Taylor Company will not pay the $2,000 they owe. Journal entry for the write-off?",opts:["Dr. Bad Debt Expense $2,000 / Cr. Allowance $2,000","Dr. Bad Debt Expense $2,000 / Cr. AR $2,000","Dr. Allowance $2,000 / Cr. AR $2,000","Dr. AR $2,000 / Cr. Allowance $2,000"],ans:2,exp:"Write-off: Dr. Allowance for Doubtful Accounts / Cr. Accounts Receivable. No bad debt expense — it was already recorded at year-end estimation. No change in total assets."},
+  ],
+  // Chapter 6
+  [
+    {q:"Davis Company sold inventory for $20,000 (cost $10,000). Customer returns $5,000 of inventory (cost $2,500). Which is part of Davis's JE for the return?",opts:["Credit Inventory $5,000","Credit Accounts Receivable $2,500","Debit Cost of Goods Sold $2,500","Debit Sales Returns and Allowances $5,000"],ans:3,exp:"For the return: Dr. Sales Returns $5,000 (the selling price) and Dr. Inventory $2,500 / Cr. COGS $2,500. Debit Sales Returns $5,000 is correct."},
+    {q:"Under the expense matching principle, the company records COGS when the inventory is purchased from its suppliers.",opts:["True","False"],ans:1,exp:"FALSE. COGS is recorded when inventory is SOLD to customers, not when purchased. This is the matching principle — match the expense to the revenue it generates."},
+    {q:"Aggie Company purchased $12,000 of merchandise, FOB shipping point. Shipping = $800. Returned $3,000. Paid within 2% discount period (discount excludes shipping). Ending inventory balance?",opts:["$11,760","$11,800","$9,620","$9,604"],ans:2,exp:"Start: $12,000 + $800 shipping = $12,800. Return: $12,800 - $3,000 = $9,800. Discount: ($12,000 - $3,000) × 2% = $180 discount. $9,800 - $180 = $9,620."},
+    {q:"Which expense is NOT included in Selling, General and Administrative expense (SG&A) on the multi-step income statement?",opts:["Salaries expense","Advertising expense","Cost of goods sold","Rent expense"],ans:2,exp:"COGS is its own line item above gross profit. SG&A (operating expenses) includes salaries, advertising, rent, depreciation, utilities — costs of running the business, not the direct cost of goods."},
+    {q:"Using FIFO, what is COGS when 30 units are sold on January 31? Beg Inv: 20 units @ $5; Jan 15: 50 units @ $7; Jan 25: 30 units @ $8.",opts:["$170","$210","$180","$240"],ans:0,exp:"FIFO — sell oldest first. 20 units from beginning @ $5 = $100. Then 10 units from Jan 15 @ $7 = $70. Total COGS = $100 + $70 = $170."},
+  ],
+  // Chapter 7
+  [
+    {q:"April 1, Year 1: machine acquired for $160,000. Useful life 8 years, salvage $16,000. Straight-line. Year 1 depreciation expense?",opts:["$13,500","$18,000","$15,000","$20,000"],ans:0,exp:"Annual dep = ($160,000 - $16,000) / 8 = $18,000. But purchased April 1 — only 9 months in Year 1. $18,000 × (9/12) = $13,500."},
+    {q:"Jan 1 Year 1: equipment $172,000, 8-year life, $12,000 salvage. Sold Dec 31 Year 5 for $60,000. Gain or loss?",opts:["$24,000 loss","$12,000 loss","No gain or loss","$6,000 loss"],ans:0,exp:"Annual dep = ($172,000 - $12,000) / 8 = $20,000. After 5 years: accum dep = $100,000. Book value = $172,000 - $100,000 = $72,000. Proceeds $60,000 < BV $72,000 = LOSS $12,000. Wait — $72k - $60k = $12,000 loss. Answer is B."},
+    {q:"The cost of repairing a broken desk leg (broken accidentally while moving) is expensed immediately.",opts:["True","False"],ans:0,exp:"TRUE. Routine repairs that restore original capability are expensed immediately. Only improvements extending useful life or adding new function are capitalized."},
+    {q:"Equipment cost $12,000. Also paid: $3,000 tax, $500 shipping, $250 installation, $2,000 annual insurance. How much is capitalized as acquisition cost?",opts:["$12,000","$17,750","$15,750","$15,500"],ans:2,exp:"Capitalize: $12,000 + $3,000 tax + $500 shipping + $250 installation = $15,750. Annual insurance ($2,000) is a recurring expense — expensed as incurred, NOT capitalized."},
+    {q:"Larry's Landscaping sold equipment for $7,000. Originally purchased for $20,000; depreciation through date of sale totaled $15,000. Gain or loss?",opts:["$13,000 gain","$8,000 gain","$2,000 loss","$2,000 gain"],ans:3,exp:"Book value = $20,000 - $15,000 = $5,000. Proceeds $7,000 > BV $5,000 = GAIN of $2,000."},
+  ],
+  // Chapter 8&9
+  [
+    {q:"Executive Airways borrows $10 million on April 1, 2021 for one year at 6%. Interest expense for year ended December 31, 2021?",opts:["$300,000","$450,000","$150,000","$600,000"],ans:1,exp:"April 1 to December 31 = 9 months (Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec). $10,000,000 × 6% × (9/12) = $450,000."},
+    {q:"Which of the following is reported as a long-term liability?",opts:["Notes payable due in two years","Salaries Payable","Deferred revenue for services next month","Accounts Payable"],ans:0,exp:"Notes payable due in two years is long-term (due in more than one year). Salaries payable, deferred revenue due next month, and accounts payable are all current liabilities."},
+    {q:"When a customer pays in advance for a product or service, the advance payment is recorded as cash received and an increase in:",opts:["Revenues","Expenses","Liabilities","Dividends"],ans:2,exp:"Cash received in advance = Deferred Revenue, which is a LIABILITY. The company owes the customer goods or services. It becomes revenue only when earned."},
+    {q:"Current Year: Net Sales $1,000,000; Net Income $120,000; Total Liabilities $250,000; Total Assets $800,000. Debt-to-total-assets ratio?",opts:["31.3%","15.0%","40.0%","10.0%"],ans:0,exp:"Debt to total assets = Total Liabilities / Total Assets = $250,000 / $800,000 = 31.25% ≈ 31.3%."},
+    {q:"This is a free point of extra credit — you will get one free point towards the class!",opts:["Thank you!","No thank you","I prefer not","Maybe later"],ans:0,exp:"Free point! Just like on the actual quiz. 🎉"},
+  ],
+];
+
+let cqIdx=0, cqPool=[], cqI=0, cqOk=0, cqCurrent=0;
+function setCQ(i,btn){
+  cqCurrent=i;
+  document.querySelectorAll('#panel-cquiz .fp').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+function startCQ(){
+  cqPool=[...CQ_BANKS[cqCurrent]];
+  cqI=0;cqOk=0;
+  document.getElementById('cq-setup').style.display='none';
+  document.getElementById('cq-result').style.display='none';
+  document.getElementById('cq-active').style.display='block';
+  renderCQ();
+}
+function renderCQ(){
+  if(cqI>=cqPool.length){showCQResult();return;}
+  const q=cqPool[cqI];
+  document.getElementById('cq-num').textContent='Q '+(cqI+1)+' of '+cqPool.length;
+  document.getElementById('cq-sc').textContent=cqOk+' correct';
+  document.getElementById('cq-bar').style.width=(cqI/cqPool.length*100)+'%';
+  document.getElementById('cq-text').textContent=q.q;
+  const opts=document.getElementById('cq-opts');
+  opts.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    const b=document.createElement('button');
+    b.className='opt';b.textContent=o;
+    b.onclick=()=>ansCQ(i,b);opts.appendChild(b);
+  });
+  document.getElementById('cq-exp').className='exp';
+  document.getElementById('cq-next').style.display='none';
+}
+function ansCQ(i,btn){
+  const q=cqPool[cqI];
+  document.querySelectorAll('#cq-opts .opt').forEach(b=>b.disabled=true);
+  if(i===q.ans){btn.classList.add('correct');cqOk++;}
+  else{btn.classList.add('wrong');document.querySelectorAll('#cq-opts .opt')[q.ans].classList.add('correct');}
+  document.getElementById('cq-exp').textContent=q.exp;
+  document.getElementById('cq-exp').className='exp on';
+  document.getElementById('cq-next').style.display='block';
+  document.getElementById('cq-sc').textContent=cqOk+' correct';
+}
+function nextCQ(){cqI++;renderCQ();}
+function showCQResult(){
+  document.getElementById('cq-active').style.display='none';
+  document.getElementById('cq-result').style.display='block';
+  const pct=Math.round(cqOk/cqPool.length*100);
+  document.getElementById('cq-rpct').textContent=pct+'%';
+  document.getElementById('cq-rmsg').textContent=cqOk+' of '+cqPool.length+' correct — '+(pct>=80?'Solid. You know this chapter.':pct>=60?'Review the explanations above.':'Go back to notes for this chapter.');
+}
+function resetCQ(){
+  document.getElementById('cq-setup').style.display='block';
+  document.getElementById('cq-active').style.display='none';
+  document.getElementById('cq-result').style.display='none';
+}
+
 </script>
 </body>
 </html>
