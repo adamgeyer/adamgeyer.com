@@ -1,991 +1,1489 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MGT 011A — Elementary Accounting</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/global.css" />
-  <style>
-    .page-hero {
-      padding: 8rem 5vw 3rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .breadcrumb {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 1.25rem;
-    }
-    .breadcrumb a { color: var(--accent); text-decoration: none; }
-    .breadcrumb a:hover { text-decoration: underline; }
-    .page-title {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      color: var(--text);
-      line-height: 1.1;
-      margin-bottom: 0.75rem;
-    }
-    .page-sub {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      margin-bottom: 1.5rem;
-    }
-    .chapter-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-    .chapter-pill {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 4px 12px;
-      border-radius: 20px;
-      background: var(--border);
-      color: var(--text-muted);
-    }
-    .study-area {
-      padding: 3rem 5vw;
-    }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>MGT 11A Final Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--card:#f8f8f6;--card2:#ffffff;
+  --text:#1a1a1a;--muted:#6b6b6b;--light:#aaa;
+  --accent:#2563eb;--accent-l:#eff6ff;
+  --border:#e5e5e5;--border2:#d0d0d0;
+  --ok:#16a34a;--ok-bg:#f0fdf4;--ok-b:#bbf7d0;
+  --err:#dc2626;--err-bg:#fef2f2;--err-b:#fecaca;
+  --warn:#d97706;--warn-bg:#fffbeb;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:.9rem 5vw;border-bottom:1px solid var(--border);background:rgba(255,255,255,.95);backdrop-filter:blur(8px)}
+.nav-logo{font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--text)}
+.nav-links{display:flex;gap:1.5rem}
+.nav-link{font-size:14px;color:var(--muted);transition:color .15s}
+.nav-link:hover,.nav-link.active{color:var(--accent)}
+/* HERO */
+.hero{padding:6.5rem 5vw 2.5rem;border-bottom:1px solid var(--border)}
+.breadcrumb{font-size:13px;color:var(--muted);margin-bottom:.75rem}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,4vw,3rem);margin-bottom:.4rem}
+.hero p{font-size:14px;color:var(--muted);margin-bottom:1.1rem}
+.pills{display:flex;flex-wrap:wrap;gap:.35rem}
+.pill{font-size:11px;padding:3px 10px;border-radius:20px;background:var(--card);border:1px solid var(--border);color:var(--muted)}
+/* TABS */
+.study{padding:1.75rem 5vw 4rem}
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:1.75rem;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{font-size:13px;padding:.7rem 1.15rem;background:transparent;border:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:all .13s}
+.tab:hover{color:var(--text)}
+.tab.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:500}
+.panel{display:none}
+.panel.on{display:block}
+/* PROGRESS */
+.pbar{height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:1.5rem}
+.pfill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s}
+/* BTNS */
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem 1.1rem;border-radius:8px;font-size:13px;cursor:pointer;transition:all .13s;border:1px solid transparent;font-family:'DM Sans',sans-serif}
+.btn-p{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-p:hover{background:#1d4ed8}
+.btn-o{background:transparent;border-color:var(--border2);color:var(--muted)}
+.btn-o:hover{border-color:var(--accent);color:var(--accent)}
+.btn-ok{background:var(--ok-bg);border-color:var(--ok-b);color:var(--ok)}
+.btn-err{background:var(--err-bg);border-color:var(--err-b);color:var(--err)}
+/* NOTES */
+.ch{margin-bottom:2.5rem}
+.ch-title{font-family:'DM Serif Display',serif;font-size:1.25rem;margin-bottom:1rem;padding-bottom:.45rem;border-bottom:2px solid var(--accent)}
+.ngrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(295px,1fr));gap:.7rem}
+.nc{background:#fff;border:1px solid var(--border);border-radius:10px;padding:1rem 1.15rem}
+.nc h4{font-size:13px;font-weight:500;margin-bottom:.45rem}
+.nc ul{list-style:none;padding:0}
+.nc ul li{font-size:13px;color:var(--muted);line-height:1.7;padding-left:.9rem;position:relative}
+.nc ul li::before{content:'·';position:absolute;left:0;color:var(--accent)}
+.nc p{font-size:13px;color:var(--muted);line-height:1.7}
+.nc .je{font-family:'DM Mono',monospace;font-size:11.5px;color:#1e3a6e;background:var(--accent-l);padding:.45rem .7rem;border-radius:5px;margin-top:.35rem;line-height:1.9;white-space:pre;overflow-x:auto}
+.wbox{background:var(--warn-bg);border:1px solid #fde68a;border-radius:7px;padding:.65rem .9rem;font-size:13px;color:#78350f;margin-top:.45rem;line-height:1.6}
+/* FLASHCARDS */
+.fc-meta{display:flex;align-items:center;gap:.7rem;margin-bottom:1.1rem;flex-wrap:wrap}
+.fc-ctr{font-size:13px;color:var(--muted)}
+.fc-knew{font-size:13px;color:var(--ok);font-weight:500}
+.badge{font-size:11px;padding:2px 9px;border-radius:20px}
+.badge-a{background:var(--accent-l);color:var(--accent)}
+.badge-m{background:var(--card);color:var(--muted);border:1px solid var(--border)}
+.cardvp{perspective:1200px;height:235px;margin-bottom:1rem;cursor:pointer}
+.cinner{width:100%;height:100%;position:relative;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.cardvp.flipped .cinner{transform:rotateY(180deg)}
+.cface{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:12px;border:1px solid var(--border);background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.75rem;text-align:center}
+.cback{transform:rotateY(180deg);background:#f0f5ff;border-color:#c7d9f8}
+.cface .clabel{font-size:11px;font-weight:500;color:var(--accent);background:var(--accent-l);padding:2px 10px;border-radius:20px;margin-bottom:.65rem}
+.cface .cq{font-size:.97rem;font-weight:500;color:var(--text);line-height:1.5;max-width:560px}
+.cface .chint{position:absolute;bottom:.85rem;font-size:11px;color:var(--light)}
+.cface .ca{font-size:12.5px;color:#1e3a6e;line-height:1.8;max-width:560px;white-space:pre-line;text-align:left;font-family:'DM Mono',monospace}
+.fc-ctrl{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:.55rem}
+@media(max-width:480px){.fc-ctrl{grid-template-columns:1fr 1fr}}
+/* QUIZ */
+.qsetup{margin-bottom:1.5rem}
+.flabel{font-size:12px;color:var(--muted);margin-bottom:.5rem;font-weight:500}
+.fpills{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1.15rem}
+.fp{font-size:12px;padding:4px 11px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;transition:all .12s}
+.fp:hover{color:var(--text);border-color:var(--muted)}
+.fp.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.qhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem}
+.qnum{font-size:13px;color:var(--muted)}
+.qscore{font-size:13px;color:var(--accent);font-weight:500}
+.qbox{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:1.15rem;font-size:1rem;line-height:1.6;margin-bottom:1rem}
+.opts{display:flex;flex-direction:column;gap:.45rem;margin-bottom:1rem}
+.opt{width:100%;text-align:left;padding:.75rem .95rem;border-radius:7px;border:1px solid var(--border2);background:#fff;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;transition:all .12s;line-height:1.5}
+.opt:hover:not(:disabled){border-color:var(--accent);background:var(--accent-l)}
+.opt.correct{background:var(--ok-bg);border-color:var(--ok-b);color:var(--ok)}
+.opt.wrong{background:var(--err-bg);border-color:var(--err-b);color:var(--err)}
+.exp{background:var(--warn-bg);border-left:3px solid var(--warn);padding:.8rem .95rem;border-radius:0 7px 7px 0;font-size:13px;color:#78350f;line-height:1.7;margin-bottom:1rem;display:none}
+.exp.on{display:block}
+.score-big{font-family:'DM Serif Display',serif;font-size:5rem;color:var(--accent);line-height:1;margin-bottom:.4rem}
+/* JOURNAL */
+.jscen{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:1.15rem;font-size:14px;line-height:1.7;margin-bottom:1rem}
+.jtbl{width:100%;border-collapse:collapse;margin-bottom:1rem;font-size:13px}
+.jtbl th{text-align:left;padding:.55rem .8rem;font-size:10.5px;font-weight:500;color:var(--muted);border-bottom:1px solid var(--border2);text-transform:uppercase;letter-spacing:.05em}
+.jtbl td{padding:.5rem .8rem;border-bottom:1px solid var(--border)}
+.jtbl input{width:100%;background:transparent;border:none;font-family:'DM Mono',monospace;font-size:13px;color:var(--text);outline:none}
+.jtbl input:focus{background:var(--accent-l);border-radius:3px;padding:2px 5px}
+.jans{background:var(--ok-bg);border:1px solid var(--ok-b);border-radius:7px;padding:.9rem 1.1rem;font-family:'DM Mono',monospace;font-size:12.5px;line-height:2;color:#14532d;white-space:pre;overflow-x:auto;margin-bottom:1rem;display:none}
+.jans.on{display:block}
+.jbtns{display:flex;gap:.55rem;flex-wrap:wrap}
+/* FORMULAS */
+.fsec{font-size:11px;font-weight:500;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin:1.6rem 0 .7rem;padding-bottom:.35rem;border-bottom:1px solid var(--border)}
+.fsec:first-child{margin-top:0}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(275px,1fr));gap:.7rem}
+.fc2{background:#fff;border:1px solid var(--border);border-radius:9px;padding:.9rem 1.1rem;transition:border-color .13s}
+.fc2:hover{border-color:var(--accent)}
+.fn{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.3rem}
+.fe{font-family:'DM Mono',monospace;font-size:12.5px;color:var(--accent);margin-bottom:.3rem;line-height:1.5}
+.fd{font-size:12px;color:var(--muted);line-height:1.5}
+.fd strong{color:var(--err);font-weight:500}
+/* MISTAKES */
+.mlist{display:flex;flex-direction:column;gap:.55rem}
+.mi{background:#fff;border:1px solid var(--border);border-left:3px solid var(--err);border-radius:0 7px 7px 0;padding:.8rem .95rem}
+.mt{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:.3rem}
+.mw{font-size:13px;color:var(--err);margin-bottom:.3rem}
+.mr{font-size:13px;color:var(--ok);line-height:1.6}
+/* FOOTER */
+.footer{padding:2rem 5vw;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;margin-top:3rem}
+.footer-name{font-family:'DM Serif Display',serif;font-size:1rem}
+.footer-note{font-size:13px;color:var(--muted)}
 
-    /* ── FLASHCARDS ── */
-    .fc-meta {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-    .fc-counter {
-      font-family: 'DM Mono', monospace;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-    .fc-knew {
-      font-family: 'DM Mono', monospace;
-      font-size: 12px;
-      color: var(--correct);
-    }
-    .fc-shuffle {
-      margin-left: auto;
-    }
-    .card-viewport {
-      perspective: 1200px;
-      height: 260px;
-      margin-bottom: 1.25rem;
-      cursor: pointer;
-    }
-    .card-inner {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      transform-style: preserve-3d;
-      transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .card-viewport.flipped .card-inner { transform: rotateY(180deg); }
-    .card-face {
-      position: absolute;
-      inset: 0;
-      backface-visibility: hidden;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      background: var(--card-bg);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      text-align: center;
-    }
-    .card-back {
-      transform: rotateY(180deg);
-      background: #111;
-      border-color: var(--accent-dim);
-    }
-    .card-face .cat-label {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1rem;
-      background: var(--accent-dim);
-      padding: 3px 10px;
-      border-radius: 20px;
-    }
-    .card-face .q-text {
-      font-size: 1.1rem;
-      font-weight: 500;
-      color: var(--text);
-      line-height: 1.5;
-      max-width: 600px;
-    }
-    .card-face .tap-hint {
-      position: absolute;
-      bottom: 1.25rem;
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-    .card-face .a-text {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      line-height: 1.7;
-      max-width: 600px;
-      white-space: pre-line;
-      text-align: left;
-    }
-    .fc-controls {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-      gap: 0.75rem;
-    }
-    @media (max-width: 500px) {
-      .fc-controls { grid-template-columns: 1fr 1fr; }
-    }
-
-    /* ── QUIZ ── */
-    .quiz-setup { margin-bottom: 2rem; }
-    .quiz-filter-label {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 0.75rem;
-    }
-    .filter-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-    .filter-pill {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      padding: 5px 14px;
-      border-radius: 20px;
-      border: 1px solid var(--border-strong);
-      background: transparent;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .filter-pill:hover { color: var(--text); border-color: var(--text-muted); }
-    .filter-pill.active { background: var(--accent); color: #0d0d0d; border-color: var(--accent); }
-    .q-header-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-    }
-    .q-num {
-      font-family: 'DM Mono', monospace;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-    .q-score-live {
-      font-family: 'DM Mono', monospace;
-      font-size: 12px;
-      color: var(--accent);
-    }
-    .question-box {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.5rem;
-      font-size: 1.05rem;
-      line-height: 1.6;
-      color: var(--text);
-      margin-bottom: 1.25rem;
-    }
-    .options-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-      margin-bottom: 1.25rem;
-    }
-    .option-btn {
-      width: 100%;
-      text-align: left;
-      padding: 0.9rem 1.2rem;
-      border-radius: 10px;
-      border: 1px solid var(--border-strong);
-      background: transparent;
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.15s;
-      line-height: 1.5;
-    }
-    .option-btn:hover:not(:disabled) { border-color: var(--accent-dim); background: var(--accent-dim); }
-    .option-btn.correct { background: var(--correct-bg); border-color: var(--correct); color: var(--correct); }
-    .option-btn.wrong { background: var(--wrong-bg); border-color: var(--wrong); color: var(--wrong); }
-    .explanation {
-      background: var(--card-bg);
-      border-left: 3px solid var(--accent);
-      padding: 1rem 1.25rem;
-      border-radius: 0 10px 10px 0;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      line-height: 1.7;
-      margin-bottom: 1.25rem;
-      display: none;
-    }
-    .explanation.show { display: block; }
-    .score-screen {
-      text-align: center;
-      padding: 3rem 1rem;
-    }
-    .score-big {
-      font-family: 'DM Serif Display', serif;
-      font-size: 5rem;
-      color: var(--accent);
-      line-height: 1;
-      margin-bottom: 0.5rem;
-    }
-    .score-msg {
-      font-size: 1rem;
-      color: var(--text-muted);
-      margin-bottom: 2rem;
-      line-height: 1.6;
-    }
-
-    /* ── JOURNAL ENTRIES ── */
-    .je-meta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-    }
-    .je-scenario-box {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.5rem;
-      font-size: 1rem;
-      line-height: 1.7;
-      color: var(--text);
-      margin-bottom: 1.25rem;
-    }
-    .je-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 1.25rem;
-      font-size: 0.9rem;
-    }
-    .je-table th {
-      text-align: left;
-      padding: 0.65rem 1rem;
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      border-bottom: 1px solid var(--border-strong);
-    }
-    .je-table td {
-      padding: 0.6rem 1rem;
-      border-bottom: 1px solid var(--border);
-      color: var(--text);
-    }
-    .je-table input {
-      width: 100%;
-      background: transparent;
-      border: none;
-      font-family: 'DM Mono', monospace;
-      font-size: 13px;
-      color: var(--text);
-      outline: none;
-    }
-    .je-table input::placeholder { color: var(--text-muted); }
-    .je-table input:focus { background: var(--accent-dim); border-radius: 4px; padding: 2px 6px; }
-    .je-answer-box {
-      background: var(--correct-bg);
-      border: 1px solid var(--correct);
-      border-radius: 10px;
-      padding: 1.25rem;
-      font-family: 'DM Mono', monospace;
-      font-size: 13px;
-      line-height: 1.9;
-      color: var(--correct);
-      white-space: pre;
-      overflow-x: auto;
-      margin-bottom: 1.25rem;
-      display: none;
-    }
-    .je-answer-box.show { display: block; }
-    .je-btn-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-
-    /* ── FORMULA SHEET ── */
-    .formula-section-title {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin: 2rem 0 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .formula-section-title:first-child { margin-top: 0; }
-    .formula-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 0.875rem;
-    }
-    .formula-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.25rem;
-      transition: border-color 0.2s;
-    }
-    .formula-card:hover { border-color: var(--accent-dim); }
-    .formula-name {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
-    }
-    .formula-eq {
-      font-family: 'DM Mono', monospace;
-      font-size: 13px;
-      color: var(--accent);
-      margin-bottom: 0.5rem;
-      line-height: 1.5;
-    }
-    .formula-note {
-      font-size: 0.83rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-    .formula-note strong { color: var(--wrong); font-weight: 500; }
-
-    /* ── COMMON MISTAKES ── */
-    .mistake-list { display: flex; flex-direction: column; gap: 0.75rem; }
-    .mistake-item {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--wrong);
-      border-radius: 0 10px 10px 0;
-      padding: 1rem 1.25rem;
-    }
-    .mistake-wrong {
-      font-size: 0.9rem;
-      color: var(--wrong);
-      margin-bottom: 0.4rem;
-    }
-    .mistake-right {
-      font-size: 0.9rem;
-      color: var(--correct);
-      line-height: 1.5;
-    }
-    .mistake-tag {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
-    }
-  </style>
+/* JOURNAL WALKTHROUGH */
+.je-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem}
+.je-progress{font-size:13px;color:var(--muted)}
+.je-scenario{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem;font-size:14px;line-height:1.7;margin-bottom:1.25rem}
+.je-scenario strong{color:var(--accent)}
+.steps-container{display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.25rem}
+.step-card{border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .2s}
+.step-card.active{border-color:var(--accent)}
+.step-card.done{border-color:var(--ok-b);background:var(--ok-bg)}
+.step-header{display:flex;align-items:center;gap:.75rem;padding:.85rem 1rem;cursor:pointer;background:#fff}
+.step-card.done .step-header{background:var(--ok-bg)}
+.step-num{width:26px;height:26px;border-radius:50%;background:var(--border);color:var(--muted);font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-card.active .step-num{background:var(--accent);color:#fff}
+.step-card.done .step-num{background:var(--ok);color:#fff}
+.step-title{font-size:14px;font-weight:500;color:var(--text);flex:1}
+.step-card.done .step-title{color:var(--ok)}
+.step-chevron{font-size:12px;color:var(--muted);transition:transform .2s}
+.step-body{display:none;padding:0 1rem 1rem;border-top:1px solid var(--border)}
+.step-card.open .step-body{display:block}
+.step-card.open .step-chevron{transform:rotate(180deg)}
+.step-body p{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:.75rem;margin-top:.75rem}
+.step-body .rule{background:var(--accent-l);border-left:3px solid var(--accent);padding:.6rem .875rem;border-radius:0 6px 6px 0;font-size:13px;color:#1e3a6e;margin-bottom:.75rem;line-height:1.6}
+.step-body .entry-preview{font-family:'DM Mono',monospace;font-size:12.5px;background:#f8faff;border:1px solid #c7d9f8;border-radius:6px;padding:.6rem .875rem;line-height:1.9;color:#1e3a6e;margin-bottom:.75rem;white-space:pre}
+.step-body .caution{background:var(--warn-bg);border-left:3px solid var(--warn);padding:.6rem .875rem;border-radius:0 6px 6px 0;font-size:13px;color:#78350f;margin-bottom:.75rem;line-height:1.6}
+.je-full-entry{background:var(--ok-bg);border:1px solid var(--ok-b);border-radius:8px;padding:1rem 1.25rem;font-family:'DM Mono',monospace;font-size:13px;line-height:2;color:#14532d;white-space:pre;overflow-x:auto;margin-bottom:1rem;display:none}
+.je-full-entry.on{display:block}
+.je-nav{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+.step-mark-btn{margin-top:.5rem}
+</style>
 </head>
 <body>
-  <nav class="nav">
-    <a href="index.html" class="nav-logo">AG</a>
-    <div class="nav-links">
-      <a href="index.html" class="nav-link">Courses</a>
-      <a href="mgt011a.html" class="nav-link active">MGT 011A</a>
-    </div>
-  </nav>
+<nav class="nav">
+  <a href="index.html" class="nav-logo">AG</a>
+  <div class="nav-links">
+    <a href="mgt011a.html" class="nav-link active">MGT 11A Final</a>
+  </div>
+</nav>
 
-  <div class="page-hero">
-    <div class="breadcrumb"><a href="index.html">Courses</a> / MGT 011A</div>
-    <h1 class="page-title">Elementary<br /><em style="font-style:italic;color:var(--accent);">Accounting</em></h1>
-    <p class="page-sub">Financial accounting fundamentals — accounting cycle, receivables, inventory, assets, and liabilities.</p>
-    <div class="chapter-pills">
-      <span class="chapter-pill">Ch.1 Intro (10%)</span>
-      <span class="chapter-pill">Ch.2 Cycle (20%)</span>
-      <span class="chapter-pill">Ch.3 Adjustments (20%)</span>
-      <span class="chapter-pill">Ch.5 Receivables (10%)</span>
-      <span class="chapter-pill">Ch.6 Inventory (5%)</span>
-      <span class="chapter-pill">Ch.7 Long-Term Assets (10%)</span>
-      <span class="chapter-pill">Ch.4 Cash (5%)</span>
-      <span class="chapter-pill">Ch.8-9 Liabilities (5%)</span>
-      <span class="chapter-pill">Summary (10%)</span>
+<div class="hero">
+    <h1>MGT 11A Final Study</h1>
+  <p>Professor Bains &middot; UC Davis &middot; Notes, flashcards, quizzes, and journal drills for Chapters 1&ndash;9.</p>
+  <div class="pills">
+    <span class="pill">Ch.1 Framework (10%)</span><span class="pill">Ch.2 Cycle During (20%)</span>
+    <span class="pill">Ch.3 Cycle End (20%)</span><span class="pill">Ch.5 Receivables (10%)</span>
+    <span class="pill">Ch.6 Inventory (5%)</span><span class="pill">Ch.7 Long-Term Assets (10%)</span>
+    <span class="pill">Ch.4 Cash &amp; Controls (5%)</span><span class="pill">Ch.8&ndash;9 Liabilities (5%)</span>
+    <span class="pill">Summary (10%)</span>
+  </div>
+</div>
+
+<div class="study">
+<div class="tabs">
+  <button class="tab on" onclick="sw('notes',this)">Chapter Notes</button>
+  <button class="tab" onclick="sw('fc',this)">Flashcards</button>
+  <button class="tab" onclick="sw('quiz',this)">Practice Quiz</button>
+  <button class="tab" onclick="sw('je',this)">Journal Drills</button>
+  <button class="tab" onclick="sw('formulas',this)">Formula Sheet</button>
+  <button class="tab" onclick="sw('mistakes',this)">Common Mistakes</button>
+  <button class="tab" onclick="sw('cquiz',this)">Chapter Quizzes</button>
+</div>
+
+<!-- ===== NOTES ===== -->
+<div id="panel-notes" class="panel on">
+
+<div class="ch">
+<div class="ch-title">Chapter 1 &mdash; A Framework for Financial Accounting</div>
+<div class="ngrid">
+<div class="nc"><h4>What is Accounting?</h4><ul>
+<li>A system of maintaining records of a company's operations and communicating to decision makers &mdash; "the language of business"</li>
+<li>Two primary functions: (1) record/measure the company's activity, (2) share/communicate with others</li>
+<li>Financial accounting: external users (investors, creditors, regulators) &mdash; 10-K filed with SEC</li>
+<li>Managerial accounting: internal users &mdash; focuses on costs and profitability</li>
+</ul></div>
+<div class="nc"><h4>Basic Accounting Equation</h4><p>Assets = Liabilities + Equity</p><ul>
+<li>Assets (owned): cash, AR, inventory, equipment, land, buildings, brand/IP</li>
+<li>Liabilities (owed): AP, notes payable, salaries payable, taxes payable, rent payable</li>
+<li>Equity (owners' claims): externally from investors, or internally from profit</li>
+<li>Accounts payable: $ owed TO suppliers &mdash; Accounts receivable: $ customers owe US</li>
+</ul></div>
+<div class="nc"><h4>Who Uses Accounting Information?</h4><ul>
+<li>Investors: decide whether to invest</li>
+<li>Creditors: decide whether to lend money</li>
+<li>Customers: decide whether to purchase</li>
+<li>Suppliers: assess customer's ability to pay</li>
+<li>Managers: decide production and expansion</li>
+<li>Regulators, tax authorities, local communities</li>
+</ul></div>
+<div class="nc"><h4>Types of Business Activity</h4><ul>
+<li>Operating: transactions related to primary functions &mdash; providing products/services; associated costs like rent, salaries, utilities, taxes, advertising</li>
+<li>Investing: buying/selling long-term assets</li>
+<li>Financing: borrowing from creditors, investments from owners</li>
+</ul></div>
+</div></div>
+
+<div class="ch">
+<div class="ch-title">Chapter 2 &mdash; The Accounting Cycle: During the Period</div>
+<div class="ngrid">
+<div class="nc"><h4>Normal Debit/Credit Balances</h4><ul>
+<li>DEBIT normal balance: Assets, Expenses, Dividends</li>
+<li>CREDIT normal balance: Liabilities, Equity (Common Stock, Retained Earnings), Revenue</li>
+<li>Tip: expenses say "expense," liabilities say "payable" or "owed"</li>
+<li>Which accounts have credit normal balance: Liabilities, Equity, Revenue &mdash; Sales Revenue is a classic example</li>
+</ul></div>
+<div class="nc"><h4>T-Accounts</h4><ul>
+<li>Shows the effect of all transactions on one account</li>
+<li>Left side = Debits always; Right side = Credits always</li>
+<li>Begin at opening balance, add all transactions, arrive at ending balance</li>
+</ul>
+<div class="je">Cash T-account:
+Beg. balance  100,000
++ Debit         40,000
+- Credit        55,000
+= Ending         85,000</div></div>
+<div class="nc"><h4>Double-Entry Accounting</h4><ul>
+<li>Every transaction affects at least TWO accounts &mdash; keeps equation balanced at all times</li>
+<li>Buy inventory for cash &rarr; Dr. Inventory (asset &uarr;) / Cr. Cash (asset &darr;)</li>
+<li>Issue stock for cash &rarr; Dr. Cash (asset &uarr;) / Cr. Common Stock (equity &uarr;)</li>
+<li>Company receives $200k for common stock &rarr; assets &uarr;, equity &uarr;</li>
+</ul></div>
+<div class="nc"><h4>The 9 Steps of the Accounting Cycle</h4><ul>
+<li>1. Analyze transactions</li>
+<li>2. Record journal entries</li>
+<li>3. Post to the general ledger (T-accounts)</li>
+<li>4. Prepare unadjusted trial balance</li>
+<li>5. Record adjusting journal entries</li>
+<li>6. Prepare adjusted trial balance (used for financial statements)</li>
+<li>7. Prepare financial statements</li>
+<li>8. Close temporary accounts</li>
+<li>9. Prepare post-closing trial balance</li>
+</ul></div>
+<div class="nc"><h4>Trial Balances</h4><ul>
+<li>Unadjusted TB: before adjusting entries &mdash; not all transactions recorded yet</li>
+<li>Adjusted TB: after all adjusting entries &mdash; used to prepare financial statements</li>
+<li>Post-Closing TB: after closing entries &mdash; only permanent (balance sheet) accounts remain with balances</li>
+</ul></div>
+<div class="nc"><h4>Example Journal Entries &mdash; Ch.2</h4>
+<div class="je">Buy inventory on account ($5,000):
+Dr. Inventory          5,000
+    Cr. Accounts Payable       5,000
+
+Pay rent in cash ($1,200):
+Dr. Rent Expense       1,200
+    Cr. Cash                   1,200
+
+Receive cash for services ($8,000):
+Dr. Cash               8,000
+    Cr. Service Revenue        8,000</div></div>
+</div></div>
+
+<div class="ch">
+<div class="ch-title">Chapter 3 &mdash; The Accounting Cycle: End of Period</div>
+<div class="ngrid">
+<div class="nc"><h4>Accrual vs. Cash Basis</h4><ul>
+<li>Accrual (GAAP): record revenues when EARNED, expenses when INCURRED &mdash; regardless of cash</li>
+<li>Cash basis (NOT GAAP): record only when cash is received or paid</li>
+<li>Revenue recognition: record when performance obligation is COMPLETE (goods/services delivered)</li>
+<li>Expense matching: recognize expenses in same period as revenue they generated</li>
+<li>"Accrual basis only records revenue when earned" &rarr; TRUE</li>
+</ul></div>
+<div class="nc"><h4>4 Types of Adjusting Entries</h4><ul>
+<li>Accrued Expenses: incurred, not yet paid &rarr; Dr. Expense / Cr. Liability (salaries payable, interest payable)</li>
+<li>Accrued Revenues: earned, cash not received yet &rarr; Dr. AR / Cr. Revenue</li>
+<li>Prepaid Expenses: allocate asset to expense &rarr; Dr. Expense / Cr. Asset (insurance, depreciation)</li>
+<li>Unearned Revenues: now earned &rarr; Dr. Deferred Revenue / Cr. Revenue</li>
+</ul></div>
+<div class="nc"><h4>Prepaid Insurance Example</h4>
+<p>Pay $120,000 on May 1 for one year of insurance. How much Prepaid Insurance remains on December 31?</p><ul>
+<li>May through December = 8 months used</li>
+<li>4 months remain (Jan&ndash;Apr next year)</li>
+<li>$120,000 &times; (4/12) = <strong style="color:var(--accent)">$40,000 remaining</strong></li>
+</ul>
+<div class="je">Dec 31 adjusting entry:
+Dr. Insurance Expense   80,000
+    Cr. Prepaid Insurance       80,000</div></div>
+<div class="nc"><h4>Depreciation Adjusting Entry</h4>
+<p>Equipment $96,000 purchased Jan 1, 8-year life, no salvage value. Monthly depreciation:</p>
+<div class="je">Annual dep = $96,000 &divide; 8 = $12,000
+Monthly dep = $12,000 &divide; 12 = $1,000
+
+Jan 31:
+Dr. Depreciation Expense   1,000
+    Cr. Accumulated Depreciation   1,000</div></div>
+<div class="nc"><h4>Permanent vs. Temporary Accounts</h4><ul>
+<li>Permanent (balance sheet): Assets, Liabilities, Equity &mdash; carry balances forward year to year</li>
+<li>Temporary: Revenues, Expenses, Dividends &mdash; track ONE YEAR only, then closed to Retained Earnings</li>
+<li>Dividends is a temporary account</li>
+</ul></div>
+<div class="nc"><h4>Closing Entries</h4><ul>
+<li>Step 1: Dr. each Revenue &rarr; Cr. Income Summary</li>
+<li>Step 2: Dr. Income Summary &rarr; Cr. each Expense</li>
+<li>Step 3: Close Income Summary &rarr; Retained Earnings (net income)</li>
+<li>Step 4: Dr. Retained Earnings &rarr; Cr. Dividends</li>
+</ul>
+<div class="je">Rev $155k, Sal Exp $32k, Supp Exp $8k, Div $3.5k:
+
+Dr. Sales Revenue      155,000
+    Cr. Income Summary         155,000
+
+Dr. Income Summary      40,000
+    Cr. Salaries Expense       32,000
+    Cr. Supplies Expense        8,000
+
+Dr. Income Summary     115,000
+    Cr. Retained Earnings      115,000
+
+Dr. Retained Earnings    3,500
+    Cr. Dividends               3,500</div></div>
+<div class="nc"><h4>Retained Earnings Formula</h4>
+<p>Beg. RE + Revenue &minus; Expenses &minus; Dividends = Ending RE</p><ul>
+<li>Connects income statement to balance sheet</li>
+<li>Net income increases RE; dividends decrease RE</li>
+</ul></div>
+<div class="nc"><h4>Multi-Step Income Statement</h4><ul>
+<li>Net Sales &minus; COGS = Gross Profit</li>
+<li>Gross Profit &minus; Operating Expenses = Income from Operations</li>
+<li>+/&minus; Other income/expenses (interest) = Pretax Income</li>
+<li>Pretax &minus; Income Tax = Net Income</li>
+<li>Operating expenses (SG&amp;A): salaries, rent, depreciation, utilities, advertising, supplies</li>
+</ul></div>
+<div class="nc"><h4>Financial Statements &amp; How They Link</h4><ul>
+<li>Balance Sheet: financial position at a POINT IN TIME (snapshot)</li>
+<li>Income Statement, Stmt of SE, Cash Flows: cover a PERIOD OF TIME</li>
+<li>Net Income (IS) &rarr; flows into Retained Earnings (Stmt of SE)</li>
+<li>Ending RE + Common Stock &rarr; appear on Balance Sheet as equity</li>
+<li>Ending Cash (SCF) &rarr; appears on Balance Sheet as current asset</li>
+</ul></div>
+<div class="nc"><h4>Purpose of an Audit</h4><ul>
+<li>Independent party assesses whether financial statements are accurate and properly prepared</li>
+<li>Tests internal controls to ensure they are designed and operating effectively</li>
+<li>CEO and CFO of SEC-filing companies must sign annual report on internal controls</li>
+</ul></div>
+</div></div>
+
+<div class="ch">
+<div class="ch-title">Chapter 5 &mdash; Receivables and Sales</div>
+<div class="ngrid">
+<div class="nc"><h4>Credit Sales &amp; Revenue Recognition</h4><ul>
+<li>Credit sales: goods/services provided on account &mdash; NOT for immediate cash</li>
+<li>Revenue recorded IMMEDIATELY when goods/services provided, even without cash yet</li>
+<li>Key: companies record an asset (AR) and revenue at point of credit sale</li>
+</ul>
+<div class="je">Credit sale:
+Dr. Accounts Receivable   X
+    Cr. Sales Revenue             X
+
+Collection later:
+Dr. Cash                  X
+    Cr. Accounts Receivable       X</div></div>
+<div class="nc"><h4>Net Revenue = Total Revenue &minus; Contra Revenues</h4><ul>
+<li>Trade discounts: directly reduce the selling price &mdash; record at discounted amount</li>
+<li>Sales Returns: customer returns goods &rarr; Dr. Sales Returns / Cr. AR; also Dr. Inventory / Cr. COGS</li>
+<li>Sales Allowances: customer keeps defective goods, gets partial refund</li>
+<li>Sales Discounts: early payment discount (e.g. 2/10, n/30)</li>
+<li>All three: DEBIT normal balance &mdash; NOT expenses, they are contra revenues</li>
+<li>Sales TAX: NOT a contra revenue &mdash; it's a current liability</li>
+</ul></div>
+<div class="nc"><h4>2/10, n/30 &mdash; Sales Discount</h4>
+<p>2% discount if paid within 10 days; full amount due within 30 days. The 10th day IS within the period.</p>
+<div class="je">Sale $25,000 on account:
+Dr. AR                    25,000
+    Cr. Sales Revenue          25,000
+
+Payment on day 5 (within discount):
+  Discount = $25,000 &times; 2% = $500
+Dr. Cash                  24,500
+Dr. Sales Discount           500
+    Cr. AR                     25,000</div></div>
+<div class="nc"><h4>Sales Return Entry (Perpetual)</h4>
+<div class="je">Customer returns $700 of goods (cost $420):
+
+Entry 1 &mdash; Reverse revenue:
+Dr. Sales Returns          700
+    Cr. Accounts Receivable       700
+
+Entry 2 &mdash; Put inventory back:
+Dr. Inventory              420
+    Cr. Cost of Goods Sold        420</div></div>
+<div class="nc"><h4>Allowance Method (GAAP Required)</h4><ul>
+<li>Must ESTIMATE future uncollectibles at year-end &mdash; can't wait until they occur</li>
+<li>AFUA = Allowance for Uncollectible Accounts = contra asset (credit normal balance, NOT a liability)</li>
+<li>Balance sheet: AR &minus; AFUA = Net Accounts Receivable</li>
+<li>Year-end estimate: Dr. Bad Debt Expense / Cr. AFUA</li>
+<li>Write-off: Dr. AFUA / Cr. AR &mdash; NO expense, NO change in total assets</li>
+</ul></div>
+<div class="nc"><h4>% of Receivables Method</h4>
+<p>Find required ENDING AFUA balance = AR &times; %<br>Then: what adjustment gets AFUA there?</p>
+<div class="je">AR $750,000 &times; 3% = $22,500 needed
+AFUA currently has $14,000 credit
+Adjustment = $22,500 &minus; $14,000 = $8,500
+
+Dr. Bad Debt Expense       8,500
+    Cr. AFUA                       8,500</div></div>
+<div class="nc"><h4>Aging Method</h4><ul>
+<li>Categorizes AR by how long past due; applies higher % to older accounts</li>
+<li>Older accounts are LESS likely to be collected</li>
+<li>More accurate than applying a single percentage</li>
+<li>Same T-account approach: determine required ending AFUA balance, then find adjustment</li>
+<li>The year-end adjusting entry is affected by the current balance of AFUA before adjustment</li>
+</ul></div>
+<div class="nc"><h4>Direct Write-Off Method (NOT GAAP)</h4><ul>
+<li>Write off bad debts only when they actually become uncollectible</li>
+<li>NOT acceptable under GAAP (overstates AR in current year)</li>
+<li>Only acceptable if uncollectible amounts not anticipated or very small</li>
+<li>Used for TAX reporting</li>
+</ul></div>
+<div class="nc"><h4>Notes Receivable &amp; Interest</h4><ul>
+<li>Notes receivable: formal credit arrangement &mdash; more formal than AR (written instrument)</li>
+<li>Interest = Face Value &times; Annual Rate &times; (Days/365)</li>
+<li>Accrue interest at year-end: Dr. Interest Receivable / Cr. Interest Revenue</li>
+</ul>
+<div class="je">$60,000 note, 5%, signed Nov 1 &rarr; accrue Dec 31:
+Interest = $60,000 &times; 5% &times; (2/12) = $500
+
+Dr. Interest Receivable    500
+    Cr. Interest Revenue           500</div></div>
+<div class="nc"><h4>Receivables Ratios</h4><ul>
+<li>Receivables Turnover = Net Credit Sales &divide; Average AR</li>
+<li>Average Collection Period = 365 &divide; Receivables Turnover</li>
+<li>Higher turnover = faster collection = better</li>
+<li>Example: turnover of 10 &rarr; collection period = 36.5 days</li>
+</ul></div>
+</div></div>
+
+<div class="ch">
+<div class="ch-title">Chapter 6 &mdash; Inventory and Cost of Goods Sold</div>
+<div class="ngrid">
+<div class="nc"><h4>What Goes in Inventory Cost?</h4><ul>
+<li>&#10003; Purchase price, freight-in (if FOB Shipping Point), sales tax</li>
+<li>&#10003; Purchase discounts REDUCE inventory cost</li>
+<li>&#10003; Purchase returns REDUCE inventory cost</li>
+<li>&#10007; Advertising &mdash; expensed immediately, NOT in inventory</li>
+<li>FOB Shipping Point: buyer pays freight (adds to inventory cost)</li>
+<li>FOB Destination: seller pays freight (doesn't add to buyer's inventory)</li>
+</ul></div>
+<div class="nc"><h4>Perpetual vs. Periodic</h4><ul>
+<li>Perpetual: continuously updates inventory on every purchase and sale &mdash; most common in practice</li>
+<li>Periodic: only updates at period-end based on physical count</li>
+<li>Both produce the SAME COGS and ending inventory under FIFO</li>
+</ul></div>
+<div class="nc"><h4>Inventory Transactions (Perpetual)</h4>
+<div class="je">Purchase $10,000 on account:
+Dr. Inventory          10,000
+    Cr. Accounts Payable       10,000
+
+Purchase discount (2%): pay within 10 days:
+Dr. AP                 10,000
+    Cr. Inventory                 200
+    Cr. Cash                    9,800
+
+Sell inventory (2 required entries):
+Dr. Cash or AR         30,000
+    Cr. Sales Revenue          30,000
+Dr. COGS               18,000
+    Cr. Inventory              18,000</div></div>
+<div class="nc"><h4>FIFO Cost Method</h4><ul>
+<li>First In, First Out: oldest units sold first</li>
+<li>Beginning inventory is ALWAYS the first batch sold &mdash; don't forget it</li>
+<li>Ending inventory = most recent purchases remain on hand</li>
+</ul>
+<div class="je">Beg. inv 100 @ $5, buy 200 @ $7, sell 150:
+  100 &times; $5 = $500
++  50 &times; $7 = $350
+COGS = $850
+Ending inv: 150 &times; $7 = $1,050</div></div>
+<div class="nc"><h4>Lower of Cost and NRV (LCNRV)</h4><ul>
+<li>Report inventory at whichever is LOWER: cost or NRV</li>
+<li>NRV = expected selling price minus costs to complete and sell</li>
+<li>If NRV falls below cost: write inventory down</li>
+</ul>
+<div class="je">Inventory cost $50,000; NRV $44,000:
+Dr. Loss on Inventory Write-Down  6,000
+    Cr. Inventory                      6,000</div></div>
+<div class="nc"><h4>Multi-Step Income Statement (Merchandiser)</h4><ul>
+<li>Net Sales &minus; COGS = Gross Profit</li>
+<li>Gross Profit &minus; Operating Expenses = Operating Income</li>
+<li>Operating income &ne; Net income (excludes nonoperating items)</li>
+</ul></div>
+<div class="nc"><h4>Inventory Ratios</h4><ul>
+<li>Inventory Turnover = COGS &divide; Average Inventory (use AVERAGE, not ending!)</li>
+<li>Average Days in Inventory = 365 &divide; Turnover</li>
+<li>Gross Profit Ratio = Gross Profit &divide; Net Sales</li>
+<li>Higher turnover = more efficient; Higher GP% = more profitable</li>
+<li>Example: COGS $70k, beg inv $10k, end inv $20k &rarr; avg = $15k &rarr; turnover = 4.67</li>
+</ul></div>
+<div class="nc"><h4>Inventory Errors</h4><ul>
+<li>Understated ending inventory &rarr; overstated COGS &rarr; understated net income (current year)</li>
+<li>Overstated ending inventory &rarr; understated COGS &rarr; overstated net income</li>
+<li>Error reverses in the following year</li>
+<li>Current year: affects inventory (BS) and COGS/gross profit (IS)</li>
+</ul></div>
+</div></div>
+
+<div class="ch">
+<div class="ch-title">Chapter 7 &mdash; Long-Term Assets</div>
+<div class="ngrid">
+<div class="nc"><h4>Types of Long-Term Assets</h4><ul>
+<li>Tangible PP&amp;E: Land, Land improvements, Buildings, Equipment, Natural resources</li>
+<li>Intangible: Patents (20 yr), Copyrights (life+70 yr), Trademarks (indefinite), Franchises, Goodwill</li>
+<li>Recorded at: original cost + ALL costs necessary to get the asset ready for its intended use</li>
+</ul></div>
+<div class="nc"><h4>PP&amp;E Acquisition Cost</h4><ul>
+<li>&#10003; Purchase price, sales tax, freight, installation, testing, assembly</li>
+<li>&#10003; Commissions, legal fees (buildings/land)</li>
+<li>&#10003; Clearing, filling, leveling land; back taxes owed on land</li>
+<li>&#10003; Cash from selling salvaged materials REDUCES land cost</li>
+<li>&#10007; Annual insurance &mdash; expensed as incurred (recurring, not capitalized)</li>
+<li>&#10007; Annual property taxes on vehicles &mdash; expensed as incurred</li>
+</ul></div>
+<div class="nc"><h4>Capitalize vs. Expense After Acquisition</h4><ul>
+<li>CAPITALIZE: extends useful life, adds new function, improves quality &rarr; add to asset, depreciate</li>
+<li>Examples to capitalize: add refrigeration unit to truck, major renovation, engine replacement</li>
+<li>EXPENSE immediately: routine repair/maintenance restoring original capability</li>
+<li>Examples to expense: oil change, tune-up, replacing broken part, tire rotation</li>
+<li>Materiality: very small amounts always expensed regardless</li>
+</ul></div>
+<div class="nc"><h4>Intangible Assets</h4><ul>
+<li>Purchased: capitalize at cost + costs to get ready for use</li>
+<li>Internally developed: EXPENSE as incurred (R&amp;D, advertising)</li>
+<li>Goodwill: purchase price &minus; fair value of net assets acquired</li>
+<li>Goodwill ONLY recorded in acquisitions &mdash; never internally generated</li>
+<li>Goodwill + indefinite-life trademarks: NOT amortized</li>
+<li>R&amp;D: always expensed &mdash; can't determine future benefit period</li>
+</ul></div>
+<div class="nc"><h4>Straight-Line Depreciation</h4><ul>
+<li>Annual Dep = (Cost &minus; Residual Value) &divide; Useful Life</li>
+<li>LAND is NEVER depreciated (indefinite life)</li>
+<li>Land improvements ARE depreciated (limited life)</li>
+<li>Depreciation = cost ALLOCATION, NOT a decrease in market value</li>
+<li>Accum. Depreciation = contra asset (credit normal balance)</li>
+<li>Book Value = Cost &minus; Accumulated Depreciation</li>
+</ul></div>
+<div class="nc"><h4>Partial Year Depreciation</h4>
+<div class="wbox">&#9888;&#65039; COUNT EACH MONTH: March to December = 10 months (not 9). September to December = 4 months (not 3). Never subtract month numbers &mdash; list them out.</div>
+<div class="je">$50,000 equip, $5,000 salvage, 5-yr life
+Purchased April 1; dep thru Dec 31 = 9 months
+
+Annual = ($50k&minus;$5k) &divide; 5 = $9,000
+9 months = $9,000 &times; 9/12 = $6,750
+
+Dr. Depreciation Expense    6,750
+    Cr. Accumulated Depreciation  6,750</div></div>
+<div class="nc"><h4>Asset Disposal</h4><ul>
+<li>Book Value = Cost &minus; Accum. Dep. at disposal date</li>
+<li>Proceeds &gt; Book Value &rarr; GAIN on sale</li>
+<li>Proceeds &lt; Book Value &rarr; LOSS on sale</li>
+<li>ALWAYS update depreciation to disposal date FIRST</li>
+<li>Remove both original cost AND accumulated depreciation separately</li>
+</ul>
+<div class="je">Cost $40k, accum dep $28k, sold $15k:
+BV = $40k &minus; $28k = $12k
+Gain = $15k &minus; $12k = $3,000
+
+Dr. Cash               15,000
+Dr. Accum. Dep.        28,000
+    Cr. Equipment              40,000
+    Cr. Gain on Sale            3,000</div></div>
+<div class="nc"><h4>Equipment &mdash; Ch.7 Practice Problems</h4>
+<div class="je">Equip: cost $68k, salvage $9k, 10-yr life
+After 7 years, sold for $22,000:
+
+Annual dep = ($68k&minus;$9k)/10 = $5,900
+Accum dep = $5,900 &times; 7 = $41,300
+Book value = $68k &minus; $41.3k = $26,700
+Proceeds $22k &lt; BV $26.7k &rarr; LOSS $4,700
+
+Dr. Cash               22,000
+Dr. Accum. Dep.        41,300
+Dr. Loss on Sale        4,700
+    Cr. Equipment              68,000</div></div>
+<div class="nc"><h4>Vehicle Disposal Example</h4>
+<div class="je">Vehicle: cost $75k, salvage $5k, 10-yr life
+Sold after 3 years for $40,000:
+
+Annual dep = ($75k&minus;$5k)/10 = $7,000
+Accum dep = $7,000 &times; 3 = $21,000
+Book value = $75k &minus; $21k = $54,000
+Proceeds $40k &lt; BV $54k &rarr; LOSS $14,000
+
+Dr. Cash               40,000
+Dr. Accum. Dep.        21,000
+Dr. Loss on Sale       14,000
+    Cr. Vehicle                75,000</div></div>
+<div class="nc"><h4>Return on Assets</h4><ul>
+<li>ROA = Net Income &divide; Average Total Assets</li>
+<li>Profit Margin = Net Income &divide; Net Sales (earnings per $1 of sales)</li>
+<li>Asset Turnover = Net Sales &divide; Average Total Assets (sales per $1 of assets)</li>
+<li>ROA = Profit Margin &times; Asset Turnover</li>
+</ul></div>
+</div></div>
+
+<div class="ch">
+<div class="ch-title">Chapter 4 &mdash; Cash and Internal Controls</div>
+<div class="ngrid">
+<div class="nc"><h4>Fraud Triangle</h4><ul>
+<li>Pressure: financial or personal motivation</li>
+<li>Opportunity: ability to commit fraud &mdash; the ONLY element companies can reduce through controls</li>
+<li>Rationalization: mental justification ("I'll pay it back," "I deserve it")</li>
+<li>Internal controls target OPPORTUNITY</li>
+<li>Occupational fraud: using one's job for personal enrichment through deliberate misuse of employer's resources</li>
+</ul></div>
+<div class="nc"><h4>Internal Control Components</h4><ul>
+<li>Control environment: overall attitudes and actions of management</li>
+<li>Risk assessment: internal and external risk factors</li>
+<li>Control activities: preventative + detective procedures</li>
+<li>Monitoring: ongoing evaluation of controls</li>
+<li>Information and communication: reliable accounting systems</li>
+</ul></div>
+<div class="nc"><h4>Control Activities</h4><ul>
+<li>Preventative: Segregation of duties (separate authorization, recording, custody); Physical controls; Proper authorization; Employee management; E-commerce controls</li>
+<li>Detective: Reconciliations, Performance reviews, Audits</li>
+<li>Limitations: collusion (2+ people coordinating), management override &mdash; even the best controls can fail</li>
+</ul></div>
+<div class="nc"><h4>Sarbanes-Oxley Act (SOX) 2002</h4><ul>
+<li>Passed after Enron and WorldCom accounting scandals</li>
+<li>Also known as the Public Company Accounting Reform and Investor Protection Act</li>
+<li>Applies ONLY to companies required to file financial statements with the SEC &mdash; NOT all US companies</li>
+<li>Section 404: management AND auditors must document and assess internal control effectiveness annually</li>
+<li>CEO and CFO must sign the annual report on internal controls</li>
+</ul></div>
+<div class="nc"><h4>Cash and Cash Equivalents</h4><ul>
+<li>Coins/currency, checks received, savings/checking balances</li>
+<li>Credit card and debit card sales (included when settled)</li>
+<li>Cash equivalents: investments maturing within 3 months (money market funds, treasury bills, CDs)</li>
+</ul></div>
+<div class="nc"><h4>Bank Reconciliation &mdash; Bank Side</h4><ul>
+<li>ADD: Deposits in transit (company recorded, bank hasn't yet)</li>
+<li>ADD: Bank errors that understate company's balance</li>
+<li>SUBTRACT: Outstanding checks (written by company, not cleared bank yet)</li>
+<li>Note: bank's "credit" = deposit (opposite of accounting &mdash; they see it as their liability to us)</li>
+</ul></div>
+<div class="nc"><h4>Bank Reconciliation &mdash; Book Side</h4><ul>
+<li>ADD: Interest earned on balance, bank collections on company's behalf</li>
+<li>SUBTRACT: NSF checks, bank service fees, debit card purchases, electronic transfers</li>
+<li>ONLY book side items require journal entries</li>
+<li>Deposits in transit and outstanding checks do NOT need entries (already in company's records)</li>
+</ul>
+<div class="je">NSF check from customer ($500):
+Dr. Accounts Receivable   500
+    Cr. Cash                      500
+
+Bank service fee ($25):
+Dr. Misc. Expense          25
+    Cr. Cash                       25</div></div>
+<div class="nc"><h4>Statement of Cash Flows</h4><ul>
+<li>Operating: day-to-day revenue/expense activities (cash from customers; pay salaries, rent, utilities, suppliers)</li>
+<li>Investing: long-term assets (purchase or sale of equipment, land, buildings)</li>
+<li>Financing: debt and equity (borrow/repay notes, issue stock, pay dividends)</li>
+</ul></div>
+</div></div>
+
+<div class="ch">
+<div class="ch-title">Chapters 8 &amp; 9 &mdash; Liabilities</div>
+<div class="ngrid">
+<div class="nc"><h4>Current vs. Long-Term Liabilities</h4><ul>
+<li>Current: due within ONE YEAR from balance sheet date (or operating cycle if longer than 1 year)</li>
+<li>Long-term: due in MORE THAN one year</li>
+<li>Operating cycle: time from spending cash &rarr; providing goods/services &rarr; collecting from customer</li>
+<li>Current portion of LTD: reclassify the portion due within 1 year to current liabilities</li>
+<li>Salaries payable &rarr; current; 30-year mortgage &rarr; long-term</li>
+</ul></div>
+<div class="nc"><h4>Notes Payable &amp; Interest</h4><ul>
+<li>Interest = Face Value &times; Annual Rate &times; (Months &divide; 12)</li>
+<li>COUNT THE FIRST MONTH: Sep 1 to Dec 31 = 4 months (Sep, Oct, Nov, Dec)</li>
+<li>Mar 1 to Dec 31 = 10 months</li>
+<li>Record interest in period INCURRED, not when paid</li>
+</ul>
+<div class="je">Borrow $60,000 at 8% on October 1:
+Dr. Cash              60,000
+    Cr. Notes Payable       60,000
+
+Dec 31 &mdash; 3 months of interest:
+$60,000 &times; 8% &times; 3/12 = $1,200
+Dr. Interest Expense    1,200
+    Cr. Interest Payable    1,200
+
+Repayment on maturity:
+Dr. Notes Payable     60,000
+Dr. Interest Payable   1,200
+    Cr. Cash                61,200</div></div>
+<div class="nc"><h4>Practice: $250,000 Note at 6%</h4>
+<div class="je">Note signed March 1 at 6% for 1 year:
+March to December = 10 months
+
+Interest = $250,000 &times; 6% &times; 10/12 = $12,500
+
+Mar 1:
+Dr. Cash             250,000
+    Cr. Notes Payable        250,000
+
+Dec 31:
+Dr. Interest Expense  12,500
+    Cr. Interest Payable      12,500</div></div>
+<div class="nc"><h4>Other Current Liabilities</h4><ul>
+<li>Deferred Revenue: cash received in advance = LIABILITY until service/goods provided (NOT revenue)</li>
+<li>Sales Tax Payable: collected from customers, owed to government &mdash; NOT expense, NOT revenue</li>
+</ul>
+<div class="je">$100 sale + 8% sales tax:
+Dr. Cash              108
+    Cr. Sales Revenue       100
+    Cr. Sales Tax Payable     8
+
+Deferred Revenue &mdash; receive $9,600 Oct 1
+for 1-year contract:
+Dr. Cash             9,600
+    Cr. Deferred Revenue     9,600
+
+Dec 31 &mdash; 3 months earned:
+Dr. Deferred Revenue 2,400
+    Cr. Service Revenue      2,400</div></div>
+<div class="nc"><h4>Liquidity Ratios (Ch.8)</h4><ul>
+<li>Working Capital = Current Assets &minus; Current Liabilities</li>
+<li>Current Ratio = Current Assets &divide; Current Liabilities</li>
+<li>Acid-Test = (Cash + Current Investments + AR) &divide; Current Liabilities (excludes inventory &amp; prepaid)</li>
+<li>Higher = more liquid; but very high current ratio could signal excess inventory or collection problems</li>
+</ul></div>
+<div class="nc"><h4>Long-Term Financing (Ch.9)</h4><ul>
+<li>Debt financing: interest is TAX-DEDUCTIBLE</li>
+<li>Equity financing: dividends are NOT tax-deductible</li>
+<li>Capital structure: mix of debt and equity</li>
+<li>Debt to Equity = Total Liabilities &divide; Stockholders' Equity</li>
+<li>Higher D/E = more leverage = higher financial risk</li>
+<li>Installment notes: each payment includes interest + reduction of principal</li>
+</ul></div>
+</div></div>
+
+</div><!-- end notes panel -->
+
+<!-- ===== FLASHCARDS ===== -->
+<div id="panel-fc" class="panel">
+<div class="pbar"><div class="pfill" id="fcbar" style="width:0%"></div></div>
+<div class="fc-meta">
+  <span class="fc-ctr" id="fcctr">1 / 44</span>
+  <span class="badge badge-a" id="fccat">Ch.1</span>
+  <span class="fc-knew" id="fcknew">0 known</span>
+  <button class="btn btn-o" style="margin-left:auto;font-size:12px;padding:4px 11px" onclick="shuffleFC()">Shuffle</button>
+</div>
+<div class="cardvp" id="fccard" onclick="flipFC()">
+  <div class="cinner">
+    <div class="cface">
+      <div class="clabel" id="fccat2">Ch.1</div>
+      <p class="cq" id="fcq">Loading...</p>
+      <span class="chint">click to flip</span>
+    </div>
+    <div class="cface cback">
+      <p class="ca" id="fca"></p>
     </div>
   </div>
+</div>
+<div class="fc-ctrl">
+  <button class="btn btn-o" onclick="prevFC()">&larr; Prev</button>
+  <button class="btn btn-err" onclick="markFC(false)">&#10007; Didn't know</button>
+  <button class="btn btn-ok" onclick="markFC(true)">&#10003; Got it</button>
+  <button class="btn btn-o" onclick="nextFC()">Next &rarr;</button>
+</div>
+</div>
 
-  <div class="study-area">
-    <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('flashcards', this)">Flashcards</button>
-      <button class="tab-btn" onclick="switchTab('quiz', this)">Practice Quiz</button>
-      <button class="tab-btn" onclick="switchTab('journal', this)">Journal Drills</button>
-      <button class="tab-btn" onclick="switchTab('formulas', this)">Formula Sheet</button>
-      <button class="tab-btn" onclick="switchTab('mistakes', this)">Common Mistakes</button>
-    </div>
-
-    <!-- ── FLASHCARDS ── -->
-    <div id="panel-flashcards" class="panel active">
-      <div class="progress-bar"><div class="progress-fill" id="fc-bar" style="width:0%"></div></div>
-      <div class="fc-meta">
-        <span class="fc-counter" id="fc-counter">1 / 30</span>
-        <span class="badge badge-accent" id="fc-cat">Ch.1</span>
-        <span class="fc-knew" id="fc-knew">0 known</span>
-        <button class="btn btn-outline fc-shuffle" onclick="shuffleCards()">Shuffle</button>
-      </div>
-      <div class="card-viewport" id="fc-card" onclick="flipCard()">
-        <div class="card-inner">
-          <div class="card-face card-front">
-            <div class="cat-label" id="fc-cat-front">Ch.1</div>
-            <p class="q-text" id="fc-q">Loading...</p>
-            <span class="tap-hint">click to reveal answer</span>
-          </div>
-          <div class="card-face card-back">
-            <p class="a-text" id="fc-a"></p>
-          </div>
-        </div>
-      </div>
-      <div class="fc-controls">
-        <button class="btn btn-outline" onclick="prevCard()">← Prev</button>
-        <button class="btn btn-danger" onclick="markCard(false)">✗ Didn't know</button>
-        <button class="btn btn-success" onclick="markCard(true)">✓ Got it</button>
-        <button class="btn btn-outline" onclick="nextCard()">Next →</button>
-      </div>
-    </div>
-
-    <!-- ── QUIZ ── -->
-    <div id="panel-quiz" class="panel">
-      <div id="quiz-setup" class="quiz-setup">
-        <p class="quiz-filter-label">Filter by chapter</p>
-        <div class="filter-pills">
-          <button class="filter-pill active" onclick="setQuizCat('all',this)">All</button>
-          <button class="filter-pill" onclick="setQuizCat('Ch.3',this)">Ch.3 Adjustments</button>
-          <button class="filter-pill" onclick="setQuizCat('Ch.5',this)">Ch.5 Receivables</button>
-          <button class="filter-pill" onclick="setQuizCat('Ch.6',this)">Ch.6 Inventory</button>
-          <button class="filter-pill" onclick="setQuizCat('Ch.7',this)">Ch.7 Assets</button>
-          <button class="filter-pill" onclick="setQuizCat('Ch.4',this)">Ch.4 Cash</button>
-          <button class="filter-pill" onclick="setQuizCat('Ch.8',this)">Ch.8 Liabilities</button>
-        </div>
-        <button class="btn btn-primary" onclick="startQuiz()" style="width:100%;justify-content:center;padding:0.9rem;">Start Quiz →</button>
-      </div>
-      <div id="quiz-active" style="display:none;">
-        <div class="q-header-row">
-          <span class="q-num" id="q-num">Question 1 of 20</span>
-          <span class="q-score-live" id="q-score-live">0 correct</span>
-        </div>
-        <div class="progress-bar"><div class="progress-fill" id="q-bar" style="width:0%"></div></div>
-        <div class="question-box" id="q-text"></div>
-        <div class="options-list" id="q-opts"></div>
-        <div class="explanation" id="q-exp"></div>
-        <button class="btn btn-primary" id="q-next" onclick="nextQuestion()" style="display:none;width:100%;justify-content:center;">Next question →</button>
-      </div>
-      <div id="quiz-result" class="score-screen" style="display:none;">
-        <div class="score-big" id="result-pct">--</div>
-        <div class="score-msg" id="result-msg"></div>
-        <button class="btn btn-outline" onclick="resetQuiz()">Try again</button>
-      </div>
-    </div>
-
-    <!-- ── JOURNAL DRILLS ── -->
-    <div id="panel-journal" class="panel">
-      <div id="je-body"></div>
-      <div class="je-btn-row">
-        <button class="btn btn-outline" onclick="revealJE()">Show answer</button>
-        <button class="btn btn-primary" onclick="nextJE()">Next scenario →</button>
-      </div>
-    </div>
-
-    <!-- ── FORMULA SHEET ── -->
-    <div id="panel-formulas" class="panel">
-      <div class="formula-section-title">Core equation</div>
-      <div class="formula-grid">
-        <div class="formula-card">
-          <div class="formula-name">Accounting Equation</div>
-          <div class="formula-eq">Assets = Liabilities + Equity</div>
-          <div class="formula-note">Foundation of all double-entry accounting. Every transaction keeps this balanced.</div>
-        </div>
-        <div class="formula-card">
-          <div class="formula-name">Retained Earnings</div>
-          <div class="formula-eq">Beg RE + Revenue − Expenses − Dividends = End RE</div>
-          <div class="formula-note">Connects income statement to balance sheet via stockholders' equity.</div>
-        </div>
-      </div>
-
-      <div class="formula-section-title">Income statement</div>
-      <div class="formula-grid">
-        <div class="formula-card">
-          <div class="formula-name">Net Revenue</div>
-          <div class="formula-eq">Total Revenue − Returns − Allowances − Discounts</div>
-          <div class="formula-note">Returns, allowances, and discounts are contra revenue accounts (debit normal balance).</div>
-        </div>
-        <div class="formula-card">
-          <div class="formula-name">Gross Profit</div>
-          <div class="formula-eq">Net Revenue − Cost of Goods Sold</div>
-        </div>
-        <div class="formula-card">
-          <div class="formula-name">Operating Income</div>
-          <div class="formula-eq">Gross Profit − Operating Expenses</div>
-          <div class="formula-note">Excludes non-operating items like interest income/expense.</div>
-        </div>
-        <div class="formula-card">
-          <div class="formula-name">Net Income</div>
-          <div class="formula-eq">All Revenues − All Expenses</div>
-          <div class="formula-note">Bottom line. Flows into Retained Earnings.</div>
-        </div>
-      </div>
-
-      <div class="formula-section-title">Receivables — Ch.5</div>
-      <div class="formula-grid">
-        <div class="formula-card">
-          <div class="formula-name">Net Accounts Receivable</div>
-          <div class="formula-eq">AR − Allowance for Uncollectible Accounts</div>
-          <div class="formula-note">AFUA is a contra asset (credit normal balance). <strong>NOT a liability.</strong></div>
-        </div>
-        <div class="formula-card">
-          <div class="formula-name">Interest on Notes</div>
-          <div class="formula-eq">Face Value × Annual Rate × (Days / 365)</div>
-          <div class="formula-note">Use the exact fraction of the year the note is outstanding.</div>
-        </div>
-        <div class="formula-card">
-          <div class="formula-name">Receivables Turnover</div>
-          <div class="formula-eq">Net Credit Sales ÷ Average AR</div>
-          <div class="formula-note">Higher = faster cash collection from customers.</div>
-        </div>
-        <div class="formula-card">
-          <div class="formula-name">Average Collection Period</div>
-          <div class="formula-eq">365 ÷ Receivables Turnover</div>
-          <div class="formula-note">Days the average AR balance is outstanding.</div>
-        </div>
-      </div>
-
-      <div class="formula-section-title">Inventory — Ch.6</div>
-      <div class="formula-grid">
-        <div class="formula-card">
-          <div class="formula-name">COGS Formula</div>
-          <div class="formula-eq">Beg Inventory + Purchases − Ending Inventory</div>
-          <div class="formula-note">Under FIFO, beginning inventory is sold first. <strong>Don't forget to include it.</strong></div>
-        </div>
-        <div class="formula-card">
-          <div class="formula-name">Inventory Turnover</div>
-          <div class="formula-eq">COGS ÷ Average Inventory</div>
-          <div class="formula-note">Average = (Beg + End) ÷ 2. <strong>Use average, not ending balance.</strong></div>
-        </div>
-        <div class="formula-card">
-          <div class="formula-name">Average Days in Inventory</div>
-          <div class="formula-eq">365 ÷ Inventory Turnover</div>
-        </div>
-        <div class="formula-card">
-          <div class="formula-name">Gross Profit Ratio</div>
-          <div class="formula-eq">Gross Profit ÷ Net Sales</div>
-          <div class="formula-note">Higher ratio = more profitable inventory management.</div>
-        </div>
-      </div>
-
-      <div class="formula-section-title">Long-term assets — Ch.7</div>
-      <div class="formula-grid">
-        <div class="formula-card">
-          <div class="formula-name">Straight-Line Depreciation</div>
-          <div class="formula-eq">(Cost − Residual Value) ÷ Useful Life</div>
-          <div class="formula-note"><strong>Land is NEVER depreciated.</strong> Depreciation = cost allocation, not value decrease.</div>
-        </div>
-        <div class="formula-card">
-          <div class="formula-name">Book Value</div>
-          <div class="formula-eq">Cost − Accumulated Depreciation</div>
-        </div>
-        <div class="formula-card">
-          <div class="formula-name">Gain / Loss on Disposal</div>
-          <div class="formula-eq">Proceeds − Book Value at Disposal Date</div>
-          <div class="formula-note">Positive = gain. Negative = loss. Always update depreciation before disposal.</div>
-        </div>
-        <div class="formula-card">
-          <div class="formula-name">Return on Assets</div>
-          <div class="formula-eq">Net Income ÷ Average Total Assets</div>
-        </div>
-        <div class="formula-card">
-          <div class="formula-name">Profit Margin</div>
-          <div class="formula-eq">Net Income ÷ Net Sales</div>
-        </div>
-        <div class="formula-card">
-          <div class="formula-name">Asset Turnover</div>
-          <div class="formula-eq">Net Sales ÷ Average Total Assets</div>
-        </div>
-      </div>
-
-      <div class="formula-section-title">Liabilities — Ch.8–9</div>
-      <div class="formula-grid">
-        <div class="formula-card">
-          <div class="formula-name">Interest Expense</div>
-          <div class="formula-eq">Face Value × Annual Rate × (Months / 12)</div>
-          <div class="formula-note"><strong>Count the first month.</strong> September to December = 4 months, not 3.</div>
-        </div>
-        <div class="formula-card">
-          <div class="formula-name">Working Capital</div>
-          <div class="formula-eq">Current Assets − Current Liabilities</div>
-        </div>
-        <div class="formula-card">
-          <div class="formula-name">Current Ratio</div>
-          <div class="formula-eq">Current Assets ÷ Current Liabilities</div>
-          <div class="formula-note">Measures ability to pay current obligations.</div>
-        </div>
-        <div class="formula-card">
-          <div class="formula-name">Acid-Test Ratio</div>
-          <div class="formula-eq">(Cash + Investments + AR) ÷ Current Liabilities</div>
-          <div class="formula-note">Excludes inventory and prepaid. More conservative liquidity measure.</div>
-        </div>
-        <div class="formula-card">
-          <div class="formula-name">Debt to Equity Ratio</div>
-          <div class="formula-eq">Total Liabilities ÷ Stockholders' Equity</div>
-          <div class="formula-note">Higher = more financial risk/leverage.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── COMMON MISTAKES ── -->
-    <div id="panel-mistakes" class="panel">
-      <div class="mistake-list">
-        <div class="mistake-item">
-          <div class="mistake-tag">Ch.5 · AFUA</div>
-          <div class="mistake-wrong">✗ "AFUA has a credit balance, so it must be a liability."</div>
-          <div class="mistake-right">✓ AFUA is a CONTRA ASSET. It reduces Accounts Receivable on the balance sheet. Both liabilities and contra assets have credit normal balances — don't confuse them.</div>
-        </div>
-        <div class="mistake-item">
-          <div class="mistake-tag">Ch.5 · Write-off</div>
-          <div class="mistake-wrong">✗ Recording Bad Debt Expense when writing off a specific account.</div>
-          <div class="mistake-right">✓ Bad debt was already expensed when the allowance was estimated at year-end. Write-off only removes AR and reduces AFUA — no income statement effect.</div>
-        </div>
-        <div class="mistake-item">
-          <div class="mistake-tag">Ch.6 · FIFO</div>
-          <div class="mistake-wrong">✗ Forgetting beginning inventory when calculating FIFO COGS.</div>
-          <div class="mistake-right">✓ Beginning inventory was purchased BEFORE any current-period buys — under FIFO it is always sold first. Include it as your first batch.</div>
-        </div>
-        <div class="mistake-item">
-          <div class="mistake-tag">Ch.6 · Inventory Turnover</div>
-          <div class="mistake-wrong">✗ Using ending inventory instead of average inventory.</div>
-          <div class="mistake-right">✓ Use average inventory: (Beginning + Ending) ÷ 2. COGS is a full-period amount; the balance sheet item must be averaged over the same period.</div>
-        </div>
-        <div class="mistake-item">
-          <div class="mistake-tag">Ch.7 · Depreciation concept</div>
-          <div class="mistake-wrong">✗ "Depreciation records the decrease in market value of an asset."</div>
-          <div class="mistake-right">✓ Depreciation is COST ALLOCATION, not valuation. We allocate the asset's cost to expense over its useful life — market value is irrelevant.</div>
-        </div>
-        <div class="mistake-item">
-          <div class="mistake-tag">Ch.7 · Land</div>
-          <div class="mistake-wrong">✗ Depreciating land along with buildings and equipment.</div>
-          <div class="mistake-right">✓ Land is NEVER depreciated — it has an indefinite useful life. Land improvements (parking lots, fences) ARE depreciated separately.</div>
-        </div>
-        <div class="mistake-item">
-          <div class="mistake-tag">Ch.7 · Asset disposal</div>
-          <div class="mistake-wrong">✗ Forgetting to update depreciation before recording the asset sale.</div>
-          <div class="mistake-right">✓ Always record depreciation up to the exact disposal date first. Otherwise book value is overstated and your gain/loss will be wrong.</div>
-        </div>
-        <div class="mistake-item">
-          <div class="mistake-tag">Ch.3 · Depreciation timing</div>
-          <div class="mistake-wrong">✗ "March 1 to December 31 is 9 months (12 − 3 = 9)."</div>
-          <div class="mistake-right">✓ March 1 to December 31 is 10 months — count every month from March through December. The shortcut of subtracting month numbers loses the first month.</div>
-        </div>
-        <div class="mistake-item">
-          <div class="mistake-tag">Ch.8 · Interest months</div>
-          <div class="mistake-wrong">✗ "September to December = 3 months (12 − 9 = 3)."</div>
-          <div class="mistake-right">✓ Count September, October, November, December = 4 months. Always count the starting month.</div>
-        </div>
-        <div class="mistake-item">
-          <div class="mistake-tag">Ch.8 · Deferred Revenue</div>
-          <div class="mistake-wrong">✗ "Deferred Revenue is a revenue account because it has the word 'revenue' in it."</div>
-          <div class="mistake-right">✓ Deferred Revenue is a LIABILITY. Cash was received but goods/services haven't been provided yet — the company owes the customer.</div>
-        </div>
-        <div class="mistake-item">
-          <div class="mistake-tag">Ch.4 · NSF Check</div>
-          <div class="mistake-wrong">✗ Thinking the NSF check is a bad check written BY the company.</div>
-          <div class="mistake-right">✓ NSF means a customer's check to you bounced. Reverse your cash deposit: Debit AR / Credit Cash. The customer still owes you the money.</div>
-        </div>
-        <div class="mistake-item">
-          <div class="mistake-tag">Ch.4 · Bank Reconciliation</div>
-          <div class="mistake-wrong">✗ Adjusting the company's cash balance for deposits outstanding and checks outstanding.</div>
-          <div class="mistake-right">✓ Outstanding deposits and checks go on the BANK side — the company already has these recorded. Only adjust the company side for items the bank has recorded that the company hasn't yet.</div>
-        </div>
-      </div>
-    </div>
+<!-- ===== QUIZ ===== -->
+<div id="panel-quiz" class="panel">
+<div id="qsetup" class="qsetup">
+  <p class="flabel">Filter by chapter</p>
+  <div class="fpills">
+    <button class="fp on" onclick="setQcat('all',this)">All</button>
+    <button class="fp" onclick="setQcat('Ch.1-2',this)">Ch.1&ndash;2 Foundations</button>
+    <button class="fp" onclick="setQcat('Ch.3',this)">Ch.3 Adjustments</button>
+    <button class="fp" onclick="setQcat('Ch.4',this)">Ch.4 Controls &amp; Cash</button>
+    <button class="fp" onclick="setQcat('Ch.5',this)">Ch.5 Receivables</button>
+    <button class="fp" onclick="setQcat('Ch.6',this)">Ch.6 Inventory</button>
+    <button class="fp" onclick="setQcat('Ch.7',this)">Ch.7 Assets</button>
+    <button class="fp" onclick="setQcat('Ch.8-9',this)">Ch.8&ndash;9 Liabilities</button>
   </div>
+  <button class="btn btn-p" onclick="startQuiz()" style="width:100%;justify-content:center;padding:.75rem">Start Quiz &rarr;</button>
+</div>
+<div id="qactive" style="display:none">
+  <div class="qhdr"><span class="qnum" id="qnum">Q 1</span><span class="qscore" id="qsc">0 correct</span></div>
+  <div class="pbar"><div class="pfill" id="qbar" style="width:0%"></div></div>
+  <div class="qbox" id="qtext"></div>
+  <div class="opts" id="qopts"></div>
+  <div class="exp" id="qexp"></div>
+  <button class="btn btn-p" id="qnext" onclick="nextQ()" style="display:none;width:100%;justify-content:center">Next &rarr;</button>
+</div>
+<div id="qresult" style="display:none;text-align:center;padding:3rem 1rem">
+  <div class="score-big" id="rpct"></div>
+  <p style="color:var(--muted);margin-bottom:1.5rem" id="rmsg"></p>
+  <button class="btn btn-o" onclick="resetQuiz()">Try again</button>
+</div>
+</div>
 
-  <footer class="footer" style="margin-top:4rem;">
-    <div class="footer-name">Adam Geyer</div>
-    <div class="footer-note" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted);">MGT 011A · UC Davis</div>
-  </footer>
+<!-- ===== JOURNAL DRILLS ===== -->
+<div id="panel-je" class="panel">
+<div id="jebody"></div>
+<div class="je-nav" id="je-nav">
+  <button class="btn btn-o" onclick="prevJE()" id="je-prev">&#8592; Prev</button>
+  <button class="btn btn-p" onclick="nextJE()">Next &rarr;</button>
+</div>
+</div>
 
-  <script>
-const CARDS = [
-  {q:"What are the two primary functions of financial accounting?",a:"1. Record or measure the company's activity\n2. Share/communicate that information to decision makers",cat:"Ch.1"},
-  {q:"What is the difference between accrual and cash basis accounting?",a:"Accrual: records revenues when earned and expenses when incurred (GAAP required).\nCash basis: records only when cash is received or paid — NOT GAAP.",cat:"Ch.3"},
-  {q:"What are the four types of adjusting entries?",a:"1. Prepaid expenses (deferred expenses)\n2. Unearned revenues (deferred revenues)\n3. Accrued expenses\n4. Accrued revenues",cat:"Ch.3"},
-  {q:"What are temporary accounts and why are they closed?",a:"Revenue, Expense, and Dividend accounts. They track activity for one year only. Closed at year-end by zeroing balances into Retained Earnings.",cat:"Ch.3"},
-  {q:"What is AFUA and what type of account is it?",a:"Allowance for Uncollectible Accounts — a CONTRA ASSET with a credit normal balance. It reduces Accounts Receivable on the balance sheet. It is NOT a liability.",cat:"Ch.5"},
-  {q:"What is the difference between a sales return and a sales allowance?",a:"Sales Return: customer physically returns the goods.\nSales Allowance: customer keeps the goods but receives a partial refund/credit for defects.",cat:"Ch.5"},
-  {q:"What does '2/10, n/30' mean?",a:"2% discount if the invoice is paid within 10 days; full amount due within 30 days if discount is not taken.",cat:"Ch.5"},
-  {q:"Under the allowance method, what is the entry to write off a bad debt?",a:"Debit: Allowance for Uncollectible Accounts\nCredit: Accounts Receivable\n\nNo bad debt expense is recorded at write-off — it was already recorded at year-end estimation.",cat:"Ch.5"},
-  {q:"What is the difference between the % of receivables and aging methods?",a:"% of receivables: one flat rate applied to total AR balance.\nAging: different rates by how old each receivable is (older = higher %). Aging is more accurate because older accounts are less likely to be collected.",cat:"Ch.5"},
-  {q:"Under FIFO, which units are assumed sold first?",a:"The oldest units — beginning inventory is treated as the first purchase, then earliest buys. Common mistake: students forget to include beginning inventory as the first units sold.",cat:"Ch.6"},
-  {q:"What is the difference between perpetual and periodic inventory systems?",a:"Perpetual: continuously updates inventory with every purchase and sale. Most common in practice.\nPeriodic: only updates at period-end based on physical count.",cat:"Ch.6"},
-  {q:"What is Lower of Cost and Net Realizable Value (LCNRV)?",a:"Inventory must be reported at whichever is lower: original cost OR net realizable value (expected selling price minus estimated costs to complete and sell). Write down if NRV < cost.",cat:"Ch.6"},
-  {q:"What is FOB Shipping Point vs. FOB Destination?",a:"FOB Shipping Point: title passes when seller ships → buyer owns it in transit, buyer pays freight.\nFOB Destination: title passes when goods arrive at buyer → seller owns it in transit, seller pays freight.",cat:"Ch.6"},
-  {q:"How is straight-line depreciation calculated?",a:"(Cost − Residual Value) ÷ Useful Life = Annual Depreciation\n\nKey: Land is NEVER depreciated. Depreciation is cost allocation, not a valuation decrease.",cat:"Ch.7"},
-  {q:"What is the journal entry to record depreciation?",a:"Debit: Depreciation Expense\nCredit: Accumulated Depreciation\n\nAccumulated Depreciation is a contra asset — it reduces the asset's book value on the balance sheet.",cat:"Ch.7"},
-  {q:"How do you determine gain vs. loss on asset disposal?",a:"Book Value = Cost − Accumulated Depreciation\nProceeds > Book Value → GAIN\nProceeds < Book Value → LOSS\n\nCritical: always update depreciation to the disposal date before recording the sale.",cat:"Ch.7"},
-  {q:"What costs are included when recording land?",a:"Purchase price + commissions + back taxes + clearing/leveling/grading costs.\nMINUS cash received from selling salvaged materials.",cat:"Ch.7"},
-  {q:"When do you capitalize vs. expense a cost?",a:"Capitalize (record as asset): benefits future periods — e.g., adding a new engine, structural remodel.\nExpense immediately: only benefits current period — e.g., routine repairs, tune-ups.",cat:"Ch.7"},
-  {q:"What is goodwill and when is it recorded?",a:"Goodwill = purchase price paid in excess of the fair value of identifiable net assets acquired.\nOnly recorded when one company acquires another — NEVER for internally generated goodwill.",cat:"Ch.7"},
-  {q:"What are the three sections of the Statement of Cash Flows?",a:"1. Operating: cash transactions from revenues and expenses\n2. Investing: purchase/sale of long-term assets and investment securities\n3. Financing: borrowing/repaying debt, issuing stock, paying dividends",cat:"Ch.4"},
-  {q:"What are the five components of internal control?",a:"1. Control environment\n2. Risk assessment\n3. Control activities (preventative + detective)\n4. Monitoring\n5. Information and communication",cat:"Ch.4"},
-  {q:"What is a bank reconciliation?",a:"A process that matches the cash balance per bank statement to the cash balance per company books.\nDifferences arise from timing (outstanding deposits/checks) or items only one party has recorded (fees, interest, NSF checks).",cat:"Ch.4"},
-  {q:"What is an NSF check and how is it recorded?",a:"Non-Sufficient Funds — a customer's check bounced. The company must reverse the deposit:\nDebit: Accounts Receivable\nCredit: Cash\n\nThe customer still owes the money, creating a receivable.",cat:"Ch.4"},
-  {q:"What is the Sarbanes-Oxley Act?",a:"2002 law (SOX) requiring companies that file with the SEC to document and assess internal controls. Section 404 requires both management and auditors to assess internal control effectiveness annually.",cat:"Ch.4"},
-  {q:"What is deferred revenue and what type of account is it?",a:"Cash received in advance for goods/services not yet provided. It is a LIABILITY — not revenue — until the performance obligation is fulfilled.",cat:"Ch.8"},
-  {q:"What is the current portion of long-term debt?",a:"The portion of long-term debt that will be paid within one year from the balance sheet date. It is reclassified from long-term to current liabilities.",cat:"Ch.8"},
-  {q:"How are current vs. long-term liabilities classified?",a:"Current: due within one year (or the operating cycle, whichever is longer).\nLong-term: due in more than one year.",cat:"Ch.8"},
-  {q:"How do you calculate interest on a note?",a:"Interest = Face Value × Annual Interest Rate × (Fraction of Year)\n\nKey mistake: count all months including the first. September to December = 4 months, not 3.",cat:"Ch.8"},
-  {q:"What is the acid-test ratio and how does it differ from the current ratio?",a:"Acid-Test = (Cash + Current Investments + Accounts Receivable) ÷ Current Liabilities\n\nExcludes inventory and prepaid assets — more conservative than current ratio.",cat:"Ch.8"},
-  {q:"What is the debt to equity ratio?",a:"Total Liabilities ÷ Stockholders' Equity\n\nMeasures financial leverage/risk. Higher ratio = more debt relative to equity = higher bankruptcy risk.",cat:"Ch.9"},
+<!-- ===== FORMULAS ===== -->
+<div id="panel-formulas" class="panel">
+<div class="fsec">Core Equation</div>
+<div class="fgrid">
+  <div class="fc2"><div class="fn">Accounting Equation</div><div class="fe">Assets = Liabilities + Equity</div><div class="fd">Foundation of all double-entry accounting.</div></div>
+  <div class="fc2"><div class="fn">Retained Earnings</div><div class="fe">Beg RE + Revenue &minus; Expenses &minus; Dividends</div><div class="fd">Connects income statement to balance sheet.</div></div>
+  <div class="fc2"><div class="fn">Net Revenue</div><div class="fe">Total Revenue &minus; Returns &minus; Allowances &minus; Discounts</div><div class="fd"><strong>Sales tax is NOT a contra revenue &mdash; it's a current liability.</strong></div></div>
+</div>
+<div class="fsec">Income Statement</div>
+<div class="fgrid">
+  <div class="fc2"><div class="fn">Gross Profit</div><div class="fe">Net Revenue &minus; Cost of Goods Sold</div></div>
+  <div class="fc2"><div class="fn">Operating Income</div><div class="fe">Gross Profit &minus; Operating Expenses (SG&A)</div></div>
+  <div class="fc2"><div class="fn">Net Income</div><div class="fe">Pretax Income &minus; Income Tax Expense</div></div>
+</div>
+<div class="fsec">Receivables &mdash; Ch.5</div>
+<div class="fgrid">
+  <div class="fc2"><div class="fn">Net Accounts Receivable</div><div class="fe">AR &minus; Allowance for Uncollectible Accounts</div><div class="fd"><strong>AFUA is a contra asset &mdash; NOT a liability.</strong></div></div>
+  <div class="fc2"><div class="fn">Interest on Notes</div><div class="fe">Face Value &times; Annual Rate &times; (Days / 365)</div></div>
+  <div class="fc2"><div class="fn">Receivables Turnover</div><div class="fe">Net Credit Sales &divide; Average AR</div></div>
+  <div class="fc2"><div class="fn">Average Collection Period</div><div class="fe">365 &divide; Receivables Turnover</div></div>
+</div>
+<div class="fsec">Inventory &mdash; Ch.6</div>
+<div class="fgrid">
+  <div class="fc2"><div class="fn">COGS</div><div class="fe">Beg Inventory + Purchases &minus; Ending Inventory</div><div class="fd">Under FIFO, beginning inventory is sold first. <strong>Don't forget it.</strong></div></div>
+  <div class="fc2"><div class="fn">Inventory Turnover</div><div class="fe">COGS &divide; Average Inventory</div><div class="fd"><strong>Use average (Beg+End)&divide;2, not ending balance.</strong></div></div>
+  <div class="fc2"><div class="fn">Average Days in Inventory</div><div class="fe">365 &divide; Inventory Turnover</div></div>
+  <div class="fc2"><div class="fn">Gross Profit Ratio</div><div class="fe">Gross Profit &divide; Net Sales</div></div>
+</div>
+<div class="fsec">Long-Term Assets &mdash; Ch.7</div>
+<div class="fgrid">
+  <div class="fc2"><div class="fn">Straight-Line Depreciation</div><div class="fe">(Cost &minus; Residual Value) &divide; Useful Life</div><div class="fd"><strong>Land is NEVER depreciated.</strong> Depreciation = cost allocation, not value decrease.</div></div>
+  <div class="fc2"><div class="fn">Book Value</div><div class="fe">Cost &minus; Accumulated Depreciation</div></div>
+  <div class="fc2"><div class="fn">Gain / Loss on Disposal</div><div class="fe">Proceeds &minus; Book Value at Disposal Date</div><div class="fd"><strong>Update depreciation BEFORE disposal.</strong></div></div>
+  <div class="fc2"><div class="fn">Return on Assets</div><div class="fe">Net Income &divide; Average Total Assets</div></div>
+  <div class="fc2"><div class="fn">Profit Margin</div><div class="fe">Net Income &divide; Net Sales</div></div>
+  <div class="fc2"><div class="fn">Asset Turnover</div><div class="fe">Net Sales &divide; Average Total Assets</div></div>
+</div>
+<div class="fsec">Liabilities &mdash; Ch.8&ndash;9</div>
+<div class="fgrid">
+  <div class="fc2"><div class="fn">Interest Expense</div><div class="fe">Face Value &times; Annual Rate &times; (Months / 12)</div><div class="fd"><strong>Count the first month. Sep&ndash;Dec = 4. Mar&ndash;Dec = 10.</strong></div></div>
+  <div class="fc2"><div class="fn">Working Capital</div><div class="fe">Current Assets &minus; Current Liabilities</div></div>
+  <div class="fc2"><div class="fn">Current Ratio</div><div class="fe">Current Assets &divide; Current Liabilities</div></div>
+  <div class="fc2"><div class="fn">Acid-Test Ratio</div><div class="fe">(Cash + Investments + AR) &divide; Current Liabilities</div><div class="fd">Excludes inventory and prepaid assets.</div></div>
+  <div class="fc2"><div class="fn">Debt to Equity</div><div class="fe">Total Liabilities &divide; Stockholders' Equity</div></div>
+</div>
+</div>
+
+<!-- ===== MISTAKES ===== -->
+<div id="panel-mistakes" class="panel">
+<div class="mlist">
+  <div class="mi"><div class="mt">Ch.5 &middot; AFUA</div><div class="mw">&#10007; "AFUA has a credit balance so it must be a liability."</div><div class="mr">&#10003; AFUA is a CONTRA ASSET. Both liabilities and contra assets have credit balances. AFUA reduces AR on the balance sheet.</div></div>
+  <div class="mi"><div class="mt">Ch.5 &middot; Write-Off</div><div class="mw">&#10007; Recording Bad Debt Expense when writing off a specific account.</div><div class="mr">&#10003; Write-off: Dr. AFUA / Cr. AR. No bad debt expense &mdash; it was recorded at year-end estimation. No effect on total assets.</div></div>
+  <div class="mi"><div class="mt">Ch.5 &middot; Contra Revenues</div><div class="mw">&#10007; Classifying Sales Returns and Sales Allowances as expenses.</div><div class="mr">&#10003; Contra revenues (debit normal balance) reduce revenue. They are NOT expenses. Expenses represent costs of generating revenue; contra revenues reduce revenue itself.</div></div>
+  <div class="mi"><div class="mt">Ch.6 &middot; FIFO Beginning Inventory</div><div class="mw">&#10007; Forgetting beginning inventory when calculating FIFO COGS.</div><div class="mr">&#10003; Beginning inventory was purchased BEFORE any current-period purchases &mdash; always sold first under FIFO. Include it as your first batch.</div></div>
+  <div class="mi"><div class="mt">Ch.6 &middot; Inventory Turnover</div><div class="mw">&#10007; Using ending inventory instead of average inventory in the ratio.</div><div class="mr">&#10003; Use average: (Beginning + Ending) &divide; 2. COGS is a full-period amount; balance sheet items must be averaged over the same period.</div></div>
+  <div class="mi"><div class="mt">Ch.6 &middot; Inventory Cost</div><div class="mw">&#10007; Including advertising costs in the inventory balance.</div><div class="mr">&#10003; Advertising is expensed immediately. Only costs to ACQUIRE and GET READY FOR SALE go in inventory (purchase price, freight-in, etc.).</div></div>
+  <div class="mi"><div class="mt">Ch.7 &middot; Depreciation Concept</div><div class="mw">&#10007; "Depreciation records the decrease in market value of an asset."</div><div class="mr">&#10003; Depreciation is COST ALLOCATION over time &mdash; not a valuation process. Market value is completely irrelevant.</div></div>
+  <div class="mi"><div class="mt">Ch.7 &middot; Land</div><div class="mw">&#10007; Depreciating land along with buildings and equipment.</div><div class="mr">&#10003; Land has an INDEFINITE useful life &mdash; NEVER depreciated. Land improvements (parking lots, fences) ARE depreciated.</div></div>
+  <div class="mi"><div class="mt">Ch.7 &middot; Asset Disposal</div><div class="mw">&#10007; Forgetting to update depreciation before recording an asset disposal.</div><div class="mr">&#10003; Always record depreciation up to the exact disposal date first. Otherwise book value is wrong and your gain/loss will be incorrect.</div></div>
+  <div class="mi"><div class="mt">Ch.7 &middot; Salvaged Materials</div><div class="mw">&#10007; Adding or ignoring cash received from selling salvaged building materials.</div><div class="mr">&#10003; Cash from salvaged materials REDUCES the cost of land. It's a credit against the land cost.</div></div>
+  <div class="mi"><div class="mt">Ch.7 &middot; Capitalize vs. Expense</div><div class="mw">&#10007; "Repairing a broken part should be capitalized."</div><div class="mr">&#10003; Routine repairs restoring original capability are EXPENSED. Only improvements extending life or adding new capability are capitalized.</div></div>
+  <div class="mi"><div class="mt">Ch.3 &amp; Ch.8 &middot; Month Counting</div><div class="mw">&#10007; "March to December = 9 months (12 &minus; 3 = 9)" or "Sep to Dec = 3 months."</div><div class="mr">&#10003; March through December = 10 months. September through December = 4 months. List each month; never subtract month numbers.</div></div>
+  <div class="mi"><div class="mt">Ch.8 &middot; Deferred Revenue</div><div class="mw">&#10007; "Deferred Revenue is a revenue account because it has the word 'revenue.'"</div><div class="mr">&#10003; Deferred Revenue is a LIABILITY. The company owes goods/services to the customer. It becomes revenue only when earned.</div></div>
+  <div class="mi"><div class="mt">Ch.4 &middot; NSF Check</div><div class="mw">&#10007; Thinking the NSF check is a bad check written BY the company.</div><div class="mr">&#10003; NSF = a customer's check to you bounced. Reverse your deposit: Dr. AR / Cr. Cash. Appears as a deduction on the BOOK side of the bank reconciliation.</div></div>
+  <div class="mi"><div class="mt">Ch.4 &middot; Bank Rec Journal Entries</div><div class="mw">&#10007; Recording journal entries for deposits in transit or outstanding checks.</div><div class="mr">&#10003; These go on the BANK side &mdash; they're already in the company's books. Only BOOK SIDE items (NSF, bank fees, interest earned) need journal entries.</div></div>
+  <div class="mi"><div class="mt">Ch.4 &middot; SOX Scope</div><div class="mw">&#10007; "The Sarbanes-Oxley Act applies to all US companies."</div><div class="mr">&#10003; SOX applies ONLY to companies required to file with the SEC. Private companies are not subject to SOX.</div></div>
+  <div class="mi"><div class="mt">Ch.5 &middot; Sales Tax</div><div class="mw">&#10007; Including sales tax collected as revenue or subtracting it as a contra revenue.</div><div class="mr">&#10003; Sales tax collected from customers is a CURRENT LIABILITY payable to the government &mdash; not revenue, not a contra revenue, not an expense.</div></div>
+</div>
+</div>
+
+
+<!-- ===== CHAPTER QUIZZES ===== -->
+<div id="panel-cquiz" class="panel">
+<div id="cq-setup">
+  <p class="flabel">Select a chapter quiz</p>
+  <div class="fpills" style="margin-bottom:1.5rem">
+    <button class="fp on" onclick="setCQ(0,this)">Chapter 1</button>
+    <button class="fp" onclick="setCQ(1,this)">Chapter 2</button>
+    <button class="fp" onclick="setCQ(2,this)">Chapter 3</button>
+    <button class="fp" onclick="setCQ(3,this)">Chapter 5</button>
+    <button class="fp" onclick="setCQ(4,this)">Chapter 6</button>
+    <button class="fp" onclick="setCQ(5,this)">Chapter 7</button>
+    <button class="fp" onclick="setCQ(6,this)">Ch. 8 &amp; 9</button>
+  </div>
+  <button class="btn btn-p" onclick="startCQ()" style="width:100%;justify-content:center;padding:.75rem">Start Quiz &rarr;</button>
+</div>
+<div id="cq-active" style="display:none">
+  <div class="qhdr"><span class="qnum" id="cq-num">Q 1 of 5</span><span class="qscore" id="cq-sc">0 correct</span></div>
+  <div class="pbar"><div class="pfill" id="cq-bar" style="width:0%"></div></div>
+  <div class="qbox" id="cq-text"></div>
+  <div class="opts" id="cq-opts"></div>
+  <div class="exp" id="cq-exp"></div>
+  <button class="btn btn-p" id="cq-next" onclick="nextCQ()" style="display:none;width:100%;justify-content:center">Next &rarr;</button>
+</div>
+<div id="cq-result" style="display:none;text-align:center;padding:3rem 1rem">
+  <div class="score-big" id="cq-rpct"></div>
+  <p style="color:var(--muted);margin-bottom:1.5rem" id="cq-rmsg"></p>
+  <button class="btn btn-o" onclick="resetCQ()">Try again</button>
+</div>
+</div>
+
+</div><!-- study -->
+
+<footer class="footer">
+  <div class="footer-name">Adam Geyer</div>
+  <div class="footer-note">MGT 11A Final &middot; UC Davis</div>
+</footer>
+
+<script>
+const CARDS=[
+  {q:"What is accounting and its two primary functions?",a:"System of maintaining records and communicating to decision makers.\n1. Record/measure the company's activity\n2. Share/communicate with others",cat:"Ch.1-2"},
+  {q:"What is the Basic Accounting Equation?",a:"Assets = Liabilities + Equity\nAssets: cash, AR, inventory, equipment, land\nLiabilities: AP, notes payable, salaries payable\nEquity: owners' claims (external investment or retained profit)",cat:"Ch.1-2"},
+  {q:"What are normal debit/credit balances for each type?",a:"DEBIT normal: Assets, Expenses, Dividends\nCREDIT normal: Liabilities, Equity, Revenue\n\nTip: expenses say 'expense'; liabilities say 'payable' or 'owed'",cat:"Ch.1-2"},
+  {q:"What is a T-account and how does it work?",a:"Shows effect of all transactions on one account.\nLeft = Debits always; Right = Credits always\n\nCash example:\nBegin $100k + $40k debit - $55k credit = $85k ending",cat:"Ch.1-2"},
+  {q:"What are the 9 steps of the accounting cycle?",a:"1. Analyze transactions\n2. Record journal entries\n3. Post to general ledger\n4. Unadjusted trial balance\n5. Adjusting journal entries\n6. Adjusted trial balance\n7. Financial statements\n8. Close temporary accounts\n9. Post-closing trial balance",cat:"Ch.1-2"},
+  {q:"What is double-entry accounting?",a:"Every transaction affects at least TWO accounts, keeping the equation balanced.\n\nBuy inventory for cash -> Dr. Inventory / Cr. Cash\nIssue stock for cash -> Dr. Cash / Cr. Common Stock",cat:"Ch.1-2"},
+  {q:"What are the three types of trial balances?",a:"1. Unadjusted: before adjusting entries\n2. Adjusted: after adjusting entries -- used for financial statements\n3. Post-Closing: after closing; only permanent accounts remain",cat:"Ch.1-2"},
+  {q:"What is the difference between accrual and cash basis?",a:"Accrual (GAAP): revenues when EARNED, expenses when INCURRED -- regardless of cash\nCash basis (NOT GAAP): only when cash changes hands\n\nDifference = WHEN transactions are recorded",cat:"Ch.3"},
+  {q:"What is revenue recognition?",a:"Revenue recorded when performance obligation is COMPLETE -- when goods/services delivered.\n\nCash timing doesn't matter.\nRevenue can be recorded before OR after cash is received.",cat:"Ch.3"},
+  {q:"What are the 4 types of adjusting entries?",a:"1. Accrued Expenses: incurred, not paid -> Dr. Expense / Cr. Liability\n2. Accrued Revenues: earned, not collected -> Dr. AR / Cr. Revenue\n3. Prepaid Expenses: allocate asset -> Dr. Expense / Cr. Asset\n4. Unearned Revenues: now earned -> Dr. Deferred Rev / Cr. Revenue",cat:"Ch.3"},
+  {q:"What are permanent vs. temporary accounts?",a:"Permanent: Assets, Liabilities, Equity -- carry balances forward year to year\n\nTemporary: Revenues, Expenses, Dividends -- track one year only, then closed to Retained Earnings at year-end",cat:"Ch.3"},
+  {q:"How do you close temporary accounts?",a:"Step 1: Dr. each Revenue -> Cr. Income Summary\nStep 2: Dr. Income Summary -> Cr. each Expense\nStep 3: Close Income Summary -> Retained Earnings\nStep 4: Dr. Retained Earnings -> Cr. Dividends",cat:"Ch.3"},
+  {q:"How do the four financial statements link together?",a:"Net Income (IS) -> Retained Earnings (Stmt of SE)\nEnding RE + Common Stock -> Balance Sheet equity\nEnding Cash (SCF) -> Balance Sheet current asset\n\nAll four are interconnected.",cat:"Ch.3"},
+  {q:"What is the multi-step income statement structure?",a:"Net Sales - COGS = GROSS PROFIT\n- Operating Expenses = OPERATING INCOME\n+/- Other items = PRETAX INCOME\n- Income Tax = NET INCOME",cat:"Ch.3"},
+  {q:"What is AFUA and how is it shown on the balance sheet?",a:"Allowance for Uncollectible Accounts = CONTRA ASSET\nCredit normal balance -- NOT a liability\n\nBalance sheet:\nAccounts Receivable        $X\n(Allowance for Uncoll.)      (X)\nNet AR                     $X",cat:"Ch.5"},
+  {q:"What is the year-end adjusting entry for bad debts?",a:"Dr. Bad Debt Expense\n  Cr. Allowance for Uncollectible Accounts\n\nEstimates FUTURE uncollectibles.\nUse T-account: find entry needed to reach required ending AFUA balance.",cat:"Ch.5"},
+  {q:"What is the entry to write off an uncollectible account?",a:"Dr. Allowance for Uncollectible Accounts\n  Cr. Accounts Receivable\n\nNO Bad Debt Expense (was recorded at estimation)\nNO effect on total assets (AR down, AFUA down equally)",cat:"Ch.5"},
+  {q:"How do you calculate the bad debt entry with % of receivables?",a:"AR x % = Required ENDING AFUA balance\nUse T-account to find adjustment needed\n\nExample: AR $750k x 3% = $22,500 needed\nAFUA has $14,000 credit\nEntry = $22,500 - $14,000 = $8,500",cat:"Ch.5"},
+  {q:"What does 2/10, n/30 mean and what is the entry if paid on day 5?",a:"2% discount if paid within 10 days; full amount due in 30 days.\nDay 10 IS within the discount period.\n\nSale $25,000; pay day 5:\nDr. Cash $24,500 + Dr. Sales Discount $500\n    Cr. AR $25,000",cat:"Ch.5"},
+  {q:"What is net revenue and what reduces it?",a:"Net Revenue = Total Revenue - Contra revenues\n\nContra revenues (debit normal balance):\n- Sales Returns\n- Sales Allowances\n- Sales Discounts\n\nSales TAX collected is NOT a contra revenue -- it's a current liability.",cat:"Ch.5"},
+  {q:"What costs are included in inventory?",a:"Include: purchase price, freight-in (FOB Shipping), sales tax\nDiscounts REDUCE inventory; returns REDUCE inventory\n\nDo NOT include advertising -- expensed immediately",cat:"Ch.6"},
+  {q:"What are the two entries when selling inventory (perpetual)?",a:"Entry 1: Dr. Cash or AR / Cr. Sales Revenue\nEntry 2: Dr. COGS / Cr. Inventory\n\nBoth entries required every single time inventory is sold.",cat:"Ch.6"},
+  {q:"Under FIFO, which units are sold first?",a:"Oldest units FIRST.\nBeginning inventory is ALWAYS the first batch -- before any current-period purchases.\n\nCommon mistake: forgetting beginning inventory.",cat:"Ch.6"},
+  {q:"What are the inventory ratios?",a:"Inventory Turnover = COGS / Average Inventory\n  (Use AVERAGE = (Beg+End)/2 -- not ending!)\nAvg Days in Inventory = 365 / Turnover\nGross Profit Ratio = Gross Profit / Net Sales",cat:"Ch.6"},
+  {q:"What is included in PP&E acquisition cost?",a:"Cost + all to get asset ready for use:\n+ Purchase price, sales tax, freight, installation\n+ Legal fees, commissions (land/buildings)\n+ Clearing, leveling, back taxes (land)\n- Salvaged materials REDUCE land cost\n\nNOT: annual insurance or property taxes",cat:"Ch.7"},
+  {q:"When do you capitalize vs. expense after acquisition?",a:"CAPITALIZE: extends life, adds new function, improves quality\n  (major renovation, engine replacement, add refrigeration)\n\nEXPENSE: routine maintenance/repair\n  (oil change, tune-up, replacing broken part)",cat:"Ch.7"},
+  {q:"How is straight-line depreciation calculated?",a:"(Cost - Residual Value) / Useful Life = Annual Dep.\n\nLAND = NEVER depreciated (indefinite life)\nDepreciation = cost ALLOCATION, NOT change in market value\nAccum. Dep. = contra asset (credit normal balance)",cat:"Ch.7"},
+  {q:"How do you determine gain or loss on disposal?",a:"Step 1: Update depreciation to disposal date\nStep 2: Book Value = Cost - Accum. Dep.\nStep 3: Proceeds > BV -> GAIN; Proceeds < BV -> LOSS\n\nRemove cost AND accumulated depreciation separately.",cat:"Ch.7"},
+  {q:"What are intangible assets and their treatment?",a:"Patents (20 yr), Copyrights (life+70 yr), Trademarks (indefinite), Goodwill\n\nGoodwill + indefinite trademarks: NOT amortized\nR&D and advertising: ALWAYS expensed immediately\nGoodwill: only in acquisitions, never internally generated",cat:"Ch.7"},
+  {q:"What are the fraud triangle components?",a:"Pressure: motivation (financial stress)\nOpportunity: ability to commit fraud -- ONLY element companies can control\nRationalization: mental justification\n\nInternal controls target OPPORTUNITY.",cat:"Ch.4"},
+  {q:"What goes on the bank side vs. book side of a bank rec?",a:"BANK SIDE: + Deposits in transit; - Outstanding checks; +/- Bank errors\n\nBOOK SIDE: + Interest earned; - NSF checks, bank fees, EFTs; +/- Errors\n\nOnly BOOK SIDE items need journal entries.",cat:"Ch.4"},
+  {q:"What is an NSF check and what is the entry?",a:"Non-Sufficient Funds -- customer's check bounced.\nReverse the deposit:\n\nDr. Accounts Receivable\n  Cr. Cash\n\nDeduction on BOOK side of bank rec.",cat:"Ch.4"},
+  {q:"What is deferred revenue?",a:"Cash received in advance = LIABILITY until service provided.\n\nReceive cash: Dr. Cash / Cr. Deferred Revenue\nEarned: Dr. Deferred Revenue / Cr. Revenue\n\nNOT a revenue account -- it's a liability.",cat:"Ch.8-9"},
+  {q:"How do you calculate interest on a note?",a:"Interest = Face Value x Annual Rate x (Months / 12)\n\nCOUNT FIRST MONTH:\nSep 1 to Dec 31 = 4 months (Sep, Oct, Nov, Dec)\nMar 1 to Dec 31 = 10 months\n\nRecord in period INCURRED, not when paid.",cat:"Ch.8-9"},
+  {q:"What are the three liquidity ratios?",a:"Working Capital = Current Assets - Current Liabilities\nCurrent Ratio = Current Assets / Current Liabilities\nAcid-Test = (Cash + Investments + AR) / Current Liabilities\n  (excludes inventory and prepaid)",cat:"Ch.8-9"},
+  {q:"What is the debt to equity ratio?",a:"Total Liabilities / Stockholders' Equity\n\nMeasures leverage and financial risk.\nHigher = more debt = higher bankruptcy risk.\nDebt advantage: interest is TAX-DEDUCTIBLE\nEquity: dividends are NOT tax-deductible",cat:"Ch.8-9"},
+  {q:"What is the Sarbanes-Oxley Act?",a:"2002 law after Enron/WorldCom scandals.\nApplies ONLY to companies filing with the SEC.\nSection 404: management AND auditors assess internal controls annually.\nCEO + CFO must sign the report.",cat:"Ch.4"},
+  {q:"What is sales tax payable?",a:"Sales tax collected from customers = CURRENT LIABILITY payable to government.\nNOT revenue, NOT an expense, NOT a contra revenue.\n\n$100 sale + 8% tax:\nDr. Cash $108 / Cr. Sales Revenue $100 / Cr. Sales Tax Payable $8",cat:"Ch.8-9"},
+  {q:"What are the three sections of the Statement of Cash Flows?",a:"1. Operating: day-to-day (cash from customers; pay salaries, rent, utilities)\n2. Investing: long-term assets (buy/sell equipment, land, buildings)\n3. Financing: debt and equity (borrow/repay, issue stock, pay dividends)",cat:"Ch.4"},
+  {q:"What is goodwill and when is it recorded?",a:"Goodwill = Purchase price - Fair value of net assets acquired.\n\nOnly recorded when one company ACQUIRES another.\nNEVER for internally generated goodwill.\nGoodwill is NOT amortized.",cat:"Ch.7"},
+  {q:"What is LCNRV for inventory?",a:"Lower of Cost and Net Realizable Value.\nReport at whichever is lower.\n\nNRV = expected selling price minus costs to complete and sell.\n\nIf NRV < cost: Dr. Loss / Cr. Inventory",cat:"Ch.6"},
+  {q:"What is the matching principle for expenses?",a:"Expenses recognized in the SAME PERIOD as the revenue they helped generate.\n\nRevenue recognition (not cash payment) triggers when expenses are recognized.\n\nThis is why adjusting entries are required.",cat:"Ch.3"},
+  {q:"Prepaid Insurance: $120,000 paid May 1 for one year. Remaining balance on December 31?",a:"May through December = 8 months used\n4 months remain (January - April)\n$120,000 x (4/12) = $40,000 remaining\n\nAdjusting entry:\nDr. Insurance Expense $80,000\n    Cr. Prepaid Insurance $80,000",cat:"Ch.3"},
+  {q:"What is the purchase discount entry when paying within the discount period?",a:"Terms 2/10 n/30 -- pay within 10 days:\n\nDr. Accounts Payable   10,000\n    Cr. Inventory              200  <- reduces cost\n    Cr. Cash                 9,800",cat:"Ch.6"},
 ];
 
-const QUIZ = [
-  {q:"A company earns $5,000 of service revenue but has not yet collected cash. Under accrual accounting, when is revenue recorded?",opts:["When cash is collected","When the service is provided","At year-end only","When the invoice is mailed"],ans:1,exp:"Accrual accounting records revenue when goods/services are provided to the customer, regardless of when cash is received.",cat:"Ch.3"},
-  {q:"Which of the following is a TEMPORARY account?",opts:["Accounts Receivable","Retained Earnings","Dividends","Prepaid Insurance"],ans:2,exp:"Temporary accounts — Revenue, Expense, and Dividends — are closed to Retained Earnings at year-end. Assets and equity accounts are permanent.",cat:"Ch.3"},
-  {q:"On May 1, a company pays $12,000 for one year of insurance. How much Prepaid Insurance remains on December 31?",opts:["$4,000","$2,000","$8,000","$12,000"],ans:0,exp:"May through August = 8 months used. 4 months remain (Jan–Apr of next year). $12,000 × (4/12) = $4,000.",cat:"Ch.3"},
-  {q:"Purdy Company purchases equipment for $96,000 on January 1, 2025, with an 8-year useful life. What is the January 31 adjusting entry?",opts:["Debit Depreciation Expense $1,000","Credit Accumulated Depreciation $12,000","Debit Equipment $1,000","Credit Cash $1,000"],ans:0,exp:"Annual depreciation = $96,000 ÷ 8 = $12,000. Monthly = $12,000 ÷ 12 = $1,000. Entry: Debit Depreciation Expense $1,000 / Credit Accumulated Depreciation $1,000.",cat:"Ch.3"},
-  {q:"Writing off a specific customer's account as uncollectible under the allowance method:",opts:["Increases total assets","Reduces net income","Has no effect on total assets","Increases bad debt expense"],ans:2,exp:"Write-off reduces AR and reduces AFUA by the same amount — no net change in total assets and no impact on the income statement. Bad debt was already expensed when the allowance was established.",cat:"Ch.5"},
-  {q:"Allowance for Uncollectible Accounts is BEST described as:",opts:["A liability because it has a credit balance","A contra asset that reduces net AR on the balance sheet","A revenue contra account","A long-term asset"],ans:1,exp:"AFUA is a contra asset — credit normal balance, offsets Accounts Receivable. It is NOT a liability even though both have credit normal balances.",cat:"Ch.5"},
-  {q:"A company has net credit sales of $500,000 and average AR of $50,000. What is the average collection period?",opts:["10 days","36.5 days","50 days","73 days"],ans:1,exp:"Receivables turnover = $500,000 ÷ $50,000 = 10 times. Average collection period = 365 ÷ 10 = 36.5 days.",cat:"Ch.5"},
-  {q:"Under FIFO, if beginning inventory is 100 units @ $5 and a purchase of 200 units @ $7 is made, what is COGS for 150 units sold?",opts:["$750","$850","$1,050","$800"],ans:1,exp:"FIFO sells oldest first: 100 units × $5 = $500 + 50 units × $7 = $350. Total COGS = $850.",cat:"Ch.6"},
-  {q:"The inventory turnover ratio should use which inventory balance?",opts:["Ending inventory","Beginning inventory","Average inventory","Net inventory"],ans:2,exp:"Use average inventory (beginning + ending ÷ 2) because COGS is generated over the period. Don't use only ending balance.",cat:"Ch.6"},
-  {q:"An understatement of ending inventory leads to:",opts:["Understated COGS","Overstated net income","Overstated COGS","Overstated assets"],ans:2,exp:"COGS = Beg Inv + Purchases − Ending Inv. If ending inventory is understated, COGS is overstated, which understates net income and assets.",cat:"Ch.6"},
-  {q:"Depreciation in accounting is best described as:",opts:["A reduction in the market value of an asset","Allocation of asset cost to expense over time","A cash outflow each period","A write-off of a worthless asset"],ans:1,exp:"Accounting depreciation is a cost allocation process — not a valuation process. The market value of the asset is irrelevant to depreciation.",cat:"Ch.7"},
-  {q:"Which of the following is NOT depreciated?",opts:["Buildings","Equipment","Land","Land improvements"],ans:2,exp:"Land has an indefinite useful life — it is never depreciated. Land improvements (parking lots, fencing, landscaping) ARE depreciated because they have limited useful lives.",cat:"Ch.7"},
-  {q:"R&D costs are reported as:",opts:["Intangible assets on the balance sheet","Expenses on the income statement","Long-term investments","Deferred charges"],ans:1,exp:"R&D costs are expensed as incurred because it's too difficult to determine how much (if any) benefit future periods.",cat:"Ch.7"},
-  {q:"A company sells equipment for $15,000. Original cost $40,000; accumulated depreciation $28,000. What is recorded?",opts:["Loss of $3,000","Gain of $3,000","Gain of $15,000","Loss of $25,000"],ans:1,exp:"Book value = $40,000 − $28,000 = $12,000. Proceeds ($15,000) > book value ($12,000) → Gain of $3,000.",cat:"Ch.7"},
-  {q:"An NSF check received from a customer affects the company's books as:",opts:["Debit Cash, Credit AR","Debit AR, Credit Cash","Debit Bad Debt Expense, Credit Cash","No entry needed"],ans:1,exp:"Reverse the original deposit: Debit AR (customer still owes money) and Credit Cash (remove the deposit that bounced).",cat:"Ch.4"},
-  {q:"Which item appears on the BANK side of a bank reconciliation?",opts:["NSF check","Bank service fee","Deposit outstanding","Interest earned"],ans:2,exp:"Outstanding deposits and outstanding checks appear on the bank side. NSF checks, bank fees, and interest earned appear on the company's side.",cat:"Ch.4"},
-  {q:"Deferred revenue is classified as:",opts:["Revenue because cash was received","An asset","A liability until goods/services are provided","Stockholders' equity"],ans:2,exp:"Deferred revenue is a liability — the company owes goods/services to the customer. It converts to revenue only when earned.",cat:"Ch.8"},
-  {q:"A company borrows $50,000 on September 1 at 6% annual interest. Interest expense recorded on December 31 is:",opts:["$750","$1,000","$3,000","$1,500"],ans:1,exp:"September, October, November, December = 4 months (count September!). $50,000 × 6% × (4/12) = $1,000.",cat:"Ch.8"},
-  {q:"The acid-test ratio excludes which current assets?",opts:["Cash and investments","Accounts receivable","Inventory and prepaid assets","Notes receivable"],ans:2,exp:"Acid-test (quick ratio) uses only Cash + Current Investments + AR. It excludes inventory and prepaid assets because they are less liquid.",cat:"Ch.8"},
-  {q:"Which activity is classified as INVESTING on the Statement of Cash Flows?",opts:["Paying employee salaries","Issuing shares for cash","Purchasing equipment with cash","Paying dividends"],ans:2,exp:"Investing activities involve purchase or sale of long-term assets. Issuing stock and paying dividends = financing; salaries = operating.",cat:"Ch.4"},
+const QUIZ=[
+  {q:"Which accounts have a CREDIT normal balance?",opts:["Assets, Expenses, Dividends","Liabilities, Equity, Revenue","Assets, Liabilities, Revenue","Expenses, Dividends, Revenue"],ans:1,exp:"Credits: Liabilities, Equity, Revenue. Debits: Assets, Expenses, Dividends.",cat:"Ch.1-2"},
+  {q:"Cash T-account: begins $100k, $40k debited, $55k credited. Ending balance?",opts:["$85,000","$115,000","$95,000","$15,000"],ans:0,exp:"Cash has debit normal balance. $100k + $40k - $55k = $85,000.",cat:"Ch.1-2"},
+  {q:"Company receives $200,000 for issuing common stock. Effect on accounting equation?",opts:["Assets up, Liabilities up","Assets up, Equity up","Assets down, Equity down","No effect"],ans:1,exp:"Cash (asset) +$200k, Common Stock (equity) +$200k. Both sides increase equally.",cat:"Ch.1-2"},
+  {q:"Recording cash paid for inventory involves:",opts:["Dr. Expense / Cr. Cash","Dr. Inventory / Cr. Cash","Dr. Cash / Cr. Inventory","Dr. COGS / Cr. Inventory"],ans:1,exp:"Purchasing inventory increases the Inventory asset. Dr. Inventory / Cr. Cash.",cat:"Ch.1-2"},
+  {q:"Under accrual accounting, revenue is recorded when:",opts:["Cash is collected","Invoice is sent","Service or product is provided","At year-end only"],ans:2,exp:"Revenue recognized when performance obligation is complete -- regardless of cash timing.",cat:"Ch.3"},
+  {q:"Which is a TEMPORARY account?",opts:["Accounts Receivable","Retained Earnings","Dividends","Prepaid Insurance"],ans:2,exp:"Temporary accounts (Revenue, Expenses, Dividends) are closed to RE at year-end. The others are permanent.",cat:"Ch.3"},
+  {q:"$120,000 paid May 1 for 1 year of insurance. Prepaid Insurance remaining on December 31?",opts:["$40,000","$80,000","$20,000","$120,000"],ans:0,exp:"May-December = 8 months used. 4 months remain. $120,000 x (4/12) = $40,000.",cat:"Ch.3"},
+  {q:"Purdy Co. buys $96k equipment Jan 1, 8-year life, no salvage. Jan 31 adjusting entry includes:",opts:["Dr. Dep. Expense $1,000","Cr. Accum. Dep. $12,000","Dr. Equipment $1,000","Cr. Cash $1,000"],ans:0,exp:"Annual dep = $96k/8 = $12k. Monthly = $1,000. Dr. Dep. Expense $1,000 / Cr. Accum. Dep. $1,000.",cat:"Ch.3"},
+  {q:"Which financial statement reports as of a specific point in time?",opts:["Income Statement","Cash Flow Statement","Balance Sheet","Statement of SE"],ans:2,exp:"Balance sheet is a snapshot at a specific date. The others cover periods of time.",cat:"Ch.3"},
+  {q:"Which would require a journal entry after a bank reconciliation?",opts:["Deposit in transit","Outstanding check","Bank service charge","Bank error"],ans:2,exp:"Only BOOK SIDE items need journal entries. Deposits in transit and outstanding checks are already in the company's records.",cat:"Ch.4"},
+  {q:"An NSF check from a customer appears as:",opts:["Bank side -- addition","Bank side -- deduction","Book side -- addition","Book side -- deduction"],ans:3,exp:"NSF reduces company's cash -- deduction on book side. Entry: Dr. AR / Cr. Cash.",cat:"Ch.4"},
+  {q:"Which is an INVESTING activity on the cash flow statement?",opts:["Paying salaries","Issuing stock","Purchasing equipment with cash","Paying dividends"],ans:2,exp:"Investing = purchase/sale of long-term assets. Stock/dividends = financing. Salaries = operating.",cat:"Ch.4"},
+  {q:"The Sarbanes-Oxley Act applies to:",opts:["All US businesses","All publicly traded companies","Companies required to file with the SEC","Only Fortune 500 companies"],ans:2,exp:"SOX applies only to companies required to file financial statements with the SEC.",cat:"Ch.4"},
+  {q:"Writing off a specific customer account under the allowance method:",opts:["Increases total assets","Reduces net income","Has no effect on total assets","Records bad debt expense"],ans:2,exp:"Dr. AFUA / Cr. AR. Both decrease equally -- no net change in assets, no income statement effect.",cat:"Ch.5"},
+  {q:"AFUA is best described as:",opts:["A liability with a credit balance","A contra asset reducing net AR","A revenue contra account","A long-term asset"],ans:1,exp:"AFUA = contra asset. Credit normal balance but deducted from AR on the balance sheet. NOT a liability.",cat:"Ch.5"},
+  {q:"AR $750,000; AFUA has $14,000 credit; estimate 3% uncollectible. Bad debt entry?",opts:["$22,500","$14,000","$8,500","$36,500"],ans:2,exp:"$750k x 3% = $22,500 needed. Already have $14,000. Adjustment = $22,500 - $14,000 = $8,500.",cat:"Ch.5"},
+  {q:"Net credit sales $500k; average AR $50k. Average collection period?",opts:["10 days","36.5 days","50 days","73 days"],ans:1,exp:"Turnover = $500k / $50k = 10. Collection period = 365 / 10 = 36.5 days.",cat:"Ch.5"},
+  {q:"100 phones sold at $250 (cost $175), terms 2/10 n/30. Customer pays on day 5. Entry on day 5?",opts:["Dr. Cash $25,000 / Cr. AR $25,000","Dr. Cash $24,500 + Dr. Discount $500 / Cr. AR $25,000","Dr. Cash $25,500 / Cr. AR $25,000","No entry needed"],ans:1,exp:"$25k x 2% = $500 discount. Within 10 days. Dr. Cash $24,500 + Dr. Sales Discount $500 / Cr. AR $25,000.",cat:"Ch.5"},
+  {q:"Which does NOT reduce net revenue?",opts:["Sales returns","Sales discounts","Sales allowances","Sales tax collected"],ans:3,exp:"Sales tax = current liability payable to government. NOT a contra revenue.",cat:"Ch.5"},
+  {q:"Which would NOT be in the inventory balance?",opts:["Freight-in (FOB shipping)","Purchase discounts","Advertising for product","Unit purchase price"],ans:2,exp:"Advertising expensed immediately. Freight-in, purchase price, and discounts (net) all affect inventory.",cat:"Ch.6"},
+  {q:"150 chairs sold at $200 each; cost $95 each. COGS entry?",opts:["Dr. COGS $30,000 / Cr. Revenue $30,000","Dr. COGS $14,250 / Cr. Inventory $14,250","Dr. Inventory $14,250 / Cr. COGS $14,250","Dr. Revenue $14,250 / Cr. COGS $14,250"],ans:1,exp:"COGS = 150 x $95 = $14,250. Dr. COGS $14,250 / Cr. Inventory $14,250.",cat:"Ch.6"},
+  {q:"Beg. inv 100 @ $5, purchase 200 @ $7, sell 150 units (FIFO). COGS?",opts:["$750","$850","$1,050","$800"],ans:1,exp:"Oldest first: 100 x $5 = $500 + 50 x $7 = $350 = $850.",cat:"Ch.6"},
+  {q:"Understating ending inventory leads to:",opts:["Understated COGS","Overstated net income","Overstated COGS","Overstated assets"],ans:2,exp:"COGS = Beg + Purchases - Ending. Lower ending inventory -> higher COGS -> lower net income.",cat:"Ch.6"},
+  {q:"Inventory turnover: COGS $70k; beg. inv $10k; end. inv $20k. Result?",opts:["3.5 times","4.67 times","7 times","2 times"],ans:1,exp:"Avg inv = ($10k+$20k)/2 = $15k. Turnover = $70k / $15k = 4.67.",cat:"Ch.6"},
+  {q:"Depreciation in accounting is:",opts:["Decrease in market value","Allocation of cost to expense over time","A cash outflow","Write-off of worthless asset"],ans:1,exp:"Cost ALLOCATION over time. Market value is irrelevant to accounting depreciation.",cat:"Ch.7"},
+  {q:"Which is NOT depreciated?",opts:["Buildings","Equipment","Land","Land improvements"],ans:2,exp:"Land has indefinite life -- NEVER depreciated. Land improvements ARE depreciated.",cat:"Ch.7"},
+  {q:"Equipment: cost $68k, salvage $9k, 10-yr life. After 7 years, sold for $22,000. Gain or loss?",opts:["Gain $4,700","Loss $4,700","Gain $22,000","No gain or loss"],ans:1,exp:"Annual dep = ($68k-$9k)/10 = $5,900. 7 yrs = $41,300 accum. BV = $26,700. $22k < $26.7k = LOSS $4,700.",cat:"Ch.7"},
+  {q:"Vehicle: cost $75k, salvage $5k, 10-yr life. Sold for $40k after 3 years. Gain or loss?",opts:["Gain $14,000","Loss $14,000","Gain $5,000","No gain or loss"],ans:1,exp:"Annual dep = $7,000. 3 yrs = $21k. BV = $54k. $40k < $54k = LOSS $14,000.",cat:"Ch.7"},
+  {q:"Repairing a broken part on a machine should be capitalized as an asset. True or False?",opts:["True","False"],ans:1,exp:"FALSE. Routine repairs restoring original capability are EXPENSED. Only improvements adding function or extending life are capitalized.",cat:"Ch.7"},
+  {q:"Which would NOT be in equipment acquisition cost?",opts:["Sales tax","Freight-in","Annual insurance","Installation costs"],ans:2,exp:"Annual insurance is a recurring operating expense -- expensed as incurred, not capitalized.",cat:"Ch.7"},
+  {q:"March 1 note: $250,000 at 6%. Interest expense through December 31?",opts:["$15,000","$12,500","$7,500","$10,000"],ans:1,exp:"Mar through Dec = 10 months. $250,000 x 6% x (10/12) = $12,500.",cat:"Ch.8-9"},
+  {q:"Borrow $50,000 September 1 at 6%. Interest expense at December 31?",opts:["$750","$1,000","$3,000","$1,500"],ans:1,exp:"Sep, Oct, Nov, Dec = 4 months. $50,000 x 6% x (4/12) = $1,000.",cat:"Ch.8-9"},
+  {q:"Deferred revenue is:",opts:["Revenue because cash was received","An asset account","A liability until goods/services provided","Part of stockholders' equity"],ans:2,exp:"Deferred revenue = LIABILITY. Owes goods/services to customer. Becomes revenue only when earned.",cat:"Ch.8-9"},
+  {q:"The acid-test ratio excludes which current assets?",opts:["Cash","Accounts receivable","Inventory and prepaid","Current investments"],ans:2,exp:"Acid-test = Cash + Current Investments + AR only. Inventory and prepaid excluded.",cat:"Ch.8-9"},
+  {q:"Sales tax collected from customers is recorded as:",opts:["Revenue","An expense","A current liability","A deduction from revenue"],ans:2,exp:"Sales tax = CURRENT LIABILITY payable to the government. Not revenue, not an expense.",cat:"Ch.8-9"},
 ];
 
-const JE_SCENARIOS = [
+const JE=[
   {
-    s:"A company sells $3,000 of merchandise on account. The cost of the merchandise is $1,800. Record the sale under the perpetual inventory system.",
-    a:"Entry 1 — Record the sale:\n  Dr. Accounts Receivable   $3,000\n      Cr. Sales Revenue              $3,000\n\nEntry 2 — Record cost of goods sold:\n  Dr. Cost of Goods Sold    $1,800\n      Cr. Inventory                  $1,800"
+    s:"A company sells <strong>$3,000 of merchandise on account</strong> (cost $1,800). Record both entries under the perpetual inventory system.",
+    steps:[
+      {title:"Identify what happened",rule:"Credit sale = goods delivered, cash comes later. Two things happen simultaneously: (1) we earn revenue, (2) we give up inventory.",explain:"The customer owes us money (AR), and we gave them goods (inventory leaves). Both sides must be recorded."},
+      {title:"Entry 1 — Record the revenue side",rule:"Revenue is recorded when goods are delivered, not when cash arrives.",entry:"Dr. Accounts Receivable   3,000\n    Cr. Sales Revenue              3,000",explain:"AR increases (we're owed money). Revenue increases (we earned it by delivering goods)."},
+      {title:"Entry 2 — Record the inventory/COGS side",rule:"Under the perpetual system, record COGS every time a sale happens.",entry:"Dr. Cost of Goods Sold    1,800\n    Cr. Inventory                  1,800",explain:"Inventory decreases (we gave it to the customer). COGS increases (it's now our expense)."},
+      {title:"Check: does the accounting equation balance?",explain:"Entry 1: AR (asset) ↑ $3,000 / Revenue (equity via RE) ↑ $3,000 ✓\nEntry 2: COGS (expense, reduces equity) ↑ $1,800 / Inventory (asset) ↓ $1,800 ✓\n\nGross profit on this sale = $3,000 − $1,800 = $1,200"}
+    ],
+    a:"Dr. Accounts Receivable   3,000\n    Cr. Sales Revenue              3,000\n\nDr. Cost of Goods Sold    1,800\n    Cr. Inventory                  1,800"
   },
   {
-    s:"A customer's $500 check is returned NSF. The company had deposited it last week and increased Cash.",
-    a:"Dr. Accounts Receivable   $500\n    Cr. Cash                       $500\n\n(Reverse the deposit; customer still owes the money)"
+    s:"1/1: 100 phones sold on account at <strong>$250 each (cost $175)</strong>, terms <strong>2/10, n/30</strong>. Record the sale on 1/1 AND the payment received on 1/5.",
+    steps:[
+      {title:"Understand the terms: 2/10, n/30",rule:"2/10, n/30 = 2% discount if paid within 10 days; full amount due in 30 days. Day 10 IS within the period.",explain:"Total sale = 100 × $250 = $25,000. If paid by day 10: discount = $25,000 × 2% = $500, so customer pays $24,500."},
+      {title:"1/1 — Record the sale (ignore the discount terms for now)",entry:"Dr. Accounts Receivable  25,000\n    Cr. Sales Revenue          25,000",explain:"Record at full price. We don't know yet if the customer will take the discount."},
+      {title:"1/1 — Also record COGS",entry:"Dr. Cost of Goods Sold   17,500\n    Cr. Inventory              17,500",explain:"100 × $175 = $17,500. Under perpetual system, record COGS at time of sale."},
+      {title:"1/5 — Customer pays within 10 days (takes the discount)",rule:"Sales Discount is a CONTRA REVENUE account with a debit normal balance. It reduces net revenue — it is NOT an expense.",caution:"The discount reduces what WE receive, not our inventory or COGS. Record it in Sales Discount.",entry:"Dr. Cash                 24,500\nDr. Sales Discount          500\n    Cr. Accounts Receivable   25,000",explain:"Cash received = $24,500. Discount given = $500. Total AR cleared = $25,000. ✓"}
+    ],
+    a:"1/1:\n  Dr. AR                   25,000 / Cr. Sales Revenue    25,000\n  Dr. COGS                 17,500 / Cr. Inventory         17,500\n\n1/5:\n  Dr. Cash                 24,500\n  Dr. Sales Discount          500\n      Cr. AR                     25,000"
   },
   {
-    s:"On December 31, the company estimates $12,000 of AR will be uncollectible. The Allowance for Uncollectible Accounts currently has a $2,000 credit balance.",
-    a:"Adjustment needed = $12,000 − $2,000 existing balance = $10,000\n\nDr. Bad Debt Expense          $10,000\n    Cr. Allowance for Uncollectible Accounts   $10,000"
+    s:"Customer returns <strong>7 of 15 beauty products</strong> (originally sold for $10 each cash; cost $5 each). Record both entries for the return.",
+    steps:[
+      {title:"Identify what's happening",rule:"A sales return reverses the original sale. Two things happened on the original sale — now reverse both.",explain:"Original sale: recorded $150 revenue (15 × $10) and $75 COGS (15 × $5). Now 7 are coming back. We reverse the revenue for 7 units and put the inventory back."},
+      {title:"Entry 1 — Reverse the revenue",rule:"Sales Returns is a CONTRA REVENUE account (debit normal balance) — NOT an expense.",entry:"Dr. Sales Returns          70\n    Cr. Cash                      70",explain:"7 × $10 = $70. Debit Sales Returns (contra revenue). Credit Cash (give money back). If original sale was on account, credit AR instead."},
+      {title:"Entry 2 — Put inventory back (perpetual system)",entry:"Dr. Inventory              35\n    Cr. Cost of Goods Sold        35",explain:"7 × $5 = $35. Inventory increases (goods returned). COGS decreases (we no longer sold those 7 units)."},
+      {title:"Key distinction: returns vs. allowances",rule:"Sales Return = customer sends goods BACK. Sales Allowance = customer KEEPS defective goods but gets a partial refund. Both are contra revenues.",explain:"For an allowance, you skip Entry 2 (no inventory to put back). Everything else is the same."}
+    ],
+    a:"Dr. Sales Returns          70\n    Cr. Cash                      70\n\nDr. Inventory              35\n    Cr. Cost of Goods Sold        35"
   },
   {
-    s:"Write off a specific customer's account of $800 as uncollectible (allowance method).",
-    a:"Dr. Allowance for Uncollectible Accounts   $800\n    Cr. Accounts Receivable                        $800\n\nNote: NO Bad Debt Expense recorded here — it was already recorded when the allowance was estimated."
+    s:"A customer's <strong>$500 check was returned NSF</strong>. The company had deposited it last week.",
+    steps:[
+      {title:"Understand what NSF means",rule:"NSF = Non-Sufficient Funds. The customer's check bounced — their bank didn't have enough money to cover it.",explain:"When you deposited the check, you debited Cash $500. That deposit was reversed by your bank. Now you need to reverse it in your books too."},
+      {title:"What entry did we make when we deposited it?",entry:"(Original deposit — already recorded):\nDr. Cash               500\n    Cr. Accounts Receivable   500",explain:"We thought we collected from the customer, so we debited Cash and credited AR. That was wrong — the customer hasn't actually paid."},
+      {title:"Reverse it — the customer still owes us",rule:"An NSF check creates (or recreates) an accounts receivable. The customer's debt is not gone.",entry:"Dr. Accounts Receivable   500\n    Cr. Cash                      500",explain:"Flip the original entry. Cash goes back down. AR goes back up. The customer still owes $500."},
+      {title:"Where does this appear on the bank reconciliation?",rule:"NSF check = DEDUCTION on the BOOK (company) side. It requires a journal entry. Deposits in transit and outstanding checks do NOT need entries.",caution:"Students often confuse NSF as appearing on the bank side. It's on the BOOK side because the bank already subtracted it — we need to catch our books up."}
+    ],
+    a:"Dr. Accounts Receivable   500\n    Cr. Cash                      500"
   },
   {
-    s:"A company borrows $60,000 on a 6-month note payable at 8% annual interest. Record the note on the date of borrowing.",
-    a:"Dr. Cash             $60,000\n    Cr. Notes Payable        $60,000"
+    s:"Dec 31: company estimates <strong>$12,000 of AR will be uncollectible</strong>. AFUA currently has a $2,000 credit balance.",
+    steps:[
+      {title:"Understand the allowance method",rule:"GAAP requires estimating future bad debts NOW — you can't wait until they actually happen. AFUA (Allowance for Uncollectible Accounts) is a contra asset.",explain:"At year-end, AFUA must show the total amount of AR you don't expect to collect. Right now AFUA has $2,000. You need it to end at $12,000."},
+      {title:"Use a T-account to find the adjustment",rule:"Required ending AFUA balance = $12,000 credit. Current balance = $2,000 credit. Adjustment needed = $10,000.",entry:"AFUA T-account:\n  Beg. balance   2,000 (credit)\n  Adjustment    10,000 (credit)\n  End. balance  12,000 (credit) ✓",explain:"Since AFUA has a credit normal balance, we need to add $10,000 credit to get from $2,000 to $12,000."},
+      {title:"Record the adjusting entry",rule:"Bad Debt Expense goes on the income statement. AFUA goes on the balance sheet as a contra asset.",entry:"Dr. Bad Debt Expense          10,000\n    Cr. Allowance for Uncollectible Accounts  10,000",explain:"This reduces net income (expense recognized) and reduces net AR on the balance sheet."},
+      {title:"What if AFUA already had a DEBIT balance?",caution:"If AFUA had a $2,000 DEBIT balance (from excess write-offs), you'd need $14,000 to reach $12,000 credit. Always check the direction of the existing balance.",explain:"Existing AFUA debit $2,000 + credit entry $14,000 = $12,000 credit ending balance. ✓"}
+    ],
+    a:"Dr. Bad Debt Expense          10,000\n    Cr. Allowance for Uncollectible Accounts  10,000"
   },
   {
-    s:"Record 3 months of accrued interest on the $60,000 note at 8% annual interest (as of December 31).",
-    a:"Interest = $60,000 × 8% × (3/12) = $1,200\n\nDr. Interest Expense   $1,200\n    Cr. Interest Payable       $1,200"
+    s:"Estimate uncollectibles at <strong>3% of AR</strong>. AR = $750,000; AFUA already has a $14,000 credit balance.",
+    steps:[
+      {title:"Step 1: Calculate the required ending AFUA balance",rule:"% of Receivables method: Required ending AFUA = AR × estimated %",entry:"$750,000 × 3% = $22,500 required ending balance",explain:"This is what AFUA must show on the balance sheet after the adjusting entry."},
+      {title:"Step 2: Find how much to adjust",rule:"AFUA currently has $14,000 credit. It needs to end at $22,500 credit. Difference = $8,500.",entry:"AFUA T-account:\n  Beg. balance  14,000 (credit)\n  Adjustment     8,500 (credit)\n  End. balance  22,500 (credit) ✓"},
+      {title:"Step 3: Record the entry",entry:"Dr. Bad Debt Expense           8,500\n    Cr. Allowance for Uncollectible Accounts  8,500",explain:"Only $8,500 is recorded — not $22,500. We already had $14,000 in AFUA."},
+      {title:"Common mistake to avoid",caution:"Do NOT debit Bad Debt Expense for the full $22,500. That would over-estimate by $14,000. Always net against the existing AFUA balance.",rule:"Bad debt expense = required balance MINUS existing AFUA credit balance (or PLUS if existing balance is a debit)."}
+    ],
+    a:"Dr. Bad Debt Expense           8,500\n    Cr. Allowance for Uncollectible Accounts  8,500"
   },
   {
-    s:"Equipment is purchased for $50,000 cash on April 1. Useful life: 5 years; residual value: $5,000 (straight-line). Record depreciation for the year ended December 31.",
-    a:"Annual depreciation = ($50,000 − $5,000) ÷ 5 = $9,000\n9 months (Apr–Dec): $9,000 × (9/12) = $6,750\n\nDr. Depreciation Expense       $6,750\n    Cr. Accumulated Depreciation       $6,750"
+    s:"Write off a specific customer's account of <strong>$800 as uncollectible</strong> (allowance method).",
+    steps:[
+      {title:"Understand what write-off means",rule:"Write-off = we've confirmed this specific customer will never pay. We remove them from AR.",explain:"We already estimated this bad debt last year (via Bad Debt Expense). Now we're just cleaning up the books. No new expense is recorded."},
+      {title:"The entry: remove AR, reduce AFUA",rule:"Debit AFUA (reduce the allowance — we're 'using' it). Credit AR (remove the uncollectible balance).",entry:"Dr. Allowance for Uncollectible Accounts   800\n    Cr. Accounts Receivable                      800"},
+      {title:"Why no Bad Debt Expense?",rule:"Bad Debt Expense was recorded at year-end estimation. Recording it again at write-off would double-count it.",caution:"Most common mistake: students debit Bad Debt Expense here. WRONG. The expense was already recorded. Write-off only affects AR and AFUA — both decrease by the same amount."},
+      {title:"Effect on total assets?",rule:"ZERO effect. AR decreases $800. AFUA (contra asset) also decreases $800. Net AR is unchanged.",entry:"Before write-off: AR $10,000 - AFUA $800 = Net AR $9,200\nAfter write-off:  AR $9,200  - AFUA $0   = Net AR $9,200 ✓"}
+    ],
+    a:"Dr. Allowance for Uncollectible Accounts   800\n    Cr. Accounts Receivable                      800\n\nNo bad debt expense. No change in total assets."
   },
   {
-    s:"A company sells equipment for $15,000 cash. Original cost was $40,000; accumulated depreciation is $28,000.",
-    a:"Book value = $40,000 − $28,000 = $12,000\nProceeds ($15,000) > Book value ($12,000) → Gain of $3,000\n\nDr. Cash                        $15,000\nDr. Accumulated Depreciation    $28,000\n    Cr. Equipment                      $40,000\n    Cr. Gain on Sale of Equipment       $3,000"
+    s:"Equipment: cost <strong>$68,000</strong>, salvage <strong>$9,000</strong>, <strong>10-year life</strong>. Depreciation recorded for 7 years. Sold for <strong>$22,000</strong>. Record the full disposal entry.",
+    steps:[
+      {title:"Step 1: Calculate annual depreciation",rule:"Straight-line: (Cost − Salvage) ÷ Useful Life",entry:"($68,000 − $9,000) ÷ 10 = $5,900 per year"},
+      {title:"Step 2: Calculate accumulated depreciation after 7 years",entry:"$5,900 × 7 years = $41,300 accumulated depreciation",caution:"Always update depreciation to the disposal date FIRST. If sold mid-year, calculate partial year depreciation before recording the disposal."},
+      {title:"Step 3: Calculate book value",rule:"Book Value = Cost − Accumulated Depreciation",entry:"$68,000 − $41,300 = $26,700 book value"},
+      {title:"Step 4: Determine gain or loss",rule:"Proceeds > Book Value = GAIN. Proceeds < Book Value = LOSS.",entry:"Proceeds: $22,000\nBook Value: $26,700\n$22,000 < $26,700 = LOSS of $4,700",explain:"We sold it for less than it was worth on our books. That's a loss."},
+      {title:"Step 5: Record the disposal entry",rule:"Remove BOTH the original cost AND accumulated depreciation. Record cash received. Plug in the gain or loss.",entry:"Dr. Cash                        22,000\nDr. Accumulated Depreciation    41,300\nDr. Loss on Sale of Equipment    4,700\n    Cr. Equipment                      68,000",explain:"Debits: Cash received + Accum. Dep. removed + Loss recognized = 22,000 + 41,300 + 4,700 = 68,000 ✓\nCredit: Original equipment cost removed = 68,000 ✓"}
+    ],
+    a:"Dr. Cash                        22,000\nDr. Accumulated Depreciation    41,300\nDr. Loss on Sale                 4,700\n    Cr. Equipment                      68,000"
   },
   {
-    s:"On October 1, a company receives $9,600 cash in advance for a one-year service contract. Record the receipt.",
-    a:"Dr. Cash             $9,600\n    Cr. Deferred Revenue     $9,600\n\n(Liability — service not yet provided)"
+    s:"Vehicle: cost <strong>$75,000</strong>, salvage <strong>$5,000</strong>, <strong>10-year life</strong>. Sold for <strong>$40,000 after 3 years</strong>.",
+    steps:[
+      {title:"Step 1: Annual depreciation",entry:"($75,000 − $5,000) ÷ 10 = $7,000 per year"},
+      {title:"Step 2: Accumulated depreciation after 3 years",entry:"$7,000 × 3 = $21,000 accumulated"},
+      {title:"Step 3: Book value at disposal",entry:"$75,000 − $21,000 = $54,000 book value"},
+      {title:"Step 4: Gain or loss?",entry:"Proceeds: $40,000\nBook Value: $54,000\n$40,000 < $54,000 = LOSS of $14,000",explain:"We sold it for $14,000 less than its book value. Loss recorded."},
+      {title:"Step 5: Record the entry",entry:"Dr. Cash                        40,000\nDr. Accumulated Depreciation    21,000\nDr. Loss on Sale of Vehicle     14,000\n    Cr. Vehicle                        75,000",explain:"Check: 40,000 + 21,000 + 14,000 = 75,000 ✓"}
+    ],
+    a:"Dr. Cash                        40,000\nDr. Accumulated Depreciation    21,000\nDr. Loss on Sale of Vehicle     14,000\n    Cr. Vehicle                        75,000"
   },
   {
-    s:"Record the December 31 adjusting entry for the service contract above (3 months of service have been provided).",
-    a:"Earned = $9,600 × (3/12) = $2,400\n\nDr. Deferred Revenue   $2,400\n    Cr. Service Revenue        $2,400"
+    s:"Equipment purchased <strong>$50,000 on April 1</strong>. Useful life 5 years, residual value $5,000 (straight-line). Record depreciation for year ended December 31.",
+    steps:[
+      {title:"Step 1: Calculate full annual depreciation",entry:"($50,000 − $5,000) ÷ 5 = $9,000 per year"},
+      {title:"Step 2: Count the months — carefully",rule:"April 1 to December 31 = 9 months (April, May, June, July, August, September, October, November, December).",caution:"Never subtract month numbers. March = 3, December = 12, 12−3 = 9 ← WRONG method but coincidentally right here. September to December = 4 months (not 3). Always LIST the months.",entry:"Months owned this year: Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec = 9 months"},
+      {title:"Step 3: Calculate partial year depreciation",entry:"$9,000 × (9/12) = $6,750"},
+      {title:"Step 4: Record the adjusting entry",rule:"Depreciation Expense goes on the income statement. Accumulated Depreciation is a contra asset (credit normal balance).",entry:"Dr. Depreciation Expense    6,750\n    Cr. Accumulated Depreciation  6,750"}
+    ],
+    a:"Annual dep = ($50,000 − $5,000) / 5 = $9,000\n9 months = $9,000 × (9/12) = $6,750\n\nDr. Depreciation Expense    6,750\n    Cr. Accumulated Depreciation  6,750"
   },
   {
-    s:"Record closing entries: Sales Revenue $155,000; Salaries Expense $32,000; Supplies Expense $8,000; Dividends $3,500.",
-    a:"Step 1 — Close revenues:\n  Dr. Sales Revenue         $155,000\n      Cr. Income Summary             $155,000\n\nStep 2 — Close expenses:\n  Dr. Income Summary         $40,000\n      Cr. Salaries Expense          $32,000\n      Cr. Supplies Expense           $8,000\n\nStep 3 — Close Income Summary:\n  Dr. Income Summary        $115,000\n      Cr. Retained Earnings         $115,000\n\nStep 4 — Close Dividends:\n  Dr. Retained Earnings       $3,500\n      Cr. Dividends                  $3,500"
+    s:"<strong>March 1</strong>: sign a $250,000 note payable at <strong>6% annual interest</strong>. Record (1) the note on March 1, and (2) accrued interest on December 31.",
+    steps:[
+      {title:"March 1 — Record borrowing the money",rule:"Borrowing money creates a liability (Notes Payable). No interest yet — interest accrues over time.",entry:"Dr. Cash             250,000\n    Cr. Notes Payable        250,000"},
+      {title:"Count the months for interest — carefully",rule:"March 1 to December 31 = 10 months.",caution:"March to December looks like 12 − 3 = 9 months. WRONG. List them: Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec = 10 months. Count the first month.",entry:"Months: Mar Apr May Jun Jul Aug Sep Oct Nov Dec = 10 months"},
+      {title:"Calculate the interest",rule:"Interest = Face Value × Annual Rate × (Months / 12)",entry:"$250,000 × 6% × (10/12) = $12,500"},
+      {title:"December 31 — Accrue the interest",rule:"Accrue = record expense in the period incurred, even if not yet paid. Accrued Interest Payable is a current liability.",entry:"Dr. Interest Expense    12,500\n    Cr. Interest Payable        12,500",explain:"Interest Expense hits the income statement. Interest Payable goes on the balance sheet as a current liability."}
+    ],
+    a:"Mar 1:\n  Dr. Cash             250,000\n      Cr. Notes Payable        250,000\n\nDec 31 (10 months):\n  Interest = $250,000 × 6% × 10/12 = $12,500\n  Dr. Interest Expense    12,500\n      Cr. Interest Payable        12,500"
   },
   {
-    s:"A company receives $200,000 in exchange for issuing common stock. What is the effect on the accounting equation?",
-    a:"Assets increase (Cash +$200,000) and Equity increases (Common Stock +$200,000).\n\nEntry:\nDr. Cash              $200,000\n    Cr. Common Stock          $200,000\n\nThe accounting equation remains balanced: Assets = Liabilities + Equity"
+    s:"<strong>October 1</strong>: borrow $60,000 at <strong>8% annual interest</strong>. Record (1) the note, (2) Dec 31 accrued interest, (3) repayment at maturity (April 1).",
+    steps:[
+      {title:"Oct 1 — Record the note",entry:"Dr. Cash             60,000\n    Cr. Notes Payable      60,000"},
+      {title:"Count months Oct 1 to Dec 31",rule:"Oct, Nov, Dec = 3 months. (Count October — it's the first month.)",caution:"12 − 10 = 2 months ← WRONG. List them: October, November, December = 3 months.",entry:"$60,000 × 8% × (3/12) = $1,200"},
+      {title:"Dec 31 — Accrue interest",entry:"Dr. Interest Expense   1,200\n    Cr. Interest Payable   1,200"},
+      {title:"April 1 — Repayment of principal + remaining interest",rule:"Pay off the note principal AND the accrued interest payable from December.",entry:"Dr. Notes Payable    60,000\nDr. Interest Payable  1,200\n    Cr. Cash               61,200",explain:"No new Interest Expense here — the $1,200 was already recorded in December. We're just paying the liability we already recognized."}
+    ],
+    a:"Oct 1: Dr. Cash $60,000 / Cr. Notes Payable $60,000\nDec 31: Dr. Interest Expense $1,200 / Cr. Interest Payable $1,200\nApr 1: Dr. Notes Payable $60,000 + Dr. Interest Payable $1,200 / Cr. Cash $61,200"
+  },
+  {
+    s:"<strong>October 1</strong>: receive $9,600 cash in advance for a <strong>one-year service contract</strong>. Record the receipt AND the December 31 adjusting entry.",
+    steps:[
+      {title:"Understand deferred revenue",rule:"Cash received before the service is performed = LIABILITY, not revenue. The company owes the customer a service.",caution:"'Deferred Revenue' sounds like revenue but it's a LIABILITY until the service is delivered. One of the most common misclassifications.",explain:"We owe 12 months of service. We've done nothing yet on October 1."},
+      {title:"October 1 — Record receiving the cash",entry:"Dr. Cash             9,600\n    Cr. Deferred Revenue     9,600",explain:"Cash increases. Deferred Revenue (liability) increases. We owe 12 months of service."},
+      {title:"Count months earned by December 31",entry:"October, November, December = 3 months earned\n$9,600 × (3/12) = $2,400 earned"},
+      {title:"December 31 — Recognize the earned portion",rule:"As service is performed, shift from liability to revenue.",entry:"Dr. Deferred Revenue   2,400\n    Cr. Service Revenue        2,400",explain:"Liability decreases (we've fulfilled 3 months). Revenue increases (we've earned it). Remaining liability = $7,200 (9 more months owed)."}
+    ],
+    a:"Oct 1: Dr. Cash $9,600 / Cr. Deferred Revenue $9,600\n\nDec 31 (3 months earned = $2,400):\n  Dr. Deferred Revenue $2,400\n      Cr. Service Revenue $2,400"
+  },
+  {
+    s:"Record <strong>closing entries</strong>: Sales Revenue $155,000; Salaries Expense $32,000; Supplies Expense $8,000; Dividends $3,500.",
+    steps:[
+      {title:"Why do we close? What are temporary accounts?",rule:"Temporary accounts (Revenue, Expenses, Dividends) track one year at a time. At year-end, they're zeroed out so next year starts fresh. Balances flow into Retained Earnings.",explain:"Permanent accounts (Assets, Liabilities, Equity) carry forward. Temporary accounts reset each year."},
+      {title:"Step 1 — Close Revenue to Income Summary",rule:"Debit the revenue account to zero it out. Credit Income Summary.",entry:"Dr. Sales Revenue      155,000\n    Cr. Income Summary         155,000"},
+      {title:"Step 2 — Close Expenses to Income Summary",rule:"Credit each expense account to zero it out. Debit Income Summary.",entry:"Dr. Income Summary      40,000\n    Cr. Salaries Expense       32,000\n    Cr. Supplies Expense        8,000",explain:"Total expenses = $32,000 + $8,000 = $40,000"},
+      {title:"Step 3 — Close Income Summary to Retained Earnings",rule:"Income Summary now has net income: $155,000 revenue − $40,000 expenses = $115,000 net income.",entry:"Dr. Income Summary     115,000\n    Cr. Retained Earnings      115,000"},
+      {title:"Step 4 — Close Dividends to Retained Earnings",rule:"Dividends reduce Retained Earnings. Debit RE, credit Dividends to zero it out.",entry:"Dr. Retained Earnings    3,500\n    Cr. Dividends               3,500",caution:"Dividends reduce RE directly — they are NOT an expense. Don't close them through Income Summary."}
+    ],
+    a:"Dr. Sales Revenue      155,000 / Cr. Income Summary      155,000\nDr. Income Summary      40,000 / Cr. Salaries Exp $32k + Supplies Exp $8k\nDr. Income Summary     115,000 / Cr. Retained Earnings  115,000\nDr. Retained Earnings    3,500 / Cr. Dividends            3,500"
+  },
+  {
+    s:"Purchase <strong>$10,000 inventory on account</strong> (terms 2/10, n/30) and pay within the discount period.",
+    steps:[
+      {title:"Step 1 — Record the purchase",entry:"Dr. Inventory          10,000\n    Cr. Accounts Payable       10,000",explain:"Inventory increases (we now have goods). AP increases (we owe the supplier)."},
+      {title:"Understand the purchase discount",rule:"Purchase discount = seller gives US a discount for paying early. This REDUCES our inventory cost.",caution:"Purchase discounts CREDIT inventory (reduce cost) — they are NOT revenue. Common mistake: recording a 'Purchase Discount Revenue' account.",entry:"Discount = $10,000 × 2% = $200"},
+      {title:"Step 2 — Record payment within discount period",rule:"Clear the full AP balance. Credit Inventory for the discount (reduces cost). Cash = AP − discount.",entry:"Dr. Accounts Payable   10,000\n    Cr. Inventory                 200\n    Cr. Cash                    9,800",explain:"AP fully cleared. Inventory reduced by $200 (net cost now $9,800). Cash paid = $9,800."}
+    ],
+    a:"Purchase:\n  Dr. Inventory $10,000 / Cr. AP $10,000\n\nPayment within 10 days:\n  Dr. AP $10,000\n      Cr. Inventory $200 (reduces cost)\n      Cr. Cash $9,800"
+  },
+  {
+    s:"Sell a product for <strong>$500 cash plus 8% sales tax</strong>. Record the entry.",
+    steps:[
+      {title:"Understand sales tax",rule:"Sales tax collected from customers belongs to the GOVERNMENT — it is a LIABILITY, not revenue.",caution:"Sales tax is NOT revenue. It is NOT an expense. It is a CURRENT LIABILITY payable to the government.",explain:"We act as a collector for the government. The $40 was never ours."},
+      {title:"Calculate the amounts",entry:"Sale price: $500\nSales tax: $500 × 8% = $40\nTotal cash received: $540"},
+      {title:"Record the entry",rule:"Credit Sales Revenue for only the $500. Credit Sales Tax Payable for the $40.",entry:"Dr. Cash              540\n    Cr. Sales Revenue       500\n    Cr. Sales Tax Payable    40"}
+    ],
+    a:"Dr. Cash              540\n    Cr. Sales Revenue       500\n    Cr. Sales Tax Payable    40\n\n(Sales tax = liability to government, not our revenue)"
+  },
+  {
+    s:"Purchase land for <strong>$100,000</strong>. Also pay: $5,000 back taxes, $3,000 clearing costs, $2,000 real estate commission. Receive <strong>$1,500 from selling salvaged materials</strong>.",
+    steps:[
+      {title:"What goes in the cost of land?",rule:"Land cost = purchase price + ALL costs to get land ready for intended use.",explain:"This includes: back taxes owed on the property, clearing/leveling costs, real estate commissions, legal fees."},
+      {title:"How does the salvaged materials cash work?",rule:"Cash received from selling salvaged materials REDUCES the cost of land — it's a credit against land cost.",caution:"Don't add the $1,500 to land cost. Don't ignore it. It REDUCES land cost. This is a very common mistake.",entry:"Land cost calculation:\n$100,000 purchase price\n+  $5,000 back taxes\n+  $3,000 clearing\n+  $2,000 commission\n−  $1,500 salvaged materials\n= $108,500 total land cost"},
+      {title:"Record the entry",entry:"Dr. Land              108,500\n    Cr. Cash                108,500"}
+    ],
+    a:"Land cost = $100,000 + $5,000 + $3,000 + $2,000 − $1,500 = $108,500\n\nDr. Land              108,500\n    Cr. Cash                108,500"
+  },
+  {
+    s:"<strong>January 1</strong>: pay $24,000 for a <strong>2-year insurance policy</strong>. Record the payment AND the December 31 adjusting entry.",
+    steps:[
+      {title:"Why is this an asset, not an expense?",rule:"Prepaid Insurance is an ASSET because future benefits remain. We expense it gradually as the coverage is used up (matching principle).",explain:"Paying $24,000 upfront for 2 years of coverage gives us a future benefit. That future benefit = asset."},
+      {title:"Jan 1 — Record the payment",entry:"Dr. Prepaid Insurance  24,000\n    Cr. Cash                   24,000"},
+      {title:"Count months used by December 31",entry:"January through December = 12 months used (out of 24 total)\n$24,000 × (12/24) = $12,000 expense for the year"},
+      {title:"Dec 31 — Record the adjusting entry",rule:"As the insurance coverage is used, shift from asset (Prepaid Insurance) to expense (Insurance Expense).",entry:"Dr. Insurance Expense  12,000\n    Cr. Prepaid Insurance      12,000",explain:"Remaining Prepaid Insurance = $24,000 − $12,000 = $12,000 (covers year 2)"}
+    ],
+    a:"Jan 1: Dr. Prepaid Insurance $24,000 / Cr. Cash $24,000\n\nDec 31: 12/24 months used = $12,000\n  Dr. Insurance Expense  12,000\n      Cr. Prepaid Insurance      12,000"
+  },
+  {
+    s:"Company issues <strong>$200,000 of common stock</strong> for cash. Record the entry and describe the accounting equation effect.",
+    steps:[
+      {title:"Identify the accounts affected",rule:"Issuing stock for cash: Cash (asset) increases, Common Stock (equity) increases.",explain:"The company is selling ownership shares. Cash comes in; equity (ownership) goes up."},
+      {title:"Record the entry",entry:"Dr. Cash              200,000\n    Cr. Common Stock          200,000"},
+      {title:"Effect on the accounting equation",rule:"Both sides of A = L + E increase by the same amount — the equation stays balanced.",entry:"Assets:  Cash ↑ $200,000\nLiabilities: no change\nEquity:  Common Stock ↑ $200,000\n\nA = L + E\n+200,000 = 0 + 200,000 ✓"}
+    ],
+    a:"Dr. Cash              200,000\n    Cr. Common Stock          200,000\n\nEffect: Assets +$200,000, Equity +$200,000"
+  },
+  {
+    s:"<strong>December 31</strong>: accrue 2 months of salaries totaling <strong>$18,000</strong>. The company will pay in January.",
+    steps:[
+      {title:"Why do we need an adjusting entry?",rule:"Accrual accounting: record expenses when INCURRED, not when paid. Employees worked in Dec — that expense belongs in December.",explain:"If we wait until the January paycheck, the December income statement would be missing $18,000 of expense. That would overstate net income."},
+      {title:"Dec 31 — Accrue the salaries",rule:"Debit Salaries Expense (income statement — December). Credit Salaries Payable (balance sheet — liability we owe).",entry:"Dr. Salaries Expense   18,000\n    Cr. Salaries Payable       18,000"},
+      {title:"January — Record the cash payment",rule:"When cash is paid, eliminate the liability. No new expense (already recorded in December).",entry:"Dr. Salaries Payable   18,000\n    Cr. Cash                   18,000",caution:"Don't record Salaries Expense again in January for these wages — they were already expensed in December. Recording twice would double-count."}
+    ],
+    a:"Dec 31:\n  Dr. Salaries Expense   18,000\n      Cr. Salaries Payable       18,000\n\nJanuary payment:\n  Dr. Salaries Payable   18,000\n      Cr. Cash                   18,000"
   },
 ];
+
+// TABS
+function sw(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  document.getElementById('panel-'+id).classList.add('on');
+  btn.classList.add('on');
+}
+
+// FLASHCARDS
+let fcOrd=[...Array(CARDS.length).keys()],fcI=0,fcKn=0;
+function renderFC(){
+  const c=CARDS[fcOrd[fcI]];
+  document.getElementById('fcq').textContent=c.q;
+  document.getElementById('fca').textContent=c.a;
+  document.getElementById('fccat').textContent=c.cat;
+  document.getElementById('fccat2').textContent=c.cat;
+  document.getElementById('fcctr').textContent=(fcI+1)+' / '+CARDS.length;
+  document.getElementById('fcknew').textContent=fcKn+' known';
+  document.getElementById('fcbar').style.width=(fcKn/CARDS.length*100)+'%';
+  document.getElementById('fccard').classList.remove('flipped');
+}
+function flipFC(){document.getElementById('fccard').classList.toggle('flipped');}
+function nextFC(){fcI=(fcI+1)%CARDS.length;renderFC();}
+function prevFC(){fcI=(fcI-1+CARDS.length)%CARDS.length;renderFC();}
+function markFC(k){if(k)fcKn=Math.min(fcKn+1,CARDS.length);nextFC();}
+function shuffleFC(){
+  for(let i=fcOrd.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[fcOrd[i],fcOrd[j]]=[fcOrd[j],fcOrd[i]];}
+  fcI=0;fcKn=0;renderFC();
+}
+renderFC();
+
+// QUIZ
+let qPool=[],qI=0,qOk=0,qCat='all';
+function setQcat(c,btn){qCat=c;document.querySelectorAll('.fp').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+function startQuiz(){
+  qPool=qCat==='all'?[...QUIZ]:QUIZ.filter(q=>q.cat===qCat);
+  for(let i=qPool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[qPool[i],qPool[j]]=[qPool[j],qPool[i]];}
+  qI=0;qOk=0;
+  document.getElementById('qsetup').style.display='none';
+  document.getElementById('qresult').style.display='none';
+  document.getElementById('qactive').style.display='block';
+  renderQ();
+}
+function renderQ(){
+  if(qI>=qPool.length){showResult();return;}
+  const q=qPool[qI];
+  document.getElementById('qnum').textContent='Q '+(qI+1)+' of '+qPool.length;
+  document.getElementById('qsc').textContent=qOk+' correct';
+  document.getElementById('qbar').style.width=(qI/qPool.length*100)+'%';
+  document.getElementById('qtext').textContent=q.q;
+  const opts=document.getElementById('qopts');
+  opts.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    const b=document.createElement('button');
+    b.className='opt';b.textContent=o;
+    b.onclick=()=>ansQ(i,b);opts.appendChild(b);
+  });
+  document.getElementById('qexp').className='exp';
+  document.getElementById('qnext').style.display='none';
+}
+function ansQ(i,btn){
+  const q=qPool[qI];
+  document.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+  if(i===q.ans){btn.classList.add('correct');qOk++;}
+  else{btn.classList.add('wrong');document.querySelectorAll('.opt')[q.ans].classList.add('correct');}
+  document.getElementById('qexp').textContent=q.exp;
+  document.getElementById('qexp').className='exp on';
+  document.getElementById('qnext').style.display='block';
+  document.getElementById('qsc').textContent=qOk+' correct';
+}
+function nextQ(){qI++;renderQ();}
+function showResult(){
+  document.getElementById('qactive').style.display='none';
+  document.getElementById('qresult').style.display='block';
+  const pct=Math.round(qOk/qPool.length*100);
+  document.getElementById('rpct').textContent=pct+'%';
+  document.getElementById('rmsg').textContent=qOk+' of '+qPool.length+' correct -- '+(pct>=90?'Excellent. You\'re ready.':pct>=75?'Good work. Review missed topics.':'Keep reviewing.');
+}
+function resetQuiz(){
+  document.getElementById('qsetup').style.display='block';
+  document.getElementById('qactive').style.display='none';
+  document.getElementById('qresult').style.display='none';
+}
+
+// JOURNAL WALKTHROUGH
+let jeI=0;
+function renderJE(){
+  const je=JE[jeI];
+  const steps=je.steps;
+  let html='<div class="je-header">';
+  html+='<span class="badge badge-m">Scenario '+(jeI+1)+' of '+JE.length+'</span>';
+  html+='<span class="je-progress" id="je-step-progress">Step 1 of '+steps.length+'</span>';
+  html+='</div>';
+  html+='<div class="je-scenario">'+je.s+'</div>';
+  html+='<div class="steps-container" id="je-steps">';
+  steps.forEach((step,i)=>{
+    html+='<div class="step-card'+(i===0?' active open':'')+'" id="step-'+i+'">';
+    html+='<div class="step-header" onclick="toggleStep('+i+')">';
+    html+='<div class="step-num">'+(i+1)+'</div>';
+    html+='<div class="step-title">'+step.title+'</div>';
+    html+='<div class="step-chevron">'+(i===0?'&#9650;':'&#9660;')+'</div>';
+    html+='</div>';
+    html+='<div class="step-body">';
+    if(step.rule) html+='<div class="rule">&#128206; '+step.rule+'</div>';
+    if(step.explain) html+='<p>'+step.explain+'</p>';
+    if(step.caution) html+='<div class="caution">&#9888;&#65039; '+step.caution+'</div>';
+    if(step.entry) html+='<div class="entry-preview">'+step.entry+'</div>';
+    html+='<button class="btn btn-ok step-mark-btn" onclick="markStep('+i+')">&#10003; Got it &mdash; next step</button>';
+    html+='</div></div>';
+  });
+  html+='</div>';
+  html+='<div class="je-full-entry" id="je-full">'+je.a+'</div>';
+  html+='<button class="btn btn-o" id="je-showall" onclick="showFullEntry()" style="margin-bottom:1rem;display:none">Show complete entry</button>';
+  document.getElementById('jebody').innerHTML=html;
+  document.getElementById('je-prev').style.opacity=jeI===0?'0.3':'1';
+}
+function toggleStep(i){
+  const card=document.getElementById('step-'+i);
+  card.classList.toggle('open');
+  const chev=card.querySelector('.step-chevron');
+  chev.innerHTML=card.classList.contains('open')?'&#9650;':'&#9660;';
+}
+function markStep(i){
+  const card=document.getElementById('step-'+i);
+  card.classList.remove('active','open');
+  card.classList.add('done');
+  const je=JE[jeI];
+  const next=i+1;
+  if(next<je.steps.length){
+    const nextCard=document.getElementById('step-'+next);
+    nextCard.classList.add('active','open');
+    nextCard.querySelector('.step-chevron').innerHTML='&#9650;';
+    document.getElementById('je-step-progress').textContent='Step '+(next+1)+' of '+je.steps.length;
+  } else {
+    document.getElementById('je-step-progress').textContent='All steps done!';
+    document.getElementById('je-showall').style.display='inline-flex';
+  }
+}
+function showFullEntry(){
+  document.getElementById('je-full').classList.add('on');
+  document.getElementById('je-showall').style.display='none';
+}
+function prevJE(){if(jeI>0){jeI--;renderJE();}}
+function nextJE(){jeI=(jeI+1)%JE.length;renderJE();}
+renderJE();
+
+const CQ_BANKS = [
+  // Chapter 1
+  [
+    {q:"What are the obligations or debts that a business must pay at some future time because of past transactions or events called, and how are they presented?",opts:["Expenses on the income statement","Equity on the balance sheet","Dividends on the statement of stockholders equity","Liabilities on the balance sheet"],ans:3,exp:"Liabilities are obligations from past transactions, presented on the balance sheet. Examples: accounts payable, notes payable, salaries payable."},
+    {q:"Which of the following activities is an example of an investing activity?",opts:["Selling merchandise online","Receiving a loan from a bank","Purchasing a delivery truck","Issuing shares of stock in exchange for cash"],ans:2,exp:"Investing activities involve purchasing or selling long-term assets. Selling merchandise = operating. Receiving a loan and issuing stock = financing."},
+    {q:"Assets must always equal the sum of liabilities plus stockholders' equity.",opts:["True","False"],ans:0,exp:"True. This is the fundamental accounting equation: Assets = Liabilities + Equity. Every transaction keeps it balanced."},
+    {q:"Which financial statement is net income (revenue minus expenses) calculated on?",opts:["Balance Sheet","Income Statement","Statement of Equity","Statement of Cash Flows"],ans:1,exp:"Net income is calculated on the Income Statement. The balance sheet shows financial position; the other statements cover equity changes and cash flows."},
+    {q:"What are the resources of a company called? (Examples: cash, building, machinery, furniture, supplies)",opts:["Revenue","Asset","Equity","Liabilities"],ans:1,exp:"Resources owned by a company are called Assets. They appear on the left/top of the balance sheet."},
+  ],
+  // Chapter 2
+  [
+    {q:"Which of the following accounts has a credit normal balance (increased by a credit)?",opts:["Salaries expense","Inventory","Dividends","Revenue"],ans:3,exp:"Revenue has a credit normal balance. Assets, expenses, and dividends all have debit normal balances. Liabilities, equity, and revenue have credit normal balances."},
+    {q:"The Cash T-account of Franklin, Inc. has a beginning balance of $100,000. During the year, $40,000 was debited and $55,000 was credited. What is the ending balance of Cash?",opts:["$85,000","$115,000","$195,000","Cannot be determined"],ans:0,exp:"Cash has a debit normal balance. $100,000 + $40,000 (debit) - $55,000 (credit) = $85,000."},
+    {q:"Recording cash paid for inventory purchased involves:",opts:["Debiting Inventory and crediting Accounts Payable","Debiting Accounts Payable and crediting Inventory","Debiting Cash and crediting Accounts Payable","Debiting Inventory and crediting Cash"],ans:3,exp:"Paying cash for inventory: Inventory (asset) increases via debit, Cash (asset) decreases via credit."},
+    {q:"Debits to which accounts result in an increased balance (debit normal balance)?",opts:["Assets and expenses","Revenues and assets","Assets and common stock","Common stock and expenses"],ans:0,exp:"Assets and expenses both have debit normal balances — debiting them increases their balance. Revenue, liabilities, and equity have credit normal balances."},
+    {q:"If a company receives $200,000 cash in exchange for common stock, the effect on the accounting equation is:",opts:["Assets, liabilities and equity are all unchanged","Assets and equity increase","Assets decrease and liabilities decrease","Assets increase and equity decreases"],ans:1,exp:"Cash (asset) increases $200,000 and Common Stock (equity) increases $200,000. Both sides of the equation increase equally."},
+  ],
+  // Chapter 3
+  [
+    {q:"Williams Company: Beg. RE $20,000; Total Revenue $100,000; Total Expenses $30,000; Dividends $10,000. What is ending retained earnings?",opts:["$60,000","$70,000","$80,000","$40,000"],ans:2,exp:"Beg RE + Revenue - Expenses - Dividends = End RE. $20,000 + $100,000 - $30,000 - $10,000 = $80,000."},
+    {q:"Which of the following is a permanent account?",opts:["Sales revenue","Dividends","Retained earnings","Salaries expense"],ans:2,exp:"Retained Earnings is a permanent account — it carries its balance forward year to year. Revenue, expenses, and dividends are temporary accounts closed at year-end."},
+    {q:"Bosa Company purchased a machine for $225,000 on January 1, 2024. Useful life 5 years. Which is part of the adjusting entry on January 31, 2024?",opts:["Credit machine $3,750","Debit depreciation expense $45,000","Credit depreciation expense $45,000","Credit accumulated depreciation $3,750"],ans:3,exp:"Annual dep = $225,000 / 5 = $45,000. Monthly = $45,000 / 12 = $3,750. Entry: Dr. Dep. Expense $3,750 / Cr. Accumulated Depreciation $3,750."},
+    {q:"Kittle Company Dec 31: Sales Revenue $150,000; Salaries Exp $21,000; Supplies Exp $5,000; Dividends $7,500. Which would be part of closing entries?",opts:["Debit supplies expense $5,000","Debit salaries expense $21,000","Debit sales revenue $150,000","Debit dividends $7,500"],ans:2,exp:"To close revenue accounts, you DEBIT them (to zero them out) and credit Income Summary. Expenses are closed by crediting them. Debit Sales Revenue $150,000 is correct."},
+    {q:"On April 1, 2024, Ward Company paid $120,000 in advance for one year of advertising. How much advertising expense on the December 31, 2024 income statement?",opts:["$120,000","$80,000","$90,000","$30,000"],ans:2,exp:"April 1 to December 31 = 9 months used. $120,000 × (9/12) = $90,000 advertising expense for the year."},
+  ],
+  // Chapter 5
+  [
+    {q:"Revenue $20,000; Sales Returns $3,000; Sales Allowances $1,500; Sales Discounts $500; COGS $4,000; Salaries Expense $2,000. What is net revenue?",opts:["$9,000","$20,000","$15,000","$19,000"],ans:2,exp:"Net Revenue = Total Revenue - Returns - Allowances - Discounts = $20,000 - $3,000 - $1,500 - $500 = $15,000. COGS and Salaries are not deducted from revenue."},
+    {q:"Which of the following is NOT a contra revenue account?",opts:["Sales revenue","Sales Returns","Sales Discounts","Sales Allowances"],ans:0,exp:"Sales Revenue is a revenue account, not a contra revenue account. Sales Returns, Discounts, and Allowances are all contra revenue accounts (debit normal balance)."},
+    {q:"Gray Company calculates $3,600 for the allowance for doubtful accounts. AR = $112,800; Allowance has a $600 credit balance before adjustment. Bad debt expense for the year?",opts:["$480","$3,000","$3,360","$3,840"],ans:1,exp:"Required ending AFUA = $3,600. Current AFUA = $600 credit. Adjustment needed = $3,600 - $600 = $3,000. Bad debt expense = $3,000."},
+    {q:"Which is the adjusting journal entry at year-end to estimate uncollectible accounts receivable?",opts:["Dr. Bad Debt Expense / Cr. Allowance for Doubtful Accounts","Dr. Allowance for Doubtful Accounts / Cr. Accounts Receivable","Dr. Bad Debt Expense / Cr. Accounts Receivable","Dr. Allowance for Doubtful Accounts / Cr. Bad Debt Expense"],ans:0,exp:"Year-end estimation entry: Dr. Bad Debt Expense / Cr. Allowance for Doubtful Accounts. The write-off entry uses Dr. Allowance / Cr. AR."},
+    {q:"Sally Company has $15,000 in allowance for doubtful accounts. Taylor Company will not pay the $2,000 they owe. Journal entry for the write-off?",opts:["Dr. Bad Debt Expense $2,000 / Cr. Allowance $2,000","Dr. Bad Debt Expense $2,000 / Cr. AR $2,000","Dr. Allowance $2,000 / Cr. AR $2,000","Dr. AR $2,000 / Cr. Allowance $2,000"],ans:2,exp:"Write-off: Dr. Allowance for Doubtful Accounts / Cr. Accounts Receivable. No bad debt expense — it was already recorded at year-end estimation. No change in total assets."},
+  ],
+  // Chapter 6
+  [
+    {q:"Davis Company sold inventory for $20,000 (cost $10,000). Customer returns $5,000 of inventory (cost $2,500). Which is part of Davis's JE for the return?",opts:["Credit Inventory $5,000","Credit Accounts Receivable $2,500","Debit Cost of Goods Sold $2,500","Debit Sales Returns and Allowances $5,000"],ans:3,exp:"For the return: Dr. Sales Returns $5,000 (the selling price) and Dr. Inventory $2,500 / Cr. COGS $2,500. Debit Sales Returns $5,000 is correct."},
+    {q:"Under the expense matching principle, the company records COGS when the inventory is purchased from its suppliers.",opts:["True","False"],ans:1,exp:"FALSE. COGS is recorded when inventory is SOLD to customers, not when purchased. This is the matching principle — match the expense to the revenue it generates."},
+    {q:"Aggie Company purchased $12,000 of merchandise, FOB shipping point. Shipping = $800. Returned $3,000. Paid within 2% discount period (discount excludes shipping). Ending inventory balance?",opts:["$11,760","$11,800","$9,620","$9,604"],ans:2,exp:"Start: $12,000 + $800 shipping = $12,800. Return: $12,800 - $3,000 = $9,800. Discount: ($12,000 - $3,000) × 2% = $180 discount. $9,800 - $180 = $9,620."},
+    {q:"Which expense is NOT included in Selling, General and Administrative expense (SG&A) on the multi-step income statement?",opts:["Salaries expense","Advertising expense","Cost of goods sold","Rent expense"],ans:2,exp:"COGS is its own line item above gross profit. SG&A (operating expenses) includes salaries, advertising, rent, depreciation, utilities — costs of running the business, not the direct cost of goods."},
+    {q:"Using FIFO, what is COGS when 30 units are sold on January 31? Beg Inv: 20 units @ $5; Jan 15: 50 units @ $7; Jan 25: 30 units @ $8.",opts:["$170","$210","$180","$240"],ans:0,exp:"FIFO — sell oldest first. 20 units from beginning @ $5 = $100. Then 10 units from Jan 15 @ $7 = $70. Total COGS = $100 + $70 = $170."},
+  ],
+  // Chapter 7
+  [
+    {q:"April 1, Year 1: machine acquired for $160,000. Useful life 8 years, salvage $16,000. Straight-line. Year 1 depreciation expense?",opts:["$13,500","$18,000","$15,000","$20,000"],ans:0,exp:"Annual dep = ($160,000 - $16,000) / 8 = $18,000. But purchased April 1 — only 9 months in Year 1. $18,000 × (9/12) = $13,500."},
+    {q:"Jan 1 Year 1: equipment $172,000, 8-year life, $12,000 salvage. Sold Dec 31 Year 5 for $60,000. Gain or loss?",opts:["$24,000 loss","$12,000 loss","No gain or loss","$6,000 loss"],ans:0,exp:"Annual dep = ($172,000 - $12,000) / 8 = $20,000. After 5 years: accum dep = $100,000. Book value = $172,000 - $100,000 = $72,000. Proceeds $60,000 < BV $72,000 = LOSS $12,000. Wait — $72k - $60k = $12,000 loss. Answer is B."},
+    {q:"The cost of repairing a broken desk leg (broken accidentally while moving) is expensed immediately.",opts:["True","False"],ans:0,exp:"TRUE. Routine repairs that restore original capability are expensed immediately. Only improvements extending useful life or adding new function are capitalized."},
+    {q:"Equipment cost $12,000. Also paid: $3,000 tax, $500 shipping, $250 installation, $2,000 annual insurance. How much is capitalized as acquisition cost?",opts:["$12,000","$17,750","$15,750","$15,500"],ans:2,exp:"Capitalize: $12,000 + $3,000 tax + $500 shipping + $250 installation = $15,750. Annual insurance ($2,000) is a recurring expense — expensed as incurred, NOT capitalized."},
+    {q:"Larry's Landscaping sold equipment for $7,000. Originally purchased for $20,000; depreciation through date of sale totaled $15,000. Gain or loss?",opts:["$13,000 gain","$8,000 gain","$2,000 loss","$2,000 gain"],ans:3,exp:"Book value = $20,000 - $15,000 = $5,000. Proceeds $7,000 > BV $5,000 = GAIN of $2,000."},
+  ],
+  // Chapter 8&9
+  [
+    {q:"Executive Airways borrows $10 million on April 1, 2021 for one year at 6%. Interest expense for year ended December 31, 2021?",opts:["$300,000","$450,000","$150,000","$600,000"],ans:1,exp:"April 1 to December 31 = 9 months (Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec). $10,000,000 × 6% × (9/12) = $450,000."},
+    {q:"Which of the following is reported as a long-term liability?",opts:["Notes payable due in two years","Salaries Payable","Deferred revenue for services next month","Accounts Payable"],ans:0,exp:"Notes payable due in two years is long-term (due in more than one year). Salaries payable, deferred revenue due next month, and accounts payable are all current liabilities."},
+    {q:"When a customer pays in advance for a product or service, the advance payment is recorded as cash received and an increase in:",opts:["Revenues","Expenses","Liabilities","Dividends"],ans:2,exp:"Cash received in advance = Deferred Revenue, which is a LIABILITY. The company owes the customer goods or services. It becomes revenue only when earned."},
+    {q:"Current Year: Net Sales $1,000,000; Net Income $120,000; Total Liabilities $250,000; Total Assets $800,000. Debt-to-total-assets ratio?",opts:["31.3%","15.0%","40.0%","10.0%"],ans:0,exp:"Debt to total assets = Total Liabilities / Total Assets = $250,000 / $800,000 = 31.25% ≈ 31.3%."},
+    {q:"This is a free point of extra credit — you will get one free point towards the class!",opts:["Thank you!","No thank you","I prefer not","Maybe later"],ans:0,exp:"Free point! Just like on the actual quiz. 🎉"},
+  ],
+];
+
+let cqIdx=0, cqPool=[], cqI=0, cqOk=0, cqCurrent=0;
+function setCQ(i,btn){
+  cqCurrent=i;
+  document.querySelectorAll('#panel-cquiz .fp').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+function startCQ(){
+  cqPool=[...CQ_BANKS[cqCurrent]];
+  cqI=0;cqOk=0;
+  document.getElementById('cq-setup').style.display='none';
+  document.getElementById('cq-result').style.display='none';
+  document.getElementById('cq-active').style.display='block';
+  renderCQ();
+}
+function renderCQ(){
+  if(cqI>=cqPool.length){showCQResult();return;}
+  const q=cqPool[cqI];
+  document.getElementById('cq-num').textContent='Q '+(cqI+1)+' of '+cqPool.length;
+  document.getElementById('cq-sc').textContent=cqOk+' correct';
+  document.getElementById('cq-bar').style.width=(cqI/cqPool.length*100)+'%';
+  document.getElementById('cq-text').textContent=q.q;
+  const opts=document.getElementById('cq-opts');
+  opts.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    const b=document.createElement('button');
+    b.className='opt';b.textContent=o;
+    b.onclick=()=>ansCQ(i,b);opts.appendChild(b);
+  });
+  document.getElementById('cq-exp').className='exp';
+  document.getElementById('cq-next').style.display='none';
+}
+function ansCQ(i,btn){
+  const q=cqPool[cqI];
+  document.querySelectorAll('#cq-opts .opt').forEach(b=>b.disabled=true);
+  if(i===q.ans){btn.classList.add('correct');cqOk++;}
+  else{btn.classList.add('wrong');document.querySelectorAll('#cq-opts .opt')[q.ans].classList.add('correct');}
+  document.getElementById('cq-exp').textContent=q.exp;
+  document.getElementById('cq-exp').className='exp on';
+  document.getElementById('cq-next').style.display='block';
+  document.getElementById('cq-sc').textContent=cqOk+' correct';
+}
+function nextCQ(){cqI++;renderCQ();}
+function showCQResult(){
+  document.getElementById('cq-active').style.display='none';
+  document.getElementById('cq-result').style.display='block';
+  const pct=Math.round(cqOk/cqPool.length*100);
+  document.getElementById('cq-rpct').textContent=pct+'%';
+  document.getElementById('cq-rmsg').textContent=cqOk+' of '+cqPool.length+' correct — '+(pct>=80?'Solid. You know this chapter.':pct>=60?'Review the explanations above.':'Go back to notes for this chapter.');
+}
+function resetCQ(){
+  document.getElementById('cq-setup').style.display='block';
+  document.getElementById('cq-active').style.display='none';
+  document.getElementById('cq-result').style.display='none';
+}
 
 </script>
-  <script>
-    // ── TAB SWITCHER ──
-    function switchTab(id, btn) {
-      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('panel-' + id).classList.add('active');
-      btn.classList.add('active');
-    }
-
-    // ── FLASHCARDS ──
-    let fcOrder = [...Array(CARDS.length).keys()];
-    let fcIdx = 0, fcKnew = 0;
-
-    function renderFC() {
-      const c = CARDS[fcOrder[fcIdx]];
-      document.getElementById('fc-q').textContent = c.q;
-      document.getElementById('fc-a').textContent = c.a;
-      document.getElementById('fc-cat').textContent = c.cat;
-      document.getElementById('fc-cat-front').textContent = c.cat;
-      document.getElementById('fc-counter').textContent = (fcIdx + 1) + ' / ' + CARDS.length;
-      document.getElementById('fc-knew').textContent = fcKnew + ' known';
-      document.getElementById('fc-bar').style.width = (fcKnew / CARDS.length * 100) + '%';
-      document.getElementById('fc-card').classList.remove('flipped');
-    }
-
-    function flipCard() { document.getElementById('fc-card').classList.toggle('flipped'); }
-    function nextCard() { fcIdx = (fcIdx + 1) % CARDS.length; renderFC(); }
-    function prevCard() { fcIdx = (fcIdx - 1 + CARDS.length) % CARDS.length; renderFC(); }
-    function markCard(knew) {
-      if (knew) fcKnew = Math.min(fcKnew + 1, CARDS.length);
-      nextCard();
-    }
-    function shuffleCards() {
-      for (let i = fcOrder.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [fcOrder[i], fcOrder[j]] = [fcOrder[j], fcOrder[i]];
-      }
-      fcIdx = 0; fcKnew = 0; renderFC();
-    }
-    renderFC();
-
-    // ── QUIZ ──
-    let qPool = [], qIdx = 0, qCorrect = 0, qCat = 'all';
-
-    function setQuizCat(cat, btn) {
-      qCat = cat;
-      document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-    }
-
-    function startQuiz() {
-      qPool = qCat === 'all' ? [...QUIZ] : QUIZ.filter(q => q.cat === qCat);
-      for (let i = qPool.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [qPool[i], qPool[j]] = [qPool[j], qPool[i]];
-      }
-      qIdx = 0; qCorrect = 0;
-      document.getElementById('quiz-setup').style.display = 'none';
-      document.getElementById('quiz-result').style.display = 'none';
-      document.getElementById('quiz-active').style.display = 'block';
-      renderQ();
-    }
-
-    function renderQ() {
-      if (qIdx >= qPool.length) { showResult(); return; }
-      const q = qPool[qIdx];
-      document.getElementById('q-num').textContent = 'Question ' + (qIdx + 1) + ' of ' + qPool.length;
-      document.getElementById('q-score-live').textContent = qCorrect + ' correct';
-      document.getElementById('q-bar').style.width = (qIdx / qPool.length * 100) + '%';
-      document.getElementById('q-text').textContent = q.q;
-      const opts = document.getElementById('q-opts');
-      opts.innerHTML = '';
-      q.opts.forEach((o, i) => {
-        const btn = document.createElement('button');
-        btn.className = 'option-btn';
-        btn.textContent = o;
-        btn.onclick = () => answerQ(i, btn);
-        opts.appendChild(btn);
-      });
-      document.getElementById('q-exp').className = 'explanation';
-      document.getElementById('q-next').style.display = 'none';
-    }
-
-    function answerQ(i, btn) {
-      const q = qPool[qIdx];
-      document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
-      if (i === q.ans) { btn.classList.add('correct'); qCorrect++; }
-      else {
-        btn.classList.add('wrong');
-        document.querySelectorAll('.option-btn')[q.ans].classList.add('correct');
-      }
-      document.getElementById('q-exp').textContent = q.exp;
-      document.getElementById('q-exp').className = 'explanation show';
-      document.getElementById('q-next').style.display = 'block';
-      document.getElementById('q-score-live').textContent = qCorrect + ' correct';
-    }
-
-    function nextQuestion() { qIdx++; renderQ(); }
-
-    function showResult() {
-      document.getElementById('quiz-active').style.display = 'none';
-      document.getElementById('quiz-result').style.display = 'block';
-      const pct = Math.round(qCorrect / qPool.length * 100);
-      document.getElementById('result-pct').textContent = pct + '%';
-      let msg = pct >= 90 ? "Outstanding — you're ready for the final."
-        : pct >= 75 ? qCorrect + ' of ' + qPool.length + ' correct. Review the missed topics above.'
-        : qCorrect + ' of ' + qPool.length + ' correct. Keep grinding — focus on wrong answers.';
-      document.getElementById('result-msg').textContent = msg;
-    }
-
-    function resetQuiz() {
-      document.getElementById('quiz-setup').style.display = 'block';
-      document.getElementById('quiz-active').style.display = 'none';
-      document.getElementById('quiz-result').style.display = 'none';
-    }
-
-    // ── JOURNAL DRILLS ──
-    let jeIdx = 0;
-
-    function renderJE() {
-      const je = JE_SCENARIOS[jeIdx];
-      document.getElementById('je-body').innerHTML = `
-        <div class="je-meta">
-          <span class="badge badge-muted">Scenario ${jeIdx + 1} of ${JE_SCENARIOS.length}</span>
-        </div>
-        <div class="je-scenario-box">${je.s}</div>
-        <table class="je-table">
-          <thead><tr><th>Account</th><th>Debit ($)</th><th>Credit ($)</th></tr></thead>
-          <tbody>
-            ${[0,1,2,3].map(() => `<tr>
-              <td><input type="text" placeholder="Account name..." /></td>
-              <td><input type="text" placeholder="" /></td>
-              <td><input type="text" placeholder="" /></td>
-            </tr>`).join('')}
-          </tbody>
-        </table>
-        <div class="je-answer-box" id="je-ans">${je.a}</div>
-      `;
-    }
-
-    function revealJE() {
-      const box = document.getElementById('je-ans');
-      if (box) box.classList.add('show');
-    }
-
-    function nextJE() {
-      jeIdx = (jeIdx + 1) % JE_SCENARIOS.length;
-      renderJE();
-    }
-
-    renderJE();
-  </script>
 </body>
 </html>
