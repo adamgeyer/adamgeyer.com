@@ -132,6 +132,35 @@ a{color:var(--accent);text-decoration:none}
 .footer{padding:2rem 5vw;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;margin-top:3rem}
 .footer-name{font-family:'DM Serif Display',serif;font-size:1rem}
 .footer-note{font-size:13px;color:var(--muted)}
+
+/* JOURNAL WALKTHROUGH */
+.je-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem}
+.je-progress{font-size:13px;color:var(--muted)}
+.je-scenario{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem;font-size:14px;line-height:1.7;margin-bottom:1.25rem}
+.je-scenario strong{color:var(--accent)}
+.steps-container{display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.25rem}
+.step-card{border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .2s}
+.step-card.active{border-color:var(--accent)}
+.step-card.done{border-color:var(--ok-b);background:var(--ok-bg)}
+.step-header{display:flex;align-items:center;gap:.75rem;padding:.85rem 1rem;cursor:pointer;background:#fff}
+.step-card.done .step-header{background:var(--ok-bg)}
+.step-num{width:26px;height:26px;border-radius:50%;background:var(--border);color:var(--muted);font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-card.active .step-num{background:var(--accent);color:#fff}
+.step-card.done .step-num{background:var(--ok);color:#fff}
+.step-title{font-size:14px;font-weight:500;color:var(--text);flex:1}
+.step-card.done .step-title{color:var(--ok)}
+.step-chevron{font-size:12px;color:var(--muted);transition:transform .2s}
+.step-body{display:none;padding:0 1rem 1rem;border-top:1px solid var(--border)}
+.step-card.open .step-body{display:block}
+.step-card.open .step-chevron{transform:rotate(180deg)}
+.step-body p{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:.75rem;margin-top:.75rem}
+.step-body .rule{background:var(--accent-l);border-left:3px solid var(--accent);padding:.6rem .875rem;border-radius:0 6px 6px 0;font-size:13px;color:#1e3a6e;margin-bottom:.75rem;line-height:1.6}
+.step-body .entry-preview{font-family:'DM Mono',monospace;font-size:12.5px;background:#f8faff;border:1px solid #c7d9f8;border-radius:6px;padding:.6rem .875rem;line-height:1.9;color:#1e3a6e;margin-bottom:.75rem;white-space:pre}
+.step-body .caution{background:var(--warn-bg);border-left:3px solid var(--warn);padding:.6rem .875rem;border-radius:0 6px 6px 0;font-size:13px;color:#78350f;margin-bottom:.75rem;line-height:1.6}
+.je-full-entry{background:var(--ok-bg);border:1px solid var(--ok-b);border-radius:8px;padding:1rem 1.25rem;font-family:'DM Mono',monospace;font-size:13px;line-height:2;color:#14532d;white-space:pre;overflow-x:auto;margin-bottom:1rem;display:none}
+.je-full-entry.on{display:block}
+.je-nav{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+.step-mark-btn{margin-top:.5rem}
 </style>
 </head>
 <body>
@@ -793,8 +822,8 @@ Dr. Deferred Revenue 2,400
 <!-- ===== JOURNAL DRILLS ===== -->
 <div id="panel-je" class="panel">
 <div id="jebody"></div>
-<div class="jbtns">
-  <button class="btn btn-o" onclick="revealJE()">Show answer</button>
+<div class="je-nav" id="je-nav">
+  <button class="btn btn-o" onclick="prevJE()" id="je-prev">&#8592; Prev</button>
   <button class="btn btn-p" onclick="nextJE()">Next &rarr;</button>
 </div>
 </div>
@@ -963,26 +992,204 @@ const QUIZ=[
 ];
 
 const JE=[
-  {s:"A company sells $3,000 of merchandise on account (cost $1,800). Record BOTH entries under the perpetual inventory system.",a:"Entry 1 - Record the sale:\n  Dr. Accounts Receivable   3,000\n      Cr. Sales Revenue              3,000\n\nEntry 2 - Record COGS:\n  Dr. Cost of Goods Sold    1,800\n      Cr. Inventory                  1,800"},
-  {s:"1/1: 100 phones sold on account at $250 each (cost $175), terms 2/10 n/30. Record the sale AND the 1/5 payment (within discount period).",a:"1/1:\n  Dr. AR                   25,000\n      Cr. Sales Revenue          25,000\n  Dr. COGS                 17,500\n      Cr. Inventory              17,500\n\n1/5 (2% discount = $500):\n  Dr. Cash                 24,500\n  Dr. Sales Discount          500\n      Cr. AR                     25,000"},
-  {s:"Customer returns 7 of 15 beauty products (sold for $10 each cash; cost $5 each). Record both entries.",a:"Entry 1 - Reverse revenue:\n  Dr. Sales Returns          70\n      Cr. Cash                      70\n\nEntry 2 - Put inventory back:\n  Dr. Inventory              35\n      Cr. Cost of Goods Sold        35"},
-  {s:"A customer's $500 check is returned NSF. The company had deposited it last week.",a:"Dr. Accounts Receivable   500\n    Cr. Cash                      500\n\n(Reverse the deposit. Customer still owes the money.)"},
-  {s:"December 31: estimate $12,000 of AR uncollectible. AFUA currently has a $2,000 credit balance. Record the adjusting entry.",a:"Required ending balance = $12,000\nCurrent balance          =  $2,000\nAdjustment               = $10,000\n\nDr. Bad Debt Expense          10,000\n    Cr. Allowance for Uncollectible Accounts  10,000"},
-  {s:"Estimate uncollectibles at 3% of AR. AR = $750,000; AFUA already has $14,000 credit. Record the year-end entry.",a:"Required AFUA = $750,000 x 3% = $22,500\nCurrent AFUA  = $14,000 credit\nAdjustment    = $22,500 - $14,000 = $8,500\n\nDr. Bad Debt Expense           8,500\n    Cr. Allowance for Uncoll.          8,500"},
-  {s:"Write off a specific customer's account of $800 as uncollectible (allowance method).",a:"Dr. Allowance for Uncollectible Accounts   800\n    Cr. Accounts Receivable                      800\n\nNO Bad Debt Expense - already recorded at year-end.\nNO effect on total assets (AR down $800, AFUA down $800)."},
-  {s:"Equipment: cost $68k, salvage $9k, 10-year life. After 7 years of depreciation, sold for $22,000. Record the full disposal entry.",a:"Annual dep = ($68,000 - $9,000) / 10 = $5,900\nAccum. dep (7 yrs) = $5,900 x 7 = $41,300\nBook value = $68,000 - $41,300 = $26,700\nLOSS = $26,700 - $22,000 = $4,700\n\nDr. Cash                        22,000\nDr. Accumulated Depreciation    41,300\nDr. Loss on Sale                 4,700\n    Cr. Equipment                      68,000"},
-  {s:"Vehicle: cost $75k, salvage $5k, 10-yr life. Sold for $40,000 after 3 years. Record the disposal.",a:"Annual dep = ($75,000 - $5,000) / 10 = $7,000\nAccum. dep (3 yrs) = $7,000 x 3 = $21,000\nBook value = $75,000 - $21,000 = $54,000\nLOSS = $54,000 - $40,000 = $14,000\n\nDr. Cash                        40,000\nDr. Accumulated Depreciation    21,000\nDr. Loss on Sale of Vehicle     14,000\n    Cr. Vehicle                        75,000"},
-  {s:"Equipment purchased $50,000 on April 1. Useful life 5 years, residual value $5,000 (straight-line). Record depreciation for year ended December 31.",a:"Annual = ($50,000 - $5,000) / 5 = $9,000\n9 months (Apr-Dec): $9,000 x (9/12) = $6,750\n\nDr. Depreciation Expense    6,750\n    Cr. Accumulated Depreciation  6,750"},
-  {s:"March 1: sign a $250,000, one-year note at 6%. Record (1) the note, and (2) December 31 accrued interest.",a:"Mar 1:\n  Dr. Cash             250,000\n      Cr. Notes Payable        250,000\n\nDec 31 - 10 months (Mar through Dec):\n  Interest = $250,000 x 6% x (10/12) = $12,500\n  Dr. Interest Expense    12,500\n      Cr. Interest Payable        12,500"},
-  {s:"October 1: borrow $60,000 at 8%. Record (1) the note, (2) Dec 31 accrued interest, (3) repayment at maturity.",a:"Oct 1:\n  Dr. Cash             60,000\n      Cr. Notes Payable      60,000\n\nDec 31 - 3 months (Oct, Nov, Dec):\n  $60,000 x 8% x (3/12) = $1,200\n  Dr. Interest Expense   1,200\n      Cr. Interest Payable   1,200\n\nRepayment:\n  Dr. Notes Payable    60,000\n  Dr. Interest Payable  1,200\n      Cr. Cash               61,200"},
-  {s:"October 1: receive $9,600 cash in advance for a one-year service contract. Record the receipt AND the December 31 adjusting entry.",a:"Oct 1:\n  Dr. Cash             9,600\n      Cr. Deferred Revenue     9,600\n\nDec 31 - 3 months earned ($9,600 x 3/12 = $2,400):\n  Dr. Deferred Revenue   2,400\n      Cr. Service Revenue        2,400"},
-  {s:"Record closing entries: Sales Revenue $155,000; Salaries Expense $32,000; Supplies Expense $8,000; Dividends $3,500.",a:"Step 1 - Close revenues:\n  Dr. Sales Revenue      155,000\n      Cr. Income Summary         155,000\n\nStep 2 - Close expenses:\n  Dr. Income Summary      40,000\n      Cr. Salaries Expense       32,000\n      Cr. Supplies Expense        8,000\n\nStep 3 - Net income $115,000:\n  Dr. Income Summary     115,000\n      Cr. Retained Earnings      115,000\n\nStep 4 - Close dividends:\n  Dr. Retained Earnings    3,500\n      Cr. Dividends               3,500"},
-  {s:"Purchase $10,000 inventory on account (2/10 n/30) and pay within the discount period.",a:"Purchase:\n  Dr. Inventory          10,000\n      Cr. Accounts Payable       10,000\n\nPay within 10 days (2% = $200 discount):\n  Dr. Accounts Payable   10,000\n      Cr. Inventory                 200\n      Cr. Cash                    9,800"},
-  {s:"Sell a product for $500 cash plus 8% sales tax.",a:"Sales tax = $500 x 8% = $40; Cash received = $540\n\nDr. Cash              540\n    Cr. Sales Revenue       500\n    Cr. Sales Tax Payable    40\n\n(Sales tax = LIABILITY to government - not revenue)"},
-  {s:"Purchase land for $100,000. Pay $5,000 back taxes, $3,000 clearing costs, $2,000 commission. Receive $1,500 from selling salvaged materials. Record the land entry.",a:"Land cost = $100,000 + $5,000 + $3,000 + $2,000 - $1,500 = $108,500\n\nDr. Land              108,500\n    Cr. Cash                108,500\n\nKey: salvaged materials REDUCE land cost."},
-  {s:"January 1: pay $24,000 for a 2-year insurance policy. Record the payment AND the December 31 adjusting entry.",a:"Jan 1:\n  Dr. Prepaid Insurance  24,000\n      Cr. Cash                   24,000\n\nDec 31 - 12 of 24 months used:\n  Expense = $24,000 x (12/24) = $12,000\n  Dr. Insurance Expense  12,000\n      Cr. Prepaid Insurance      12,000"},
-  {s:"Company issues $200,000 of common stock for cash. Record the entry and describe the effect on the accounting equation.",a:"Dr. Cash              200,000\n    Cr. Common Stock          200,000\n\nEffect: Assets +$200,000 (Cash), Equity +$200,000\nEquation remains balanced: A = L + E"},
-  {s:"December 31: accrue 2 months of salaries totaling $18,000. The company will pay in January.",a:"Dec 31:\n  Dr. Salaries Expense   18,000\n      Cr. Salaries Payable       18,000\n\n(Accrued expense: incurred but not yet paid - shown as liability)\n\nWhen paid in January:\n  Dr. Salaries Payable   18,000\n      Cr. Cash                   18,000"},
+  {
+    s:"A company sells <strong>$3,000 of merchandise on account</strong> (cost $1,800). Record both entries under the perpetual inventory system.",
+    steps:[
+      {title:"Identify what happened",rule:"Credit sale = goods delivered, cash comes later. Two things happen simultaneously: (1) we earn revenue, (2) we give up inventory.",explain:"The customer owes us money (AR), and we gave them goods (inventory leaves). Both sides must be recorded."},
+      {title:"Entry 1 — Record the revenue side",rule:"Revenue is recorded when goods are delivered, not when cash arrives.",entry:"Dr. Accounts Receivable   3,000\n    Cr. Sales Revenue              3,000",explain:"AR increases (we're owed money). Revenue increases (we earned it by delivering goods)."},
+      {title:"Entry 2 — Record the inventory/COGS side",rule:"Under the perpetual system, record COGS every time a sale happens.",entry:"Dr. Cost of Goods Sold    1,800\n    Cr. Inventory                  1,800",explain:"Inventory decreases (we gave it to the customer). COGS increases (it's now our expense)."},
+      {title:"Check: does the accounting equation balance?",explain:"Entry 1: AR (asset) ↑ $3,000 / Revenue (equity via RE) ↑ $3,000 ✓\nEntry 2: COGS (expense, reduces equity) ↑ $1,800 / Inventory (asset) ↓ $1,800 ✓\n\nGross profit on this sale = $3,000 − $1,800 = $1,200"}
+    ],
+    a:"Dr. Accounts Receivable   3,000\n    Cr. Sales Revenue              3,000\n\nDr. Cost of Goods Sold    1,800\n    Cr. Inventory                  1,800"
+  },
+  {
+    s:"1/1: 100 phones sold on account at <strong>$250 each (cost $175)</strong>, terms <strong>2/10, n/30</strong>. Record the sale on 1/1 AND the payment received on 1/5.",
+    steps:[
+      {title:"Understand the terms: 2/10, n/30",rule:"2/10, n/30 = 2% discount if paid within 10 days; full amount due in 30 days. Day 10 IS within the period.",explain:"Total sale = 100 × $250 = $25,000. If paid by day 10: discount = $25,000 × 2% = $500, so customer pays $24,500."},
+      {title:"1/1 — Record the sale (ignore the discount terms for now)",entry:"Dr. Accounts Receivable  25,000\n    Cr. Sales Revenue          25,000",explain:"Record at full price. We don't know yet if the customer will take the discount."},
+      {title:"1/1 — Also record COGS",entry:"Dr. Cost of Goods Sold   17,500\n    Cr. Inventory              17,500",explain:"100 × $175 = $17,500. Under perpetual system, record COGS at time of sale."},
+      {title:"1/5 — Customer pays within 10 days (takes the discount)",rule:"Sales Discount is a CONTRA REVENUE account with a debit normal balance. It reduces net revenue — it is NOT an expense.",caution:"The discount reduces what WE receive, not our inventory or COGS. Record it in Sales Discount.",entry:"Dr. Cash                 24,500\nDr. Sales Discount          500\n    Cr. Accounts Receivable   25,000",explain:"Cash received = $24,500. Discount given = $500. Total AR cleared = $25,000. ✓"}
+    ],
+    a:"1/1:\n  Dr. AR                   25,000 / Cr. Sales Revenue    25,000\n  Dr. COGS                 17,500 / Cr. Inventory         17,500\n\n1/5:\n  Dr. Cash                 24,500\n  Dr. Sales Discount          500\n      Cr. AR                     25,000"
+  },
+  {
+    s:"Customer returns <strong>7 of 15 beauty products</strong> (originally sold for $10 each cash; cost $5 each). Record both entries for the return.",
+    steps:[
+      {title:"Identify what's happening",rule:"A sales return reverses the original sale. Two things happened on the original sale — now reverse both.",explain:"Original sale: recorded $150 revenue (15 × $10) and $75 COGS (15 × $5). Now 7 are coming back. We reverse the revenue for 7 units and put the inventory back."},
+      {title:"Entry 1 — Reverse the revenue",rule:"Sales Returns is a CONTRA REVENUE account (debit normal balance) — NOT an expense.",entry:"Dr. Sales Returns          70\n    Cr. Cash                      70",explain:"7 × $10 = $70. Debit Sales Returns (contra revenue). Credit Cash (give money back). If original sale was on account, credit AR instead."},
+      {title:"Entry 2 — Put inventory back (perpetual system)",entry:"Dr. Inventory              35\n    Cr. Cost of Goods Sold        35",explain:"7 × $5 = $35. Inventory increases (goods returned). COGS decreases (we no longer sold those 7 units)."},
+      {title:"Key distinction: returns vs. allowances",rule:"Sales Return = customer sends goods BACK. Sales Allowance = customer KEEPS defective goods but gets a partial refund. Both are contra revenues.",explain:"For an allowance, you skip Entry 2 (no inventory to put back). Everything else is the same."}
+    ],
+    a:"Dr. Sales Returns          70\n    Cr. Cash                      70\n\nDr. Inventory              35\n    Cr. Cost of Goods Sold        35"
+  },
+  {
+    s:"A customer's <strong>$500 check was returned NSF</strong>. The company had deposited it last week.",
+    steps:[
+      {title:"Understand what NSF means",rule:"NSF = Non-Sufficient Funds. The customer's check bounced — their bank didn't have enough money to cover it.",explain:"When you deposited the check, you debited Cash $500. That deposit was reversed by your bank. Now you need to reverse it in your books too."},
+      {title:"What entry did we make when we deposited it?",entry:"(Original deposit — already recorded):\nDr. Cash               500\n    Cr. Accounts Receivable   500",explain:"We thought we collected from the customer, so we debited Cash and credited AR. That was wrong — the customer hasn't actually paid."},
+      {title:"Reverse it — the customer still owes us",rule:"An NSF check creates (or recreates) an accounts receivable. The customer's debt is not gone.",entry:"Dr. Accounts Receivable   500\n    Cr. Cash                      500",explain:"Flip the original entry. Cash goes back down. AR goes back up. The customer still owes $500."},
+      {title:"Where does this appear on the bank reconciliation?",rule:"NSF check = DEDUCTION on the BOOK (company) side. It requires a journal entry. Deposits in transit and outstanding checks do NOT need entries.",caution:"Students often confuse NSF as appearing on the bank side. It's on the BOOK side because the bank already subtracted it — we need to catch our books up."}
+    ],
+    a:"Dr. Accounts Receivable   500\n    Cr. Cash                      500"
+  },
+  {
+    s:"Dec 31: company estimates <strong>$12,000 of AR will be uncollectible</strong>. AFUA currently has a $2,000 credit balance.",
+    steps:[
+      {title:"Understand the allowance method",rule:"GAAP requires estimating future bad debts NOW — you can't wait until they actually happen. AFUA (Allowance for Uncollectible Accounts) is a contra asset.",explain:"At year-end, AFUA must show the total amount of AR you don't expect to collect. Right now AFUA has $2,000. You need it to end at $12,000."},
+      {title:"Use a T-account to find the adjustment",rule:"Required ending AFUA balance = $12,000 credit. Current balance = $2,000 credit. Adjustment needed = $10,000.",entry:"AFUA T-account:\n  Beg. balance   2,000 (credit)\n  Adjustment    10,000 (credit)\n  End. balance  12,000 (credit) ✓",explain:"Since AFUA has a credit normal balance, we need to add $10,000 credit to get from $2,000 to $12,000."},
+      {title:"Record the adjusting entry",rule:"Bad Debt Expense goes on the income statement. AFUA goes on the balance sheet as a contra asset.",entry:"Dr. Bad Debt Expense          10,000\n    Cr. Allowance for Uncollectible Accounts  10,000",explain:"This reduces net income (expense recognized) and reduces net AR on the balance sheet."},
+      {title:"What if AFUA already had a DEBIT balance?",caution:"If AFUA had a $2,000 DEBIT balance (from excess write-offs), you'd need $14,000 to reach $12,000 credit. Always check the direction of the existing balance.",explain:"Existing AFUA debit $2,000 + credit entry $14,000 = $12,000 credit ending balance. ✓"}
+    ],
+    a:"Dr. Bad Debt Expense          10,000\n    Cr. Allowance for Uncollectible Accounts  10,000"
+  },
+  {
+    s:"Estimate uncollectibles at <strong>3% of AR</strong>. AR = $750,000; AFUA already has a $14,000 credit balance.",
+    steps:[
+      {title:"Step 1: Calculate the required ending AFUA balance",rule:"% of Receivables method: Required ending AFUA = AR × estimated %",entry:"$750,000 × 3% = $22,500 required ending balance",explain:"This is what AFUA must show on the balance sheet after the adjusting entry."},
+      {title:"Step 2: Find how much to adjust",rule:"AFUA currently has $14,000 credit. It needs to end at $22,500 credit. Difference = $8,500.",entry:"AFUA T-account:\n  Beg. balance  14,000 (credit)\n  Adjustment     8,500 (credit)\n  End. balance  22,500 (credit) ✓"},
+      {title:"Step 3: Record the entry",entry:"Dr. Bad Debt Expense           8,500\n    Cr. Allowance for Uncollectible Accounts  8,500",explain:"Only $8,500 is recorded — not $22,500. We already had $14,000 in AFUA."},
+      {title:"Common mistake to avoid",caution:"Do NOT debit Bad Debt Expense for the full $22,500. That would over-estimate by $14,000. Always net against the existing AFUA balance.",rule:"Bad debt expense = required balance MINUS existing AFUA credit balance (or PLUS if existing balance is a debit)."}
+    ],
+    a:"Dr. Bad Debt Expense           8,500\n    Cr. Allowance for Uncollectible Accounts  8,500"
+  },
+  {
+    s:"Write off a specific customer's account of <strong>$800 as uncollectible</strong> (allowance method).",
+    steps:[
+      {title:"Understand what write-off means",rule:"Write-off = we've confirmed this specific customer will never pay. We remove them from AR.",explain:"We already estimated this bad debt last year (via Bad Debt Expense). Now we're just cleaning up the books. No new expense is recorded."},
+      {title:"The entry: remove AR, reduce AFUA",rule:"Debit AFUA (reduce the allowance — we're 'using' it). Credit AR (remove the uncollectible balance).",entry:"Dr. Allowance for Uncollectible Accounts   800\n    Cr. Accounts Receivable                      800"},
+      {title:"Why no Bad Debt Expense?",rule:"Bad Debt Expense was recorded at year-end estimation. Recording it again at write-off would double-count it.",caution:"Most common mistake: students debit Bad Debt Expense here. WRONG. The expense was already recorded. Write-off only affects AR and AFUA — both decrease by the same amount."},
+      {title:"Effect on total assets?",rule:"ZERO effect. AR decreases $800. AFUA (contra asset) also decreases $800. Net AR is unchanged.",entry:"Before write-off: AR $10,000 - AFUA $800 = Net AR $9,200\nAfter write-off:  AR $9,200  - AFUA $0   = Net AR $9,200 ✓"}
+    ],
+    a:"Dr. Allowance for Uncollectible Accounts   800\n    Cr. Accounts Receivable                      800\n\nNo bad debt expense. No change in total assets."
+  },
+  {
+    s:"Equipment: cost <strong>$68,000</strong>, salvage <strong>$9,000</strong>, <strong>10-year life</strong>. Depreciation recorded for 7 years. Sold for <strong>$22,000</strong>. Record the full disposal entry.",
+    steps:[
+      {title:"Step 1: Calculate annual depreciation",rule:"Straight-line: (Cost − Salvage) ÷ Useful Life",entry:"($68,000 − $9,000) ÷ 10 = $5,900 per year"},
+      {title:"Step 2: Calculate accumulated depreciation after 7 years",entry:"$5,900 × 7 years = $41,300 accumulated depreciation",caution:"Always update depreciation to the disposal date FIRST. If sold mid-year, calculate partial year depreciation before recording the disposal."},
+      {title:"Step 3: Calculate book value",rule:"Book Value = Cost − Accumulated Depreciation",entry:"$68,000 − $41,300 = $26,700 book value"},
+      {title:"Step 4: Determine gain or loss",rule:"Proceeds > Book Value = GAIN. Proceeds < Book Value = LOSS.",entry:"Proceeds: $22,000\nBook Value: $26,700\n$22,000 < $26,700 = LOSS of $4,700",explain:"We sold it for less than it was worth on our books. That's a loss."},
+      {title:"Step 5: Record the disposal entry",rule:"Remove BOTH the original cost AND accumulated depreciation. Record cash received. Plug in the gain or loss.",entry:"Dr. Cash                        22,000\nDr. Accumulated Depreciation    41,300\nDr. Loss on Sale of Equipment    4,700\n    Cr. Equipment                      68,000",explain:"Debits: Cash received + Accum. Dep. removed + Loss recognized = 22,000 + 41,300 + 4,700 = 68,000 ✓\nCredit: Original equipment cost removed = 68,000 ✓"}
+    ],
+    a:"Dr. Cash                        22,000\nDr. Accumulated Depreciation    41,300\nDr. Loss on Sale                 4,700\n    Cr. Equipment                      68,000"
+  },
+  {
+    s:"Vehicle: cost <strong>$75,000</strong>, salvage <strong>$5,000</strong>, <strong>10-year life</strong>. Sold for <strong>$40,000 after 3 years</strong>.",
+    steps:[
+      {title:"Step 1: Annual depreciation",entry:"($75,000 − $5,000) ÷ 10 = $7,000 per year"},
+      {title:"Step 2: Accumulated depreciation after 3 years",entry:"$7,000 × 3 = $21,000 accumulated"},
+      {title:"Step 3: Book value at disposal",entry:"$75,000 − $21,000 = $54,000 book value"},
+      {title:"Step 4: Gain or loss?",entry:"Proceeds: $40,000\nBook Value: $54,000\n$40,000 < $54,000 = LOSS of $14,000",explain:"We sold it for $14,000 less than its book value. Loss recorded."},
+      {title:"Step 5: Record the entry",entry:"Dr. Cash                        40,000\nDr. Accumulated Depreciation    21,000\nDr. Loss on Sale of Vehicle     14,000\n    Cr. Vehicle                        75,000",explain:"Check: 40,000 + 21,000 + 14,000 = 75,000 ✓"}
+    ],
+    a:"Dr. Cash                        40,000\nDr. Accumulated Depreciation    21,000\nDr. Loss on Sale of Vehicle     14,000\n    Cr. Vehicle                        75,000"
+  },
+  {
+    s:"Equipment purchased <strong>$50,000 on April 1</strong>. Useful life 5 years, residual value $5,000 (straight-line). Record depreciation for year ended December 31.",
+    steps:[
+      {title:"Step 1: Calculate full annual depreciation",entry:"($50,000 − $5,000) ÷ 5 = $9,000 per year"},
+      {title:"Step 2: Count the months — carefully",rule:"April 1 to December 31 = 9 months (April, May, June, July, August, September, October, November, December).",caution:"Never subtract month numbers. March = 3, December = 12, 12−3 = 9 ← WRONG method but coincidentally right here. September to December = 4 months (not 3). Always LIST the months.",entry:"Months owned this year: Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec = 9 months"},
+      {title:"Step 3: Calculate partial year depreciation",entry:"$9,000 × (9/12) = $6,750"},
+      {title:"Step 4: Record the adjusting entry",rule:"Depreciation Expense goes on the income statement. Accumulated Depreciation is a contra asset (credit normal balance).",entry:"Dr. Depreciation Expense    6,750\n    Cr. Accumulated Depreciation  6,750"}
+    ],
+    a:"Annual dep = ($50,000 − $5,000) / 5 = $9,000\n9 months = $9,000 × (9/12) = $6,750\n\nDr. Depreciation Expense    6,750\n    Cr. Accumulated Depreciation  6,750"
+  },
+  {
+    s:"<strong>March 1</strong>: sign a $250,000 note payable at <strong>6% annual interest</strong>. Record (1) the note on March 1, and (2) accrued interest on December 31.",
+    steps:[
+      {title:"March 1 — Record borrowing the money",rule:"Borrowing money creates a liability (Notes Payable). No interest yet — interest accrues over time.",entry:"Dr. Cash             250,000\n    Cr. Notes Payable        250,000"},
+      {title:"Count the months for interest — carefully",rule:"March 1 to December 31 = 10 months.",caution:"March to December looks like 12 − 3 = 9 months. WRONG. List them: Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec = 10 months. Count the first month.",entry:"Months: Mar Apr May Jun Jul Aug Sep Oct Nov Dec = 10 months"},
+      {title:"Calculate the interest",rule:"Interest = Face Value × Annual Rate × (Months / 12)",entry:"$250,000 × 6% × (10/12) = $12,500"},
+      {title:"December 31 — Accrue the interest",rule:"Accrue = record expense in the period incurred, even if not yet paid. Accrued Interest Payable is a current liability.",entry:"Dr. Interest Expense    12,500\n    Cr. Interest Payable        12,500",explain:"Interest Expense hits the income statement. Interest Payable goes on the balance sheet as a current liability."}
+    ],
+    a:"Mar 1:\n  Dr. Cash             250,000\n      Cr. Notes Payable        250,000\n\nDec 31 (10 months):\n  Interest = $250,000 × 6% × 10/12 = $12,500\n  Dr. Interest Expense    12,500\n      Cr. Interest Payable        12,500"
+  },
+  {
+    s:"<strong>October 1</strong>: borrow $60,000 at <strong>8% annual interest</strong>. Record (1) the note, (2) Dec 31 accrued interest, (3) repayment at maturity (April 1).",
+    steps:[
+      {title:"Oct 1 — Record the note",entry:"Dr. Cash             60,000\n    Cr. Notes Payable      60,000"},
+      {title:"Count months Oct 1 to Dec 31",rule:"Oct, Nov, Dec = 3 months. (Count October — it's the first month.)",caution:"12 − 10 = 2 months ← WRONG. List them: October, November, December = 3 months.",entry:"$60,000 × 8% × (3/12) = $1,200"},
+      {title:"Dec 31 — Accrue interest",entry:"Dr. Interest Expense   1,200\n    Cr. Interest Payable   1,200"},
+      {title:"April 1 — Repayment of principal + remaining interest",rule:"Pay off the note principal AND the accrued interest payable from December.",entry:"Dr. Notes Payable    60,000\nDr. Interest Payable  1,200\n    Cr. Cash               61,200",explain:"No new Interest Expense here — the $1,200 was already recorded in December. We're just paying the liability we already recognized."}
+    ],
+    a:"Oct 1: Dr. Cash $60,000 / Cr. Notes Payable $60,000\nDec 31: Dr. Interest Expense $1,200 / Cr. Interest Payable $1,200\nApr 1: Dr. Notes Payable $60,000 + Dr. Interest Payable $1,200 / Cr. Cash $61,200"
+  },
+  {
+    s:"<strong>October 1</strong>: receive $9,600 cash in advance for a <strong>one-year service contract</strong>. Record the receipt AND the December 31 adjusting entry.",
+    steps:[
+      {title:"Understand deferred revenue",rule:"Cash received before the service is performed = LIABILITY, not revenue. The company owes the customer a service.",caution:"'Deferred Revenue' sounds like revenue but it's a LIABILITY until the service is delivered. One of the most common misclassifications.",explain:"We owe 12 months of service. We've done nothing yet on October 1."},
+      {title:"October 1 — Record receiving the cash",entry:"Dr. Cash             9,600\n    Cr. Deferred Revenue     9,600",explain:"Cash increases. Deferred Revenue (liability) increases. We owe 12 months of service."},
+      {title:"Count months earned by December 31",entry:"October, November, December = 3 months earned\n$9,600 × (3/12) = $2,400 earned"},
+      {title:"December 31 — Recognize the earned portion",rule:"As service is performed, shift from liability to revenue.",entry:"Dr. Deferred Revenue   2,400\n    Cr. Service Revenue        2,400",explain:"Liability decreases (we've fulfilled 3 months). Revenue increases (we've earned it). Remaining liability = $7,200 (9 more months owed)."}
+    ],
+    a:"Oct 1: Dr. Cash $9,600 / Cr. Deferred Revenue $9,600\n\nDec 31 (3 months earned = $2,400):\n  Dr. Deferred Revenue $2,400\n      Cr. Service Revenue $2,400"
+  },
+  {
+    s:"Record <strong>closing entries</strong>: Sales Revenue $155,000; Salaries Expense $32,000; Supplies Expense $8,000; Dividends $3,500.",
+    steps:[
+      {title:"Why do we close? What are temporary accounts?",rule:"Temporary accounts (Revenue, Expenses, Dividends) track one year at a time. At year-end, they're zeroed out so next year starts fresh. Balances flow into Retained Earnings.",explain:"Permanent accounts (Assets, Liabilities, Equity) carry forward. Temporary accounts reset each year."},
+      {title:"Step 1 — Close Revenue to Income Summary",rule:"Debit the revenue account to zero it out. Credit Income Summary.",entry:"Dr. Sales Revenue      155,000\n    Cr. Income Summary         155,000"},
+      {title:"Step 2 — Close Expenses to Income Summary",rule:"Credit each expense account to zero it out. Debit Income Summary.",entry:"Dr. Income Summary      40,000\n    Cr. Salaries Expense       32,000\n    Cr. Supplies Expense        8,000",explain:"Total expenses = $32,000 + $8,000 = $40,000"},
+      {title:"Step 3 — Close Income Summary to Retained Earnings",rule:"Income Summary now has net income: $155,000 revenue − $40,000 expenses = $115,000 net income.",entry:"Dr. Income Summary     115,000\n    Cr. Retained Earnings      115,000"},
+      {title:"Step 4 — Close Dividends to Retained Earnings",rule:"Dividends reduce Retained Earnings. Debit RE, credit Dividends to zero it out.",entry:"Dr. Retained Earnings    3,500\n    Cr. Dividends               3,500",caution:"Dividends reduce RE directly — they are NOT an expense. Don't close them through Income Summary."}
+    ],
+    a:"Dr. Sales Revenue      155,000 / Cr. Income Summary      155,000\nDr. Income Summary      40,000 / Cr. Salaries Exp $32k + Supplies Exp $8k\nDr. Income Summary     115,000 / Cr. Retained Earnings  115,000\nDr. Retained Earnings    3,500 / Cr. Dividends            3,500"
+  },
+  {
+    s:"Purchase <strong>$10,000 inventory on account</strong> (terms 2/10, n/30) and pay within the discount period.",
+    steps:[
+      {title:"Step 1 — Record the purchase",entry:"Dr. Inventory          10,000\n    Cr. Accounts Payable       10,000",explain:"Inventory increases (we now have goods). AP increases (we owe the supplier)."},
+      {title:"Understand the purchase discount",rule:"Purchase discount = seller gives US a discount for paying early. This REDUCES our inventory cost.",caution:"Purchase discounts CREDIT inventory (reduce cost) — they are NOT revenue. Common mistake: recording a 'Purchase Discount Revenue' account.",entry:"Discount = $10,000 × 2% = $200"},
+      {title:"Step 2 — Record payment within discount period",rule:"Clear the full AP balance. Credit Inventory for the discount (reduces cost). Cash = AP − discount.",entry:"Dr. Accounts Payable   10,000\n    Cr. Inventory                 200\n    Cr. Cash                    9,800",explain:"AP fully cleared. Inventory reduced by $200 (net cost now $9,800). Cash paid = $9,800."}
+    ],
+    a:"Purchase:\n  Dr. Inventory $10,000 / Cr. AP $10,000\n\nPayment within 10 days:\n  Dr. AP $10,000\n      Cr. Inventory $200 (reduces cost)\n      Cr. Cash $9,800"
+  },
+  {
+    s:"Sell a product for <strong>$500 cash plus 8% sales tax</strong>. Record the entry.",
+    steps:[
+      {title:"Understand sales tax",rule:"Sales tax collected from customers belongs to the GOVERNMENT — it is a LIABILITY, not revenue.",caution:"Sales tax is NOT revenue. It is NOT an expense. It is a CURRENT LIABILITY payable to the government.",explain:"We act as a collector for the government. The $40 was never ours."},
+      {title:"Calculate the amounts",entry:"Sale price: $500\nSales tax: $500 × 8% = $40\nTotal cash received: $540"},
+      {title:"Record the entry",rule:"Credit Sales Revenue for only the $500. Credit Sales Tax Payable for the $40.",entry:"Dr. Cash              540\n    Cr. Sales Revenue       500\n    Cr. Sales Tax Payable    40"}
+    ],
+    a:"Dr. Cash              540\n    Cr. Sales Revenue       500\n    Cr. Sales Tax Payable    40\n\n(Sales tax = liability to government, not our revenue)"
+  },
+  {
+    s:"Purchase land for <strong>$100,000</strong>. Also pay: $5,000 back taxes, $3,000 clearing costs, $2,000 real estate commission. Receive <strong>$1,500 from selling salvaged materials</strong>.",
+    steps:[
+      {title:"What goes in the cost of land?",rule:"Land cost = purchase price + ALL costs to get land ready for intended use.",explain:"This includes: back taxes owed on the property, clearing/leveling costs, real estate commissions, legal fees."},
+      {title:"How does the salvaged materials cash work?",rule:"Cash received from selling salvaged materials REDUCES the cost of land — it's a credit against land cost.",caution:"Don't add the $1,500 to land cost. Don't ignore it. It REDUCES land cost. This is a very common mistake.",entry:"Land cost calculation:\n$100,000 purchase price\n+  $5,000 back taxes\n+  $3,000 clearing\n+  $2,000 commission\n−  $1,500 salvaged materials\n= $108,500 total land cost"},
+      {title:"Record the entry",entry:"Dr. Land              108,500\n    Cr. Cash                108,500"}
+    ],
+    a:"Land cost = $100,000 + $5,000 + $3,000 + $2,000 − $1,500 = $108,500\n\nDr. Land              108,500\n    Cr. Cash                108,500"
+  },
+  {
+    s:"<strong>January 1</strong>: pay $24,000 for a <strong>2-year insurance policy</strong>. Record the payment AND the December 31 adjusting entry.",
+    steps:[
+      {title:"Why is this an asset, not an expense?",rule:"Prepaid Insurance is an ASSET because future benefits remain. We expense it gradually as the coverage is used up (matching principle).",explain:"Paying $24,000 upfront for 2 years of coverage gives us a future benefit. That future benefit = asset."},
+      {title:"Jan 1 — Record the payment",entry:"Dr. Prepaid Insurance  24,000\n    Cr. Cash                   24,000"},
+      {title:"Count months used by December 31",entry:"January through December = 12 months used (out of 24 total)\n$24,000 × (12/24) = $12,000 expense for the year"},
+      {title:"Dec 31 — Record the adjusting entry",rule:"As the insurance coverage is used, shift from asset (Prepaid Insurance) to expense (Insurance Expense).",entry:"Dr. Insurance Expense  12,000\n    Cr. Prepaid Insurance      12,000",explain:"Remaining Prepaid Insurance = $24,000 − $12,000 = $12,000 (covers year 2)"}
+    ],
+    a:"Jan 1: Dr. Prepaid Insurance $24,000 / Cr. Cash $24,000\n\nDec 31: 12/24 months used = $12,000\n  Dr. Insurance Expense  12,000\n      Cr. Prepaid Insurance      12,000"
+  },
+  {
+    s:"Company issues <strong>$200,000 of common stock</strong> for cash. Record the entry and describe the accounting equation effect.",
+    steps:[
+      {title:"Identify the accounts affected",rule:"Issuing stock for cash: Cash (asset) increases, Common Stock (equity) increases.",explain:"The company is selling ownership shares. Cash comes in; equity (ownership) goes up."},
+      {title:"Record the entry",entry:"Dr. Cash              200,000\n    Cr. Common Stock          200,000"},
+      {title:"Effect on the accounting equation",rule:"Both sides of A = L + E increase by the same amount — the equation stays balanced.",entry:"Assets:  Cash ↑ $200,000\nLiabilities: no change\nEquity:  Common Stock ↑ $200,000\n\nA = L + E\n+200,000 = 0 + 200,000 ✓"}
+    ],
+    a:"Dr. Cash              200,000\n    Cr. Common Stock          200,000\n\nEffect: Assets +$200,000, Equity +$200,000"
+  },
+  {
+    s:"<strong>December 31</strong>: accrue 2 months of salaries totaling <strong>$18,000</strong>. The company will pay in January.",
+    steps:[
+      {title:"Why do we need an adjusting entry?",rule:"Accrual accounting: record expenses when INCURRED, not when paid. Employees worked in Dec — that expense belongs in December.",explain:"If we wait until the January paycheck, the December income statement would be missing $18,000 of expense. That would overstate net income."},
+      {title:"Dec 31 — Accrue the salaries",rule:"Debit Salaries Expense (income statement — December). Credit Salaries Payable (balance sheet — liability we owe).",entry:"Dr. Salaries Expense   18,000\n    Cr. Salaries Payable       18,000"},
+      {title:"January — Record the cash payment",rule:"When cash is paid, eliminate the liability. No new expense (already recorded in December).",entry:"Dr. Salaries Payable   18,000\n    Cr. Cash                   18,000",caution:"Don't record Salaries Expense again in January for these wages — they were already expensed in December. Recording twice would double-count."}
+    ],
+    a:"Dec 31:\n  Dr. Salaries Expense   18,000\n      Cr. Salaries Payable       18,000\n\nJanuary payment:\n  Dr. Salaries Payable   18,000\n      Cr. Cash                   18,000"
+  },
 ];
 
 // TABS
@@ -1069,20 +1276,65 @@ function resetQuiz(){
   document.getElementById('qresult').style.display='none';
 }
 
-// JOURNAL
+// JOURNAL WALKTHROUGH
 let jeI=0;
 function renderJE(){
   const je=JE[jeI];
-  document.getElementById('jebody').innerHTML=
-    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem">'+
-    '<span class="badge badge-m">Scenario '+(jeI+1)+' of '+JE.length+'</span></div>'+
-    '<div class="jscen">'+je.s+'</div>'+
-    '<table class="jtbl"><thead><tr><th>Account</th><th>Debit ($)</th><th>Credit ($)</th></tr></thead><tbody>'+
-    [0,1,2,3].map(()=>'<tr><td><input type="text" placeholder="Account name..."/></td><td><input type="text"/></td><td><input type="text"/></td></tr>').join('')+
-    '</tbody></table>'+
-    '<div class="jans" id="jans">'+je.a+'</div>';
+  const steps=je.steps;
+  let html='<div class="je-header">';
+  html+='<span class="badge badge-m">Scenario '+(jeI+1)+' of '+JE.length+'</span>';
+  html+='<span class="je-progress" id="je-step-progress">Step 1 of '+steps.length+'</span>';
+  html+='</div>';
+  html+='<div class="je-scenario">'+je.s+'</div>';
+  html+='<div class="steps-container" id="je-steps">';
+  steps.forEach((step,i)=>{
+    html+='<div class="step-card'+(i===0?' active open':'')+'" id="step-'+i+'">';
+    html+='<div class="step-header" onclick="toggleStep('+i+')">';
+    html+='<div class="step-num">'+(i+1)+'</div>';
+    html+='<div class="step-title">'+step.title+'</div>';
+    html+='<div class="step-chevron">'+(i===0?'&#9650;':'&#9660;')+'</div>';
+    html+='</div>';
+    html+='<div class="step-body">';
+    if(step.rule) html+='<div class="rule">&#128206; '+step.rule+'</div>';
+    if(step.explain) html+='<p>'+step.explain+'</p>';
+    if(step.caution) html+='<div class="caution">&#9888;&#65039; '+step.caution+'</div>';
+    if(step.entry) html+='<div class="entry-preview">'+step.entry+'</div>';
+    html+='<button class="btn btn-ok step-mark-btn" onclick="markStep('+i+')">&#10003; Got it &mdash; next step</button>';
+    html+='</div></div>';
+  });
+  html+='</div>';
+  html+='<div class="je-full-entry" id="je-full">'+je.a+'</div>';
+  html+='<button class="btn btn-o" id="je-showall" onclick="showFullEntry()" style="margin-bottom:1rem;display:none">Show complete entry</button>';
+  document.getElementById('jebody').innerHTML=html;
+  document.getElementById('je-prev').style.opacity=jeI===0?'0.3':'1';
 }
-function revealJE(){const b=document.getElementById('jans');if(b)b.classList.add('on');}
+function toggleStep(i){
+  const card=document.getElementById('step-'+i);
+  card.classList.toggle('open');
+  const chev=card.querySelector('.step-chevron');
+  chev.innerHTML=card.classList.contains('open')?'&#9650;':'&#9660;';
+}
+function markStep(i){
+  const card=document.getElementById('step-'+i);
+  card.classList.remove('active','open');
+  card.classList.add('done');
+  const je=JE[jeI];
+  const next=i+1;
+  if(next<je.steps.length){
+    const nextCard=document.getElementById('step-'+next);
+    nextCard.classList.add('active','open');
+    nextCard.querySelector('.step-chevron').innerHTML='&#9650;';
+    document.getElementById('je-step-progress').textContent='Step '+(next+1)+' of '+je.steps.length;
+  } else {
+    document.getElementById('je-step-progress').textContent='All steps done!';
+    document.getElementById('je-showall').style.display='inline-flex';
+  }
+}
+function showFullEntry(){
+  document.getElementById('je-full').classList.add('on');
+  document.getElementById('je-showall').style.display='none';
+}
+function prevJE(){if(jeI>0){jeI--;renderJE();}}
 function nextJE(){jeI=(jeI+1)%JE.length;renderJE();}
 renderJE();
 </script>
