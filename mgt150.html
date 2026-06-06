@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>MGT 150 Final Study &mdash; Adam Geyer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--card:#f8f8f6;--card2:#ffffff;
+  --text:#1a1a1a;--muted:#6b6b6b;--light:#aaa;
+  --accent:#2563eb;--accent-l:#eff6ff;
+  --border:#e5e5e5;--border2:#d0d0d0;
+  --ok:#16a34a;--ok-bg:#f0fdf4;--ok-b:#bbf7d0;
+  --err:#dc2626;--err-bg:#fef2f2;--err-b:#fecaca;
+  --warn:#d97706;--warn-bg:#fffbeb;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:.9rem 5vw;border-bottom:1px solid var(--border);background:rgba(255,255,255,.95);backdrop-filter:blur(8px)}
+.nav-logo{font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--text)}
+.nav-links{display:flex;gap:1.5rem}
+.nav-link{font-size:14px;color:var(--muted);transition:color .15s}
+.nav-link:hover,.nav-link.active{color:var(--accent)}
+
+.hero{padding:6.5rem 5vw 2.5rem;border-bottom:1px solid var(--border)}
+.breadcrumb{font-size:13px;color:var(--muted);margin-bottom:.75rem}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,4vw,3rem);margin-bottom:.4rem}
+.hero p{font-size:14px;color:var(--muted);margin-bottom:1.1rem}
+.pills{display:flex;flex-wrap:wrap;gap:.35rem}
+.pill{font-size:11px;padding:3px 10px;border-radius:20px;background:var(--card);border:1px solid var(--border);color:var(--muted)}
+
+.study{padding:1.75rem 5vw 4rem}
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:1.75rem;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{font-size:13px;padding:.7rem 1.15rem;background:transparent;border:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:all .13s}
+.tab:hover{color:var(--text)}
+.tab.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:500}
+.panel{display:none}
+.panel.on{display:block}
+
+.pbar{height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:1.5rem}
+.pfill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s}
+
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem 1.1rem;border-radius:8px;font-size:13px;cursor:pointer;transition:all .13s;border:1px solid transparent;font-family:'DM Sans',sans-serif}
+.btn-p{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-p:hover{background:#1d4ed8}
+.btn-o{background:transparent;border-color:var(--border2);color:var(--muted)}
+.btn-o:hover{border-color:var(--accent);color:var(--accent)}
+.btn-ok{background:var(--ok-bg);border-color:var(--ok-b);color:var(--ok)}
+.btn-err{background:var(--err-bg);border-color:var(--err-b);color:var(--err)}
+
+/* NOTES */
+.ch{margin-bottom:2.5rem}
+.ch-title{font-family:'DM Serif Display',serif;font-size:1.25rem;margin-bottom:1rem;padding-bottom:.45rem;border-bottom:2px solid var(--accent)}
+.ngrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(295px,1fr));gap:.7rem}
+.nc{background:#fff;border:1px solid var(--border);border-radius:10px;padding:1rem 1.15rem}
+.nc h4{font-size:13px;font-weight:500;margin-bottom:.45rem}
+.nc ul{list-style:none;padding:0}
+.nc ul li{font-size:13px;color:var(--muted);line-height:1.7;padding-left:.9rem;position:relative}
+.nc ul li::before{content:'·';position:absolute;left:0;color:var(--accent)}
+.nc p{font-size:13px;color:var(--muted);line-height:1.7}
+.nc .mono{font-family:'DM Mono',monospace;font-size:11.5px;color:#1e3a6e;background:var(--accent-l);padding:.45rem .7rem;border-radius:5px;margin-top:.35rem;line-height:1.9;white-space:pre-wrap;overflow-x:auto}
+.nc .tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:.5rem}
+.nc .tbl th{text-align:left;padding:.4rem .6rem;font-size:10.5px;font-weight:500;color:var(--muted);border-bottom:1px solid var(--border2);text-transform:uppercase;letter-spacing:.05em}
+.nc .tbl td{padding:.4rem .6rem;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top}
+.nc .tbl tr:last-child td{border:none}
+.wbox{background:var(--warn-bg);border:1px solid #fde68a;border-radius:7px;padding:.65rem .9rem;font-size:13px;color:#78350f;margin-top:.45rem;line-height:1.6}
+.kbox{background:var(--ok-bg);border:1px solid var(--ok-b);border-radius:7px;padding:.65rem .9rem;font-size:13px;color:#14532d;margin-top:.45rem;line-height:1.6}
+
+/* FLASHCARDS */
+.fc-meta{display:flex;align-items:center;gap:.7rem;margin-bottom:1.1rem;flex-wrap:wrap}
+.fc-ctr{font-size:13px;color:var(--muted)}
+.fc-knew{font-size:13px;color:var(--ok);font-weight:500}
+.badge{font-size:11px;padding:2px 9px;border-radius:20px}
+.badge-a{background:var(--accent-l);color:var(--accent)}
+.badge-m{background:var(--card);color:var(--muted);border:1px solid var(--border)}
+.cardvp{perspective:1200px;height:235px;margin-bottom:1rem;cursor:pointer}
+.cinner{width:100%;height:100%;position:relative;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.cardvp.flipped .cinner{transform:rotateY(180deg)}
+.cface{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:12px;border:1px solid var(--border);background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.75rem;text-align:center}
+.cback{transform:rotateY(180deg);background:#f0f5ff;border-color:#c7d9f8}
+.cface .clabel{font-size:11px;font-weight:500;color:var(--accent);background:var(--accent-l);padding:2px 10px;border-radius:20px;margin-bottom:.65rem}
+.cface .cq{font-size:.97rem;font-weight:500;color:var(--text);line-height:1.5;max-width:560px}
+.cface .chint{position:absolute;bottom:.85rem;font-size:11px;color:var(--light)}
+.cface .ca{font-size:12.5px;color:#1e3a6e;line-height:1.8;max-width:560px;white-space:pre-line;text-align:left;font-family:'DM Mono',monospace}
+.fc-ctrl{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:.55rem}
+@media(max-width:480px){.fc-ctrl{grid-template-columns:1fr 1fr}}
+
+/* QUIZ */
+.qsetup{margin-bottom:1.5rem}
+.flabel{font-size:12px;color:var(--muted);margin-bottom:.5rem;font-weight:500}
+.fpills{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1.15rem}
+.fp{font-size:12px;padding:4px 11px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;transition:all .12s}
+.fp:hover{color:var(--text);border-color:var(--muted)}
+.fp.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.qhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem}
+.qnum{font-size:13px;color:var(--muted)}
+.qscore{font-size:13px;color:var(--accent);font-weight:500}
+.qbox{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:1.15rem;font-size:1rem;line-height:1.6;margin-bottom:1rem}
+.opts{display:flex;flex-direction:column;gap:.45rem;margin-bottom:1rem}
+.opt{width:100%;text-align:left;padding:.75rem .95rem;border-radius:7px;border:1px solid var(--border2);background:#fff;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;transition:all .12s;line-height:1.5}
+.opt:hover:not(:disabled){border-color:var(--accent);background:var(--accent-l)}
+.opt.correct{background:var(--ok-bg);border-color:var(--ok-b);color:var(--ok)}
+.opt.wrong{background:var(--err-bg);border-color:var(--err-b);color:var(--err)}
+.exp{background:var(--warn-bg);border-left:3px solid var(--warn);padding:.8rem .95rem;border-radius:0 7px 7px 0;font-size:13px;color:#78350f;line-height:1.7;margin-bottom:1rem;display:none}
+.exp.on{display:block}
+.score-big{font-family:'DM Serif Display',serif;font-size:5rem;color:var(--accent);line-height:1;margin-bottom:.4rem}
+
+/* FORMULAS */
+.fsec{font-size:11px;font-weight:500;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin:1.6rem 0 .7rem;padding-bottom:.35rem;border-bottom:1px solid var(--border)}
+.fsec:first-child{margin-top:0}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(275px,1fr));gap:.7rem}
+.fc2{background:#fff;border:1px solid var(--border);border-radius:9px;padding:.9rem 1.1rem;transition:border-color .13s}
+.fc2:hover{border-color:var(--accent)}
+.fn{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.3rem}
+.fe{font-family:'DM Mono',monospace;font-size:12.5px;color:var(--accent);margin-bottom:.3rem;line-height:1.5}
+.fd{font-size:12px;color:var(--muted);line-height:1.5}
+.fd strong{color:var(--err);font-weight:500}
+
+/* MISTAKES */
+.mlist{display:flex;flex-direction:column;gap:.55rem}
+.mi{background:#fff;border:1px solid var(--border);border-left:3px solid var(--err);border-radius:0 7px 7px 0;padding:.8rem .95rem}
+.mt{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:.3rem}
+.mw{font-size:13px;color:var(--err);margin-bottom:.3rem}
+.mr{font-size:13px;color:var(--ok);line-height:1.6}
+
+/* CHAPTER QUIZ */
+.je-full-entry{background:var(--ok-bg);border:1px solid var(--ok-b);border-radius:8px;padding:1rem 1.25rem;font-family:'DM Mono',monospace;font-size:13px;line-height:2;color:#14532d;white-space:pre;overflow-x:auto;margin-bottom:1rem;display:none}
+.je-full-entry.on{display:block}
+
+.footer{padding:2rem 5vw;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;margin-top:3rem}
+.footer-name{font-family:'DM Serif Display',serif;font-size:1rem}
+.footer-note{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">AG</a>
+  <div class="nav-links">
+    <a href="study.html" class="nav-link">Study Hub</a>
+    <a href="mgt150.html" class="nav-link active">MGT 150</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="breadcrumb"><a href="study.html">Study Hub</a> / MGT 150</div>
+  <h1>MGT 150 Final Study</h1>
+  <p>UC Davis &middot; Notes, flashcards, quizzes, and concept drills covering Lectures 1&ndash;9.</p>
+  <div class="pills">
+    <span class="pill">L1 Intro to Mgmt (10%)</span>
+    <span class="pill">L2 Stakeholders (10%)</span>
+    <span class="pill">L3 Ethics &amp; CSR (10%)</span>
+    <span class="pill">L4–5 Strategy (20%)</span>
+    <span class="pill">L6–7 Org Design &amp; Culture (15%)</span>
+    <span class="pill">L8 Change &amp; Innovation (10%)</span>
+    <span class="pill">L9 Motivation &amp; Rewards (10%)</span>
+    <span class="pill">L10–11 Teams &amp; Power (15%)</span>
+  </div>
+</div>
+
+<div class="study">
+<div class="tabs">
+  <button class="tab on" onclick="sw('notes',this)">Lecture Notes</button>
+  <button class="tab" onclick="sw('fc',this)">Flashcards</button>
+  <button class="tab" onclick="sw('quiz',this)">Practice Quiz</button>
+  <button class="tab" onclick="sw('formulas',this)">Key Frameworks</button>
+  <button class="tab" onclick="sw('mistakes',this)">Common Mistakes</button>
+  <button class="tab" onclick="sw('cquiz',this)">Topic Quizzes</button>
+</div>
+
+<!-- ===== NOTES ===== -->
+<div id="panel-notes" class="panel on">
+
+<div class="ch">
+<div class="ch-title">L1 &mdash; Introduction to Management</div>
+<div class="ngrid">
+<div class="nc"><h4>What Is Management?</h4><ul>
+<li>Organizations need to be set up to work for "normal people" &mdash; reward <em>performance</em>, not potential</li>
+<li>As a <strong>field</strong>: how orgs function, structural elements (org chart, culture, power structure), why people behave as they do</li>
+<li>As a <strong>practice</strong>: types of managers and what they do day-to-day</li>
+<li>Management skills complement functional skills and provide personal competitive advantage</li>
+</ul></div>
+<div class="nc"><h4>4 Functions of Management (POLC)</h4><ul>
+<li><strong>Planning</strong> &rarr; set goals and decide how to achieve them</li>
+<li><strong>Organizing</strong> &rarr; arrange tasks, people, and resources to accomplish work</li>
+<li><strong>Leading</strong> &rarr; motivate, direct, and influence people to pursue org goals</li>
+<li><strong>Controlling</strong> &rarr; monitor performance vs. goals; take corrective action</li>
+</ul>
+<div class="kbox">Tip: "Our numbers aren't looking good and we need a strategy" = <strong>Planning</strong>.</div></div>
+<div class="nc"><h4>Types of Managers</h4><ul>
+<li><strong>Functional managers</strong>: responsible for one functional area (marketing, finance, HR)</li>
+<li><strong>General managers</strong>: cross-functional responsibility &mdash; VP of product, CEO, COO, CFO (C-suite)</li>
+<li>General managers typically have other managers reporting to them</li>
+</ul></div>
+<div class="nc"><h4>3 Skills Managers Need</h4><ul>
+<li><strong>Technical</strong>: ability to do the job itself</li>
+<li><strong>Conceptual</strong>: think analytically about how the job fits the whole system; far-reaching consequences</li>
+<li><strong>Human</strong>: work well with others (who may or may not report to you)</li>
+</ul>
+<div class="wbox">As managers rise: emphasis shifts Technical &rarr; Conceptual &rarr; Human. All three can be ACQUIRED.</div></div>
+<div class="nc"><h4>Levels of Analysis Framework</h4><ul>
+<li>Individual characteristics &rarr; Group dynamics &rarr; Intergroup dynamics &rarr; Organization-level features</li>
+<li>Taking multiple perspectives enables better problem definition and diagnosis &rarr; better solutions</li>
+<li>The "flight example": most organizational issues aren't just about technical skill</li>
+</ul></div>
+</div></div>
+
+<div class="ch">
+<div class="ch-title">L2 &mdash; Stakeholders &amp; Organizational Environment</div>
+<div class="ngrid">
+<div class="nc"><h4>Stakeholders Defined</h4><ul>
+<li>Parties (people, groups, orgs) whose interests are affected by an org's activities</li>
+<li>Broader than just shareholders; vary in importance &mdash; different stakeholders matter more at different times</li>
+<li>The general environment rarely (if ever) contains stakeholders</li>
+</ul></div>
+<div class="nc"><h4>Internal vs. External Stakeholders</h4>
+<table class="tbl">
+<tr><th>Type</th><th>Who</th><th>Key Interests</th></tr>
+<tr><td>Internal</td><td>Employees, Owners, Board of Directors</td><td>Employees: salary, job security. Owners: flexibility, profit. Board: governance, survival.</td></tr>
+<tr><td>External (value chain)</td><td>Customers, Competitors, Suppliers, Distributors, Allies</td><td>Directly involved in producing/delivering the product</td></tr>
+<tr><td>External (general interest)</td><td>Unions, Community, Lenders, Media, Govt, Interest groups</td><td>Broader societal stakes; don't contribute directly to production</td></tr>
+</table></div>
+<div class="nc"><h4>Task vs. General Environment</h4><ul>
+<li><strong>Task environment</strong>: closer to the org, directly influences management &mdash; customers, competitors, suppliers, regulators, media</li>
+<li><strong>General environment</strong>: macro-level forces the org must contend with &mdash; PESTEL (Political, Economic, Sociocultural, Technological, Environmental, Legal)</li>
+</ul></div>
+<div class="nc"><h4>Framework to Describe the Environment</h4>
+<table class="tbl">
+<tr><th>Characteristic</th><th>Description</th><th>High</th><th>Low</th></tr>
+<tr><td>Dynamism</td><td>Rate of change</td><td>Dynamic</td><td>Stable</td></tr>
+<tr><td>Complexity</td><td># of elements affecting the firm</td><td>Complex</td><td>Simple</td></tr>
+<tr><td>Uncertainty</td><td>How much this year resembles prior years</td><td>Uncertain</td><td>Predictable</td></tr>
+</table></div>
+</div></div>
+
+<div class="ch">
+<div class="ch-title">L3 &mdash; Responsible Management &amp; Ethics</div>
+<div class="ngrid">
+<div class="nc"><h4>Ethics Defined</h4><ul>
+<li>Code of moral principles governing behavior re: right vs. wrong</li>
+<li>Lives in the grey area between codified law and individual moral codes</li>
+<li><strong>Values</strong>: deeply held, permanent beliefs that determine behavior; orgs express them through norms and practices</li>
+</ul></div>
+<div class="nc"><h4>4 Approaches to Ethical Dilemmas</h4><ul>
+<li><strong>Utilitarian</strong>: greatest good for the greatest number</li>
+<li><strong>Individual</strong>: act in your own long-term self-interest</li>
+<li><strong>Moral Rights</strong>: respect fundamental rights shared by everyone</li>
+<li><strong>Justice</strong>: apply impartial standards of fairness</li>
+</ul></div>
+<div class="nc"><h4>Universalism vs. Relativism</h4><ul>
+<li><strong>Universalism</strong>: human nature is constant; right is right regardless of where/when ("Paying women less is always wrong")</li>
+<li><strong>Relativism</strong>: different cultures/eras produce valid but different values; no rational way to resolve all disagreements</li>
+</ul></div>
+<div class="nc"><h4>Abnormal vs. Normal View of Unethical Behavior</h4>
+<table class="tbl">
+<tr><th></th><th>Abnormal (traditional)</th><th>Normal (modern)</th></tr>
+<tr><td>Wrongdoing is…</td><td>Aberrant; bad people / bad culture</td><td>Ordinary; power structures, admin systems, social influence, bad luck</td></tr>
+<tr><td>Implication</td><td>Fire the bad actor</td><td>We are all more susceptible than we think</td></tr>
+</table>
+<div class="wbox">Neither view is complete. A multifaceted approach is best: examine power structures AND admin systems that enable unethical behavior.</div></div>
+<div class="nc"><h4>CSR &amp; Carroll's Pyramid (bottom &rarr; top)</h4><ul>
+<li><strong>Economic</strong>: be profitable (required by global capitalism)</li>
+<li><strong>Legal</strong>: obey the law (required by stakeholders)</li>
+<li><strong>Ethical</strong>: be ethical (expected by stakeholders)</li>
+<li><strong>Philanthropic</strong>: be a good global citizen (desired by stakeholders)</li>
+</ul>
+<div class="kbox">Moral case: golden rule. Business case: recruiting/retention, reduced risk, increased buyer preference.</div></div>
+<div class="nc"><h4>Key Ethics Terms</h4><ul>
+<li><strong>Greenwashing</strong>: faking environmentally beneficial activities &mdash; invites backlash</li>
+<li><strong>Triple bottom line</strong>: people, planet, profit</li>
+<li><strong>Governance</strong>: parties ensuring the org serves interests of owners and stakeholders &mdash; committees: compensation, audit, risk/compliance</li>
+<li>CSR activities should reflect a firm's actual identity and strategy; don't compromise founding principles for growth</li>
+</ul></div>
+</div></div>
+
+<div class="ch">
+<div class="ch-title">L4 &mdash; Strategy I: Situation Analysis &amp; Corporate Strategy</div>
+<div class="ngrid">
+<div class="nc"><h4>What Is Strategy?</h4><ul>
+<li>A plan to win: long-term objectives + economic logic (higher WTP <em>or</em> lower costs) + resource allocation</li>
+<li>Positioning for <strong>sustainable competitive advantage (SCA)</strong>: create value and attract participants even when competitors try to do the same</li>
+<li>Strategy is equally about what you <em>will not do</em> &mdash; trade-offs are essential</li>
+</ul></div>
+<div class="nc"><h4>Strategy Formulation Process</h4><ul>
+<li>1. Establish mission, vision, values</li>
+<li>2. Assess current reality (SWOT, PESTEL, Benchmarking, VRIO) &larr; <em>this is where SWOT fits</em></li>
+<li>3. Formulate strategy (industry position + corporate/business)</li>
+<li>4. Implement through people and processes</li>
+<li>5. Maintain strategic control &rarr; financial performance &rarr; feedback loop</li>
+</ul>
+<div class="wbox">What's missing from this model: management's values and attitude toward risk.</div></div>
+<div class="nc"><h4>VRIO Internal Analysis</h4>
+<table class="tbl">
+<tr><th>Letter</th><th>Question</th></tr>
+<tr><td><strong>V</strong>aluable</td><td>Does it enable exploiting opportunities or reducing threats?</td></tr>
+<tr><td><strong>R</strong>are</td><td>Do many others already have the same resource?</td></tr>
+<tr><td><strong>I</strong>nimitable</td><td>Can others copy it without great cost? (unique history, causal ambiguity, social complexity)</td></tr>
+<tr><td><strong>O</strong>rganization</td><td>Does the firm's structure/systems support the resource's potential?</td></tr>
+</table></div>
+<div class="nc"><h4>Levels of Strategy</h4><ul>
+<li><strong>Corporate level</strong>: What business(es) should we be in?</li>
+<li><strong>Business level</strong>: How should we compete in this industry?</li>
+<li><strong>Functional level</strong>: How can functions (marketing, HR, ops) support the business-level strategy?</li>
+</ul></div>
+<div class="nc"><h4>Corporate Scope Decisions</h4><ul>
+<li><strong>Product scope (diversification)</strong>: how specialized in offerings? (Amazon vs. Starbucks)</li>
+<li><strong>Vertical scope (integration)</strong>: what range of value-adding activities? (Nike vs. Zara)</li>
+<li><strong>Geographic scope</strong>: optimal spread of activities? (In-N-Out vs. McDonald's)</li>
+</ul></div>
+<div class="nc"><h4>BCG Growth-Share Matrix</h4>
+<table class="tbl">
+<tr><th></th><th>Low Market Share</th><th>High Market Share</th></tr>
+<tr><td><strong>High Growth</strong></td><td>❓ New Venture &mdash; invest cautiously</td><td>⭐ Star &mdash; invest heavily</td></tr>
+<tr><td><strong>Low Growth</strong></td><td>🐕 Dog &mdash; consider divestment</td><td>🐄 Cash Cow &mdash; milk to fund ventures</td></tr>
+</table></div>
+<div class="nc"><h4>Why Vertically Integrate?</h4><ul>
+<li>Response to uncertainty: high supply uncertainty, hold-up risk, information asymmetry</li>
+<li>Opportunity for synergy: new capabilities, flexibility, innovation</li>
+<li>New technologies and market changes can alter optimal vertical integration choices</li>
+</ul></div>
+</div></div>
+
+<div class="ch">
+<div class="ch-title">L5 &mdash; Strategy II: Five Forces &amp; Generic Strategies</div>
+<div class="ngrid">
+<div class="nc"><h4>Porter's Five Forces</h4><ul>
+<li><strong>Threat of New Entry</strong>: barriers (patents, capital, brand, regulation). Patent expiry &rarr; increases this force.</li>
+<li><strong>Bargaining Power of Suppliers</strong>: weak if many alternatives (e.g. coffee commodities)</li>
+<li><strong>Bargaining Power of Buyers</strong>: small, fragmented buyers with low switching costs = moderate/high power</li>
+<li><strong>Threat of Substitutes</strong>: products from <em>other industries</em> serving the same function</li>
+<li><strong>Intensity of Rivalry</strong>: number of competitors, near-duopoly = constrained rivalry</li>
+</ul>
+<div class="wbox">Five Forces is about the INDUSTRY, not a single firm. Definition of industry is critical. The stronger the forces, the less attractive the industry.</div></div>
+<div class="nc"><h4>Porter's 4 Generic Strategies</h4>
+<table class="tbl">
+<tr><th>Scope</th><th>Lower Cost</th><th>Differentiation</th></tr>
+<tr><td>Broad</td><td>1. Cost Leadership (Walmart)</td><td>2. Differentiation (BMW)</td></tr>
+<tr><td>Narrow</td><td>3a. Focus/Cost</td><td>3b. Focus/Diff (REI)</td></tr>
+</table>
+<div class="wbox">Don't get "stuck in the middle" &mdash; doing two things badly. What you WON'T do is as important as what you will do.</div></div>
+<div class="nc"><h4>Strategy Fit</h4><ul>
+<li><strong>Fit with inputs</strong>: strategy consistent with mission/vision/values and current reality</li>
+<li><strong>Fit with implementation levers</strong>: structure, culture, HR, ops all ease execution</li>
+<li>Strategy is ultimately implemented through <em>people</em></li>
+</ul></div>
+</div></div>
+
+<div class="ch">
+<div class="ch-title">L6 &mdash; Organizational Design &amp; Structure</div>
+<div class="ngrid">
+<div class="nc"><h4>Organizational Structure</h4><ul>
+<li>"The pattern of organizational roles, relationships, and procedures enabling integrated, collective action"</li>
+<li><strong>Division of labor</strong>: horizontal partitions (by function, product, region, customer, project)</li>
+<li><strong>Hierarchy</strong>: vertical partitions (how many layers)</li>
+<li><strong>Coordination</strong>: span of control, authority, centralization</li>
+</ul>
+<div class="kbox">Strategy drives structure. The right structure fits and enables strategy implementation.</div></div>
+<div class="nc"><h4>Traditional Structures Compared</h4>
+<table class="tbl">
+<tr><th>Structure</th><th>Partitioning</th><th>Best Context</th></tr>
+<tr><td><strong>Functional (U-Form)</strong></td><td>By input: similar skills grouped</td><td>Stable env, routine tech, small-medium, few products</td></tr>
+<tr><td><strong>Divisional (M-Form)</strong></td><td>By output: same product/region</td><td>Moderately dynamic, larger orgs, multiple products</td></tr>
+<tr><td><strong>Matrix</strong></td><td>Functional AND divisional simultaneously</td><td>Complex/uncertain, high interdependence, non-routine tasks</td></tr>
+</table></div>
+<div class="nc"><h4>Functional (U-Form) Deep Dive</h4><ul>
+<li><strong>Strengths</strong>: economies of scale within functions, deep skill development, functional goal achievement</li>
+<li><strong>Weaknesses</strong>: slow response to change, management overload, poor interunit coordination, less innovation, restricted view of org goals</li>
+</ul></div>
+<div class="nc"><h4>Divisional (M-Form) Deep Dive</h4><ul>
+<li><strong>Strengths</strong>: clear accountability, adapts to product/region differences, faster divisional decisions</li>
+<li><strong>Weaknesses</strong>: hard to coordinate across divisions, reduces functional depth, reduces economies of scale</li>
+</ul></div>
+<div class="nc"><h4>Matrix Deep Dive</h4><ul>
+<li><strong>Strengths</strong>: flexibility + expertise, flexible HR sharing, handles complex decisions and frequent change, both functional and product skills develop</li>
+<li><strong>Weaknesses</strong>: dual authority ("everyone thought they were my boss"), time-consuming/meeting-intensive, hard to implement, unclear accountability</li>
+</ul></div>
+<div class="nc"><h4>New / Contemporary Structures</h4><ul>
+<li><strong>Horizontal (Team-Based)</strong>: by knowledge or project; high uncertainty; decentralized, informal coordination</li>
+<li><strong>Hollow</strong>: outsource non-core activities</li>
+<li><strong>Modular</strong>: outsource even core activities</li>
+<li><strong>Virtual</strong>: temporary, project-based; forms and dissolves as needed</li>
+</ul>
+<div class="wbox">No structure is perfect. Coordination mechanisms can reinforce or compensate for shortcomings.</div></div>
+</div></div>
+
+<div class="ch">
+<div class="ch-title">L7 &mdash; Organizational Culture</div>
+<div class="ngrid">
+<div class="nc"><h4>Culture Defined</h4><ul>
+<li>"The set of shared, taken-for-granted implicit assumptions a group holds that determines how it perceives, thinks about, and reacts to its environments"</li>
+<li>Collective reality; not usually noticed by members; emerges from shared history</li>
+<li>Not static &mdash; continually reproduced. Varies in strength and intensity.</li>
+</ul></div>
+<div class="nc"><h4>Culture as an Iceberg &mdash; Three Levels</h4><ul>
+<li><strong>Artifacts &amp; Behaviors</strong> (above waterline): observable &mdash; ceremonies, stories, language, symbols. Hard to interpret without understanding deeper levels.</li>
+<li><strong>Values, Beliefs, Norms</strong>: what is considered important. What you're told. Can be misleading.</li>
+<li><strong>Basic Assumptions</strong> (deep): unstated, taken-for-granted beliefs about reality. Most visible when challenged.</li>
+</ul>
+<div class="kbox">Enacted values (what guides actual behavior) vs. Espoused values (what the org says it values) vs. Observed values (what outsiders see).</div></div>
+<div class="nc"><h4>Competing Values Framework</h4>
+<table class="tbl">
+<tr><th>Quadrant</th><th>Thrust</th><th>Focus</th><th>Ends</th></tr>
+<tr><td><strong>Clan</strong></td><td>Collaborate</td><td>Internal + Flexible</td><td>Morale, people development, commitment</td></tr>
+<tr><td><strong>Adhocracy</strong></td><td>Create</td><td>External + Flexible</td><td>Innovation, growth, cutting-edge output</td></tr>
+<tr><td><strong>Hierarchy</strong></td><td>Control</td><td>Internal + Stable</td><td>Efficiency, timeliness, smooth functioning</td></tr>
+<tr><td><strong>Market</strong></td><td>Compete</td><td>External + Stable</td><td>Market share, profitability, goal achievement</td></tr>
+</table></div>
+<div class="nc"><h4>How Employees Learn Culture</h4><ul>
+<li>Symbols, Stories, Heroes, Rites &amp; Rituals</li>
+<li><strong>Organizational socialization</strong> (3 stages): Anticipatory socialization (before joining) &rarr; Encounter (first contact with org reality) &rarr; Change and Acquisition (mastery and adaptation)</li>
+</ul></div>
+<div class="nc"><h4>Functions of Culture</h4><ul>
+<li><strong>Normative order</strong>: guidelines on appropriate/inappropriate behavior</li>
+<li><strong>Cognitive order</strong>: helps people understand decisions and goals</li>
+<li><strong>Org identity</strong>: unique "personality" distinguishing the org</li>
+<li><strong>Commitment</strong>: promotes similarity, creates bonds, makes people want to stay</li>
+<li>Culture coordinates, motivates, and controls &mdash; reducing need for formal hierarchy</li>
+</ul></div>
+<div class="nc"><h4>Strong Culture: Assets vs. Liabilities</h4><ul>
+<li><strong>Assets</strong>: loyalty, commitment, motivation; improved coordination and goal alignment</li>
+<li><strong>Liabilities</strong>: values may misalign with strategy/environment; breeds homogeneity; hard to change</li>
+</ul>
+<div class="wbox">Strong culture + adaptability/learning culture = high performance. Strong culture without adaptability = underperforms when environment changes.</div></div>
+</div></div>
+
+<div class="ch">
+<div class="ch-title">L8 &mdash; Organizational Change &amp; Innovation</div>
+<div class="ngrid">
+<div class="nc"><h4>Why Organizations Change</h4><ul>
+<li><strong>Outside</strong>: demographic, technological, stakeholder/social/political pressure</li>
+<li><strong>Inside</strong>: strategy, leadership change, performance pressure</li>
+<li>58% of managers say they must reinvent every 3 years. 63–70% of change efforts fail.</li>
+<li>Change is harder than expected &mdash; orgs are built to be stable. Can't always be dictated.</li>
+</ul></div>
+<div class="nc"><h4>Three Forms of Change</h4><ul>
+<li><strong>Adaptive</strong>: "We've seen this before." Through normal structures/processes. No-brainers.</li>
+<li><strong>Innovative</strong>: "New for the company." Moderately difficult. Uncomfortable but feels like progress.</li>
+<li><strong>Radically Innovative</strong>: "Changes what we do and maybe who we are." Paradigm-breaking, transforms structure and culture, heavy resistance.</li>
+</ul></div>
+<div class="nc"><h4>Lewin's 3-Stage Change Model</h4><ul>
+<li><strong>Unfreezing</strong>: create the motivation to change</li>
+<li><strong>Changing</strong>: learn new ways of doing things</li>
+<li><strong>Refreezing</strong>: support and reinforce the change</li>
+</ul></div>
+<div class="nc"><h4>Systems Approach — 4 Target Elements</h4><ul>
+<li><strong>People</strong>: knowledge, ability, attitudes, motivation, behavior</li>
+<li><strong>Org arrangements</strong>: policies, procedures, roles, structure, rewards, physical setting, technology</li>
+<li><strong>Methods</strong>: processes, workflow, job design, technology</li>
+<li><strong>Social factors</strong>: org culture, group processes, interpersonal interactions, leadership</li>
+</ul>
+<div class="wbox">Any change in one element ripples across the entire organization, ultimately affecting people.</div></div>
+<div class="nc"><h4>Innovation</h4><ul>
+<li>A <em>novel and useful idea that is successfully implemented</em>. Implementation is what distinguishes innovation from just an idea.</li>
+<li>Technologies follow an S-curve: slow start &rarr; rapid growth &rarr; plateau</li>
+<li><strong>Disruptive technologies</strong>: different attributes from existing tech; perform worse on current customer dimensions; appeal to new markets; add pressure on incumbents even while still inferior overall</li>
+</ul></div>
+<div class="nc"><h4>IDEO Innovation Process</h4><ul>
+<li>Observation &rarr; Brainstorming &rarr; Prototyping &rarr; Implementation</li>
+<li>Simultaneously examines user desirability, technical feasibility, and business viability</li>
+<li><strong>Entrepreneurial mindset</strong>: continuously gather information and make decisions in complex, uncertain, dynamic environments. Fueled by need for achievement + openness to experience.</li>
+</ul></div>
+</div></div>
+
+<div class="ch">
+<div class="ch-title">L9 &mdash; Personality &amp; Individual Differences</div>
+<div class="ngrid">
+<div class="nc"><h4>Personality</h4><ul>
+<li>Relatively stable, unique configuration of characteristics describing who you are</li>
+<li>Set in early childhood; enduring over time</li>
+<li>Has stronger effect on behavior in "weak" situations (few established rules, novel/uncertain contexts)</li>
+</ul></div>
+<div class="nc"><h4>Big 5 Personality (OCEAN)</h4>
+<table class="tbl">
+<tr><th>Trait</th><th>Work Relevance</th></tr>
+<tr><td><strong>Openness</strong></td><td>Predicts performance in cross-cultural roles; some leadership roles</td></tr>
+<tr><td><strong>Conscientiousness</strong></td><td><em>Most reliable predictor of job performance, leadership, and resilience</em> across virtually all jobs</td></tr>
+<tr><td><strong>Extraversion</strong></td><td>Leadership behaviors, motivation, positivity, well-being, interpersonal skills</td></tr>
+<tr><td><strong>Agreeableness</strong></td><td>Predictive of liking; not directly predictive of work success</td></tr>
+<tr><td><strong>Neuroticism</strong> (reverse = Emotional Stability)</td><td>Predicts performance in leadership and customer service</td></tr>
+</table></div>
+<div class="nc"><h4>Dark Triad</h4><ul>
+<li><strong>Narcissism</strong>: grandiosity, entitlement</li>
+<li><strong>Machiavellianism</strong>: manipulativeness, cynicism</li>
+<li><strong>Psychopathy</strong>: lack of empathy, impulsivity</li>
+<li>Leaders have a <em>higher</em> likelihood of dark triad traits than the general population</li>
+</ul></div>
+<div class="nc"><h4>Core Self-Evaluation (CSE)</h4><ul>
+<li>Generalized self-efficacy, self-esteem, internal locus of control, emotional stability</li>
+<li>High CSE &rarr; good job performance, job/life satisfaction, higher income, lower stress</li>
+</ul></div>
+<div class="nc"><h4>Emotional Intelligence (EI)</h4>
+<table class="tbl">
+<tr><th>Component</th><th>Focus</th><th>Description</th></tr>
+<tr><td>Self-Awareness</td><td>Self</td><td>Read your own emotions</td></tr>
+<tr><td>Self-Management</td><td>Self</td><td>Control emotions; act reliably and adaptably</td></tr>
+<tr><td>Social Awareness</td><td>Social</td><td>Recognize others' emotions; empathy</td></tr>
+<tr><td>Relationship Management</td><td>Social</td><td>Use awareness to manage relationships</td></tr>
+</table>
+<div class="kbox">High EI &rarr; better relationships, well-being, job satisfaction, and organizational citizenship behavior (OCB). Can be built and improved.</div></div>
+<div class="nc"><h4>Selective Perception &amp; Halo Effect</h4><ul>
+<li><strong>Selective perception</strong>: tendency to notice certain things and filter out others. Occurs through 4 stages of social perception (attend &rarr; interpret &rarr; attribute &rarr; store)</li>
+<li><strong>Halo effect</strong>: a general positive impression influences evaluation on a specific dimension (e.g., rating teamwork high because someone is technically skilled)</li>
+</ul></div>
+</div></div>
+
+<div class="ch">
+<div class="ch-title">L10 &mdash; Theories of Motivation</div>
+<div class="ngrid">
+<div class="nc"><h4>Performance Formula</h4>
+<div class="mono">Performance = f(Motivation × Ability × Environment)</div>
+<ul>
+<li>Even the most able, best-equipped worker won't perform well without motivation</li>
+<li>Motivation alone isn't sufficient without ability and a proper environment</li>
+<li>People must (1) join and stay, (2) perform assigned tasks, (3) go beyond role with creative/innovative behavior</li>
+</ul></div>
+<div class="nc"><h4>Equity Theory (Social Comparison)</h4>
+<div class="mono">OP/IP = ORP/IRP → Equity
+OP/IP &lt; ORP/IRP → Inequity (underrewarded)
+OP/IP &gt; ORP/IRP → Inequity (overrewarded)</div>
+<ul>
+<li>IP/OP = your inputs/outputs; IRP/ORP = referent's inputs/outputs</li>
+<li>Strongest among those with similar personal + job characteristics</li>
+<li>Relative compensation influences satisfaction more than absolute (MBA study: 69% preferred $75k/75k over $85k/95k)</li>
+<li>To restore equity: reduce/increase inputs, change outputs, change perception, change referent</li>
+</ul>
+<div class="wbox">Equity theory = social comparison. Complaining about your raise without comparing to others' ratios is NOT equity theory.</div></div>
+<div class="nc"><h4>Expectancy Theory</h4>
+<div class="mono">Motivation = (E→P) × Σ[(P→O) × V]</div>
+<ul>
+<li><strong>E→P</strong>: belief that effort leads to performance (self-efficacy, training, past accomplishments)</li>
+<li><strong>P→O (Instrumentality)</strong>: belief that performance leads to outcome (locus of control, manager reliability)</li>
+<li><strong>Valence (V)</strong>: value placed on the outcome</li>
+</ul>
+<div class="kbox">To increase P→O: demonstrate track record of delivering rewards; show you control relevant resources; shift focus to rewards you can provide (praise, better projects).</div></div>
+<div class="nc"><h4>Goal-Setting Theory</h4><ul>
+<li>Goals direct attention, regulate effort, increase persistence, foster strategies and action plans</li>
+<li><strong>SMART Goals</strong>: Specific, Measurable, Attainable, Results-oriented, Timely</li>
+<li>Issue: lure of attaining goals can induce unethical behavior</li>
+</ul></div>
+<div class="nc"><h4>Job Characteristics Model (JCM)</h4>
+<table class="tbl">
+<tr><th>Core Characteristic</th><th>&rarr; Psych. State</th><th>&rarr; Outcome</th></tr>
+<tr><td>Skill variety + Task identity + Task significance</td><td>Experienced meaningfulness</td><td rowspan="3">High motivation, performance, satisfaction; low turnover</td></tr>
+<tr><td>Autonomy</td><td>Experienced responsibility</td></tr>
+<tr><td>Feedback</td><td>Knowledge of results</td></tr>
+</table>
+<div class="wbox">Whether JCM potential is realized depends on the employee's growth needs. Not all jobs can be designed to be meaningful.</div></div>
+</div></div>
+
+<div class="ch">
+<div class="ch-title">L11 &mdash; Rewarding Performance</div>
+<div class="ngrid">
+<div class="nc"><h4>Intrinsic vs. Extrinsic Rewards</h4>
+<table class="tbl">
+<tr><th>Intrinsic</th><th>Extrinsic</th></tr>
+<tr><td>Pride in work, loyalty, commitment, meaning</td><td>Money, promotions, status indicators, praise</td></tr>
+<tr><td>Effects last longer; stronger impact; associated with extra-role behavior; easier to manage</td><td>Powerful compliance motivator, but compliance may be all you get</td></tr>
+</table></div>
+<div class="nc"><h4>Why Financial Incentives Undermine Intrinsic Motivation</h4><ul>
+<li>Signals the task must be "work," not "interesting"</li>
+<li>Signals employer distrust</li>
+<li>Shifts reasons for working from the task to the reward</li>
+<li>Encourages narrow cost-benefit thinking that crowds out genuine engagement</li>
+</ul></div>
+<div class="nc"><h4>Pay-for-Performance Guidelines</h4><ul>
+<li>Clear, specific performance criteria so employees know the basis for allocation</li>
+<li>Minimize rewards tied to non-performance factors</li>
+<li>Ensure employees have control over performance outcomes</li>
+<li>Make rewards large enough to differentiate high from low performers</li>
+<li>Recognize limitations in collectivist cultures</li>
+<li>Ensure people have other reasons to perform &mdash; too much monetary emphasis displaces intrinsic motivation</li>
+</ul></div>
+<div class="nc"><h4>Procedural Fairness &amp; Pay Secrecy</h4><ul>
+<li><strong>Procedural fairness</strong>: most important when outcomes are unfavorable. Helps people accept outcomes they don't like.</li>
+<li><strong>Pay openness</strong>: forces fair systems, corrects equity misconceptions, builds trust &mdash; but employees may prefer privacy</li>
+</ul></div>
+</div></div>
+
+<div class="ch">
+<div class="ch-title">L12 &mdash; Teams &amp; Conflict</div>
+<div class="ngrid">
+<div class="nc"><h4>Defining Characteristics of Teams</h4><ul>
+<li><strong>Social psychological awareness</strong>: members see themselves as an intact social entity</li>
+<li><strong>Social embeddedness</strong>: teams exist within a larger org system</li>
+<li><strong>Task interdependence</strong>: members share a purpose and rely on each other to achieve it</li>
+<li>Only 1 in 10 teams in corporate America is successful</li>
+</ul></div>
+<div class="nc"><h4>Types of Task Interdependence</h4>
+<table class="tbl">
+<tr><th>Type</th><th>Description</th><th>Coordination Needed</th></tr>
+<tr><td><strong>Pooled</strong></td><td>Work independently, pool outputs (e.g. sales org)</td><td>Least</td></tr>
+<tr><td><strong>Sequential</strong></td><td>Assembly-line division of labor</td><td>Moderate</td></tr>
+<tr><td><strong>Reciprocal</strong></td><td>Each member depends on all others at multiple points</td><td>Most &mdash; process losses are largest here</td></tr>
+</table></div>
+<div class="nc"><h4>Tuckman's 5-Stage Model (fits in Development phase)</h4><ul>
+<li><strong>Forming</strong>: "How do I fit in? Why are we here?"</li>
+<li><strong>Storming</strong>: "What's my role? Who's in charge?"</li>
+<li><strong>Norming</strong>: "What do others expect? Can we work together?"</li>
+<li><strong>Performing</strong>: "How can I best perform my role?"</li>
+<li><strong>Adjourning</strong>: "What's next? How do members transition out?"</li>
+</ul>
+<div class="kbox">Tuckman's model belongs in the <strong>Development</strong> phase of the framework (Context &rarr; Design &rarr; Development &rarr; Outcomes). Punctuated equilibrium is an alternative to staged development.</div></div>
+<div class="nc"><h4>Group Performance Formula</h4>
+<div class="mono">Actual Perf. = Potential Perf. + Process Gains − Process Losses</div>
+<ul>
+<li><strong>Process gains</strong>: effective coordination + motivation (synergy, knowledge sharing)</li>
+<li><strong>Process losses</strong>: coordination + motivation problems (social loafing)</li>
+</ul></div>
+<div class="nc"><h4>Social Loafing</h4><ul>
+<li>People put less effort in a group than alone</li>
+<li><strong>Causes</strong>: diffused responsibility, incentive problems, "sucker effect" (fairness concerns), attribution/measurement difficulties</li>
+<li><strong>Solutions</strong>: clear individual accountability, meaningful individual tasks, group cohesion</li>
+</ul></div>
+<div class="nc"><h4>Conflict Types &amp; Styles</h4><ul>
+<li><strong>Task conflict</strong>: about the work itself &mdash; functional; associated with process gains</li>
+<li><strong>Relationship conflict</strong>: about interpersonal issues &mdash; dysfunctional; associated with process losses</li>
+<li><strong>Integrating</strong>: better when issue is complex + important, relationship matters, win-win possible</li>
+<li><strong>Compromising</strong>: faster but expedient; use when issue is less critical</li>
+<li><strong>Groupthink</strong>: informational influence (others know better) + normative influence (need to fit in)</li>
+</ul></div>
+</div></div>
+
+<div class="ch">
+<div class="ch-title">L13 &mdash; Power &amp; Influence</div>
+<div class="ngrid">
+<div class="nc"><h4>What Is Power?</h4><ul>
+<li>The ability of one person to affect the behavior of someone else in a desired way</li>
+<li>Power is: a potential, relational, neutral, and specific (domain-, context-, relationship-specific)</li>
+<li>People low in power: more authoritarian, closely supervise, hold back talent, use more coercive power, lower group morale</li>
+</ul></div>
+<div class="nc"><h4>French &amp; Raven's 6 Sources of Power</h4>
+<table class="tbl">
+<tr><th>Type</th><th>Source</th><th>Description</th></tr>
+<tr><td><strong>Legitimate</strong></td><td rowspan="3">Position-based</td><td>Right to command compliance by formal role</td></tr>
+<tr><td><strong>Reward</strong></td><td>Ability to incentivize via promised/granted rewards</td></tr>
+<tr><td><strong>Coercive</strong></td><td>Ability to force compliance via punishment</td></tr>
+<tr><td><strong>Expert</strong></td><td rowspan="3">Person-based</td><td>Compelling action through knowledge and expertise</td></tr>
+<tr><td><strong>Information/Persuasion</strong></td><td>Compelling action through logical arguments and evidence</td></tr>
+<tr><td><strong>Referent</strong></td><td>Others like/want to be like you; charisma, shared values, liking</td></tr>
+</table>
+<div class="wbox">Coercive power forces short-term compliance but reduces trust and liking over time, diluting referent, expert, and informational power. Formal authority is a very limited source of power.</div></div>
+<div class="nc"><h4>Influence Tactics &amp; Reactions</h4><ul>
+<li>Rational persuasion, inspirational appeals, consultation, ingratiation, personal appeals, exchange, coalition tactics, pressure, legitimating tactics</li>
+<li>Reactions: Commitment (best) &rarr; Compliance &rarr; Resistance</li>
+<li>Rational persuasion: works when expertise matters. Inspirational appeals: works when values/commitment matter.</li>
+</ul></div>
+<div class="nc"><h4>Does Power Corrupt?</h4><ul>
+<li>"Power tends to corrupt and absolute power corrupts absolutely" &mdash; research confirms</li>
+<li>Powerful people: more likely to violate norms (Berkeley cookie experiment), view subordinates as instruments, lie, over-claim credit, under-claim responsibility</li>
+<li><strong>Nuance</strong>: depends on whether power is construed as freedom vs. responsibility. Oversight and transparency increase ethical behavior. Power is fundamentally neutral.</li>
+</ul></div>
+</div></div>
+
+<div class="ch">
+<div class="ch-title">L14 &mdash; Understanding Leadership</div>
+<div class="ngrid">
+<div class="nc"><h4>What Is Leadership?</h4><ul>
+<li>"The ability to influence employees to voluntarily pursue organizational goals"</li>
+<li>People are LED. Tasks are managed. Effective leaders do both.</li>
+<li>Leaders are <em>made</em>, not born &mdash; focus on skills. Leadership can be practiced without hierarchical authority.</li>
+</ul></div>
+<div class="nc"><h4>Full Range Leadership Model</h4>
+<table class="tbl">
+<tr><th>Style</th><th>Description</th><th>Consequences</th></tr>
+<tr><td>Passive (Laissez-faire)</td><td>Let employees lead themselves</td><td>Potential chaos in times of change</td></tr>
+<tr><td><strong>Transactional</strong></td><td>Clarify goals; provide rewards/punishments</td><td>Necessary baseline; positively related to effectiveness + performance</td></tr>
+<tr><td><strong>Transformational</strong></td><td>Inspire to pursue org goals beyond self-interest</td><td>Exceptional results; intrinsic motivation, trust, commitment</td></tr>
+</table></div>
+<div class="nc"><h4>4 Behaviors of Transformational Leadership</h4><ul>
+<li><strong>Inspirational Motivation</strong>: charisma and vision; inspiring picture of the future</li>
+<li><strong>Idealized Influence</strong>: ethicality + focus on the greater good; moral role model</li>
+<li><strong>Individualized Consideration</strong>: enable follower growth; attend to individual needs</li>
+<li><strong>Intellectual Stimulation</strong>: challenge followers to think creatively</li>
+</ul>
+<div class="wbox">Transformational = exceptional things (change, innovation). Transactional = necessary day-to-day baseline. Both are needed.</div></div>
+<div class="nc"><h4>Contemporary Leadership Concepts</h4>
+<table class="tbl">
+<tr><th>Concept</th><th>Description</th><th>Consequences</th></tr>
+<tr><td>LMX</td><td>Different exchange relationships with each subordinate (in/out group)</td><td>High-quality exchange &rarr; more control + higher performance</td></tr>
+<tr><td>Servant Leadership</td><td>Benefit all stakeholders with care/compassion</td><td>Positive follower attitudes, reduced burnout</td></tr>
+<tr><td>Humility</td><td>Low self-focus, high self-awareness &rarr; learning orientation</td><td>Follower humility, self-efficacy, performance</td></tr>
+<tr><td>Empowering</td><td>Give employees control over work</td><td>Intrinsic motivation, trust, creativity</td></tr>
+<tr><td>Abusive</td><td>Hostility toward subordinates</td><td>Opposite of empowering</td></tr>
+</table></div>
+<div class="nc"><h4>Cross-Cultural Topics</h4><ul>
+<li><strong>Uncertainty avoidance</strong>: degree to which a culture tolerates ambiguity (Japan = high; USA = moderate/low)</li>
+<li><strong>Individualism vs. Collectivism</strong>: pay-for-performance less effective in collectivist cultures</li>
+<li><strong>Ethnocentrism</strong>: seeing things only through one's own cultural lens. More attributable to <em>ignorance</em> than conscious prejudice. Core cause of cultural misunderstanding: different values and norms.</li>
+</ul></div>
+</div></div>
+
+</div><!-- end notes panel -->
+
+<!-- ===== FLASHCARDS ===== -->
+<div id="panel-fc" class="panel">
+<div class="pbar"><div class="pfill" id="fcbar" style="width:0%"></div></div>
+<div class="fc-meta">
+  <span class="fc-ctr" id="fcctr">1 / 50</span>
+  <span class="badge badge-a" id="fccat">L1</span>
+  <span class="fc-knew" id="fcknew">0 known</span>
+  <button class="btn btn-o" style="margin-left:auto;font-size:12px;padding:4px 11px" onclick="shuffleFC()">Shuffle</button>
+</div>
+<div class="cardvp" id="fccard" onclick="flipFC()">
+  <div class="cinner">
+    <div class="cface">
+      <div class="clabel" id="fccat2">L1</div>
+      <p class="cq" id="fcq">Loading...</p>
+      <span class="chint">click to flip</span>
+    </div>
+    <div class="cface cback">
+      <p class="ca" id="fca"></p>
+    </div>
+  </div>
+</div>
+<div class="fc-ctrl">
+  <button class="btn btn-o" onclick="prevFC()">&larr; Prev</button>
+  <button class="btn btn-err" onclick="markFC(false)">&#10007; Didn't know</button>
+  <button class="btn btn-ok" onclick="markFC(true)">&#10003; Got it</button>
+  <button class="btn btn-o" onclick="nextFC()">Next &rarr;</button>
+</div>
+</div>
+
+<!-- ===== QUIZ ===== -->
+<div id="panel-quiz" class="panel">
+<div id="qsetup" class="qsetup">
+  <p class="flabel">Filter by topic</p>
+  <div class="fpills">
+    <button class="fp on" onclick="setQcat('all',this)">All</button>
+    <button class="fp" onclick="setQcat('Foundations',this)">L1–2 Foundations</button>
+    <button class="fp" onclick="setQcat('Ethics',this)">L3 Ethics &amp; CSR</button>
+    <button class="fp" onclick="setQcat('Strategy',this)">L4–5 Strategy</button>
+    <button class="fp" onclick="setQcat('OrgDesign',this)">L6–7 Org Design &amp; Culture</button>
+    <button class="fp" onclick="setQcat('Change',this)">L8 Change &amp; Innovation</button>
+    <button class="fp" onclick="setQcat('People',this)">L9–11 Personality &amp; Motivation</button>
+    <button class="fp" onclick="setQcat('Teams',this)">L12–14 Teams, Power &amp; Leadership</button>
+  </div>
+  <button class="btn btn-p" onclick="startQuiz()" style="width:100%;justify-content:center;padding:.75rem">Start Quiz &rarr;</button>
+</div>
+<div id="qactive" style="display:none">
+  <div class="qhdr"><span class="qnum" id="qnum">Q 1</span><span class="qscore" id="qsc">0 correct</span></div>
+  <div class="pbar"><div class="pfill" id="qbar" style="width:0%"></div></div>
+  <div class="qbox" id="qtext"></div>
+  <div class="opts" id="qopts"></div>
+  <div class="exp" id="qexp"></div>
+  <button class="btn btn-p" id="qnext" onclick="nextQ()" style="display:none;width:100%;justify-content:center">Next &rarr;</button>
+</div>
+<div id="qresult" style="display:none;text-align:center;padding:3rem 1rem">
+  <div class="score-big" id="rpct"></div>
+  <p style="color:var(--muted);margin-bottom:1.5rem" id="rmsg"></p>
+  <button class="btn btn-o" onclick="resetQuiz()">Try again</button>
+</div>
+</div>
+
+<!-- ===== FORMULAS / KEY FRAMEWORKS ===== -->
+<div id="panel-formulas" class="panel">
+<div class="fsec">Management Fundamentals</div>
+<div class="fgrid">
+  <div class="fc2"><div class="fn">4 Functions of Management</div><div class="fe">Planning → Organizing → Leading → Controlling</div><div class="fd">POLC. Applies at all managerial levels.</div></div>
+  <div class="fc2"><div class="fn">Manager Skill Shift</div><div class="fe">Technical → Conceptual → Human</div><div class="fd">As managers rise in the hierarchy, skill emphasis shifts. All three can be acquired.</div></div>
+  <div class="fc2"><div class="fn">Levels of Analysis</div><div class="fe">Individual → Group → Intergroup → Organization</div><div class="fd">Multiple perspectives enable better problem diagnosis and solutions.</div></div>
+</div>
+<div class="fsec">Strategy</div>
+<div class="fgrid">
+  <div class="fc2"><div class="fn">Strategy Formulation Steps</div><div class="fe">Mission → Assess Reality → Formulate → Implement → Control → Feedback</div><div class="fd"><strong>SWOT fits at "Assess Reality" (Step 2).</strong></div></div>
+  <div class="fc2"><div class="fn">VRIO</div><div class="fe">Valuable · Rare · Inimitable · Organization</div><div class="fd">All four required for Sustained Competitive Advantage.</div></div>
+  <div class="fc2"><div class="fn">Porter's Generic Strategies</div><div class="fe">Cost Leadership | Differentiation | Focus/Cost | Focus/Diff</div><div class="fd"><strong>Don't get stuck in the middle doing two things badly.</strong></div></div>
+  <div class="fc2"><div class="fn">Five Forces</div><div class="fe">Rivalry | New Entry | Substitutes | Buyer Power | Supplier Power</div><div class="fd">About the industry, not a single firm. Patent expiry → Threat of New Entry increases.</div></div>
+  <div class="fc2"><div class="fn">BCG Matrix</div><div class="fe">Star (high/high) | Cash Cow (low/high) | Dog (low/low) | ? (high/low)</div><div class="fd">Market growth vs. market share. Cash Cows fund Stars.</div></div>
+</div>
+<div class="fsec">Motivation</div>
+<div class="fgrid">
+  <div class="fc2"><div class="fn">Performance Formula</div><div class="fe">Performance = f(Motivation × Ability × Environment)</div></div>
+  <div class="fc2"><div class="fn">Equity Theory</div><div class="fe">OP/IP vs. ORP/IRP</div><div class="fd"><strong>Social comparison ratios, not just satisfaction with pay. Not the same as complaining to your manager.</strong></div></div>
+  <div class="fc2"><div class="fn">Expectancy Theory</div><div class="fe">Motivation = (E→P) × Σ[(P→O) × V]</div><div class="fd">All three must be high. Increase P→O by demonstrating track record of delivering rewards.</div></div>
+  <div class="fc2"><div class="fn">SMART Goals</div><div class="fe">Specific · Measurable · Attainable · Results-oriented · Timely</div></div>
+</div>
+<div class="fsec">Teams</div>
+<div class="fgrid">
+  <div class="fc2"><div class="fn">Group Performance</div><div class="fe">Actual = Potential + Process Gains − Process Losses</div><div class="fd">Process most important in reciprocal interdependence.</div></div>
+  <div class="fc2"><div class="fn">Tuckman's Stages</div><div class="fe">Forming → Storming → Norming → Performing → Adjourning</div><div class="fd">Belongs in the <strong>Development</strong> phase of the group framework.</div></div>
+  <div class="fc2"><div class="fn">Conflict Types</div><div class="fe">Task conflict = process gains | Relationship conflict = process losses</div></div>
+</div>
+<div class="fsec">Power &amp; Leadership</div>
+<div class="fgrid">
+  <div class="fc2"><div class="fn">French &amp; Raven's 6 Sources</div><div class="fe">Legitimate | Reward | Coercive (position-based)<br>Expert | Informational | Referent (person-based)</div><div class="fd"><strong>Coercive power erodes referent, expert, and informational power over time.</strong></div></div>
+  <div class="fc2"><div class="fn">Full Range Leadership</div><div class="fe">Passive → Transactional → Transformational</div><div class="fd">Transformational for exceptional things. Transactional for necessary baseline.</div></div>
+  <div class="fc2"><div class="fn">4 Transformational Behaviors</div><div class="fe">Inspirational Motivation | Idealized Influence | Individualized Consideration | Intellectual Stimulation</div></div>
+</div>
+</div>
+
+<!-- ===== COMMON MISTAKES ===== -->
+<div id="panel-mistakes" class="panel">
+<div class="mlist">
+  <div class="mi"><div class="mt">Equity Theory</div><div class="mw">✗ "Equity theory = feeling dissatisfied with your raise or complaining to your manager."</div><div class="mr">✓ Equity theory is fundamentally about SOCIAL COMPARISON RATIOS (OP/IP vs. ORP/IRP). Dissatisfaction only triggers the theory when comparing your ratio to a relevant social referent's ratio.</div></div>
+  <div class="mi"><div class="mt">Expectancy Theory &mdash; P→O</div><div class="mw">✗ "To increase P→O expectancy, just motivate employees with bigger bonuses."</div><div class="mr">✓ Increase P→O by demonstrating you have resources to deliver, showing past reliability, and shifting to rewards within your control (praise, better projects). If employees don't believe performance leads to reward, valence is irrelevant.</div></div>
+  <div class="mi"><div class="mt">Financial Incentives</div><div class="mw">✗ "Adding a bonus to a task will always increase motivation."</div><div class="mr">✓ Financial incentives can UNDERMINE intrinsic motivation by signaling the task is "work," implying distrust, shifting attention from task to reward, and encouraging cost-benefit thinking. Money motivates compliance, but compliance may be all you get.</div></div>
+  <div class="mi"><div class="mt">SWOT Stage</div><div class="mw">✗ "SWOT is used during strategy formulation."</div><div class="mr">✓ SWOT belongs in "Assessing the Current Reality" — Step 2 of the strategy process. Formulating strategy is Step 3, after you understand your situation.</div></div>
+  <div class="mi"><div class="mt">Five Forces Framing</div><div class="mw">✗ "The Five Forces tells you how Company X is doing."</div><div class="mr">✓ Five Forces is about the INDUSTRY, not a single firm. The definition of the industry itself is critical and somewhat subjective — getting it wrong changes all your answers.</div></div>
+  <div class="mi"><div class="mt">Patent Expiry &amp; Five Forces</div><div class="mw">✗ "Patent expiry mainly affects rivalry."</div><div class="mr">✓ Patent expiry increases the THREAT OF NEW ENTRY because patents are a key barrier to entry. Competitors can now enter with similar products.</div></div>
+  <div class="mi"><div class="mt">Coercive Power Over Time</div><div class="mw">✗ "Coercive power is just as effective as other power types over time."</div><div class="mr">✓ Coercive power may force short-term compliance but reduces trust, liking, and credibility over time — eroding referent, expert, and informational power. Formal authority is a very limited long-term source of power.</div></div>
+  <div class="mi"><div class="mt">Transformational vs. Transactional</div><div class="mw">✗ "A transformational leader doesn't need to be transactional."</div><div class="mr">✓ Transactional leadership is the necessary baseline — it clarifies goals and ties performance to outcomes. Transformational leadership builds on top of it for exceptional results. Both are required; passive leadership is the failure mode.</div></div>
+  <div class="mi"><div class="mt">Strong Culture &amp; Performance</div><div class="mw">✗ "A strong culture always leads to better firm performance."</div><div class="mr">✓ The relationship is NOT straightforward. Strong culture ONLY improves performance when it's also an adaptability/learning culture. A strong, non-adaptive culture underperforms when the environment changes.</div></div>
+  <div class="mi"><div class="mt">Task vs. Relationship Conflict</div><div class="mw">✗ "All conflict hurts team performance."</div><div class="mr">✓ Task conflict (about the work) is functional and associated with process GAINS — better decisions, more perspectives. Only relationship conflict (interpersonal issues) is dysfunctional and causes process losses.</div></div>
+  <div class="mi"><div class="mt">Reciprocal vs. Pooled Interdependence</div><div class="mw">✗ "Team process matters equally regardless of interdependence type."</div><div class="mr">✓ Team process is MOST important in reciprocal interdependence. When each member depends on all others at multiple points, coordination failures cascade — process losses are largest. In pooled interdependence, members work more independently and failures are more contained.</div></div>
+  <div class="mi"><div class="mt">Tuckman's Model Placement</div><div class="mw">✗ "Tuckman's stages are part of team design."</div><div class="mr">✓ Tuckman's 5-stage model belongs in the DEVELOPMENT phase (Context → Design → Development → Outcomes). The Development phase encompasses the group's entire working experience — norms, punctuated equilibrium, and group process all live here too.</div></div>
+  <div class="mi"><div class="mt">Ethnocentrism</div><div class="mw">✗ "Ethnocentrism is mostly caused by conscious prejudice."</div><div class="mr">✓ Ethnocentrism is more attributable to IGNORANCE than conscious prejudice. It often stems from a lack of cross-cultural awareness — not malicious intent. The core cause of most cultural misunderstandings is different values and norms.</div></div>
+  <div class="mi"><div class="mt">Dark Triad &amp; Leadership</div><div class="mw">✗ "Leaders never have dark triad traits."</div><div class="mr">✓ Research shows leaders have a HIGHER likelihood of dark triad traits (narcissism, machiavellianism, psychopathy) than the general population. These traits may provide short-term influence advantages but at long-term ethical and organizational cost.</div></div>
+  <div class="mi"><div class="mt">Enacted vs. Espoused Values</div><div class="mw">✗ "If a company says it values X, then X guides behavior."</div><div class="mr">✓ Espoused values (what the org says) ≠ Enacted values (what actually guides behavior). The gap between them is a major source of cultural confusion and mistrust. Visible artifacts can be misleading without understanding the underlying assumptions.</div></div>
+</div>
+</div>
+
+<!-- ===== TOPIC QUIZZES ===== -->
+<div id="panel-cquiz" class="panel">
+<div id="cq-setup">
+  <p class="flabel">Select a topic quiz</p>
+  <div class="fpills" style="margin-bottom:1.5rem">
+    <button class="fp on" onclick="setCQ(0,this)">L1–2 Foundations</button>
+    <button class="fp" onclick="setCQ(1,this)">L3 Ethics &amp; CSR</button>
+    <button class="fp" onclick="setCQ(2,this)">L4–5 Strategy</button>
+    <button class="fp" onclick="setCQ(3,this)">L6–7 Org Design &amp; Culture</button>
+    <button class="fp" onclick="setCQ(4,this)">L8 Change &amp; Innovation</button>
+    <button class="fp" onclick="setCQ(5,this)">L9–11 Personality &amp; Motivation</button>
+    <button class="fp" onclick="setCQ(6,this)">L12–14 Teams, Power &amp; Leadership</button>
+  </div>
+  <button class="btn btn-p" onclick="startCQ()" style="width:100%;justify-content:center;padding:.75rem">Start Quiz &rarr;</button>
+</div>
+<div id="cq-active" style="display:none">
+  <div class="qhdr"><span class="qnum" id="cq-num">Q 1 of 5</span><span class="qscore" id="cq-sc">0 correct</span></div>
+  <div class="pbar"><div class="pfill" id="cq-bar" style="width:0%"></div></div>
+  <div class="qbox" id="cq-text"></div>
+  <div class="opts" id="cq-opts"></div>
+  <div class="exp" id="cq-exp"></div>
+  <button class="btn btn-p" id="cq-next" onclick="nextCQ()" style="display:none;width:100%;justify-content:center">Next &rarr;</button>
+</div>
+<div id="cq-result" style="display:none;text-align:center;padding:3rem 1rem">
+  <div class="score-big" id="cq-rpct"></div>
+  <p style="color:var(--muted);margin-bottom:1.5rem" id="cq-rmsg"></p>
+  <button class="btn btn-o" onclick="resetCQ()">Try again</button>
+</div>
+</div>
+
+</div><!-- /study -->
+
+<footer class="footer">
+  <div class="footer-name">Adam Geyer</div>
+  <div class="footer-note">MGT 150 &middot; UC Davis</div>
+</footer>
+
+<script>
+// ── FLASHCARDS DATA ──
+const CARDS=[
+  {q:"What are the 4 functions of management?",a:"Planning → set goals and decide how to achieve them\nOrganizing → arrange tasks, people, resources\nLeading → motivate, direct, influence people\nControlling → monitor performance vs. goals; take corrective action",cat:"L1"},
+  {q:"What are the three skill types managers need, and how do they shift as managers rise?",a:"Technical, Conceptual, Human.\n\nAs managers rise: Technical → Conceptual → Human.\nAll three can be ACQUIRED.",cat:"L1"},
+  {q:"Difference between functional managers and general managers?",a:"Functional: responsible for one area (marketing, finance, HR).\nGeneral: cross-functional responsibility — VP of product, CEO, COO, CFO (C-suite). Typically have other managers reporting to them.",cat:"L1"},
+  {q:"What do stakeholders include, and how do they differ from shareholders?",a:"Stakeholders = parties (people, groups, orgs) whose interests are affected by an org's activities. Much broader than shareholders.\n\nVary in importance — different stakeholders matter more at different times.",cat:"L2"},
+  {q:"What are the three characteristics used to describe how challenging an environment is?",a:"Dynamism: rate of change (dynamic vs. stable)\nComplexity: number of elements affecting the firm\nUncertainty: how much this year resembles prior years",cat:"L2"},
+  {q:"What is the difference between the task environment and the general environment?",a:"Task environment: closer to the org; directly influences management (customers, competitors, suppliers, regulators, media).\n\nGeneral environment: macro-level PESTEL forces the org must contend with (Political, Economic, Sociocultural, Technological, Environmental, Legal).",cat:"L2"},
+  {q:"What are the 4 approaches to resolving ethical dilemmas?",a:"1. Utilitarian: greatest good for the greatest number\n2. Individual: act in your own long-term self-interest\n3. Moral Rights: respect fundamental rights\n4. Justice: apply impartial standards of fairness",cat:"L3"},
+  {q:"Universalism vs. Relativism in ethics?",a:"Universalism: right is right regardless of where/when ('Paying women less is always wrong').\n\nRelativism: different cultures/eras produce valid but different values; no universal way to resolve disagreements.",cat:"L3"},
+  {q:"What is Carroll's Pyramid of CSR (bottom to top)?",a:"Economic → Legal → Ethical → Philanthropic\n\nBusiness case: recruiting/retention, reduced risk, increased buyer preference.\nMoral case: the golden rule.",cat:"L3"},
+  {q:"What is greenwashing?",a:"Faking environmentally beneficial activities. Invites backlash.\n\nCSR activities should reflect a firm's actual identity and strategy — not just PR spin.",cat:"L3"},
+  {q:"What is strategy and what does SCA mean?",a:"Strategy = plan to win: long-term objectives + economic logic (higher WTP or lower costs) + resource allocation.\n\nSCA = Sustainable Competitive Advantage: ability to create value and attract participants even when competitors try to do the same.",cat:"L4"},
+  {q:"What is VRIO and what does it test for?",a:"Valuable: enables exploiting opportunities or reducing threats?\nRare: do many others have the same resource?\nInimitable: can others copy without great cost? (unique history, causal ambiguity, social complexity)\nOrganization: does the firm's structure support the resource's potential?\n\nAll four required for Sustained Competitive Advantage.",cat:"L4"},
+  {q:"What stage of the strategic process does SWOT analysis belong to?",a:"Step 2: Assessing the Current Reality (not formulating strategy).\n\nOrder: Mission/Values → Assess Reality → Formulate Strategy → Implement → Control → Feedback loop.",cat:"L4"},
+  {q:"What are the three levels of strategy?",a:"Corporate: what business(es) should we be in?\nBusiness: how should we compete in this industry?\nFunctional: how can functions (HR, marketing, ops) support business-level strategy?",cat:"L4"},
+  {q:"What are the four quadrants of the BCG Growth-Share Matrix?",a:"Star (high growth, high share): invest heavily\nCash Cow (low growth, high share): milk to fund ventures\nNew Venture/? (high growth, low share): invest cautiously\nDog (low growth, low share): consider divestment",cat:"L4"},
+  {q:"What are Porter's Five Forces?",a:"1. Threat of New Entry (barriers: patents, capital, brand)\n2. Bargaining Power of Suppliers\n3. Bargaining Power of Buyers\n4. Threat of Substitutes (other industries)\n5. Intensity of Rivalry\n\nAbout the INDUSTRY. Stronger forces = less attractive industry.",cat:"L5"},
+  {q:"Which Five Force is affected when important patents expire?",a:"Threat of New Entry increases — patents are a key barrier to entry. When they expire, competitors can enter with similar products.",cat:"L5"},
+  {q:"What are Porter's four generic strategies?",a:"1. Cost Leadership (broad scope, lower cost) — Walmart\n2. Differentiation (broad scope, higher WTP) — BMW\n3. Focus/Cost (narrow scope, lower cost)\n4. Focus/Differentiation (narrow scope, higher WTP) — REI\n\nDon't get 'stuck in the middle' doing two things badly.",cat:"L5"},
+  {q:"What is the difference between functional and divisional structures?",a:"Functional (U-Form): partitioned by input — similar skills grouped. Best in stable environments, small-medium orgs, few products.\n\nDivisional (M-Form): partitioned by output — same product/region/market. Best in moderately dynamic environments with multiple products.",cat:"L6"},
+  {q:"What are the weaknesses of the functional structure?",a:"Slow response to environmental changes\nSlower decision-making; management overload\nPoor interunit coordination\nLess innovation\nRestricted view of org goals",cat:"L6"},
+  {q:"What are the weaknesses of the matrix structure?",a:"Participants experience dual (or more) authority ('everyone thought they were my boss')\nTime-consuming, meeting-intensive\nDifficult to implement successfully\nAccountability can be unclear",cat:"L6"},
+  {q:"What are the three levels of organizational culture (iceberg model)?",a:"1. Artifacts & Behaviors (observable): ceremonies, stories, symbols. Hard to interpret without deeper levels.\n2. Values, Beliefs, Norms: what is considered important. Can be misleading.\n3. Basic Assumptions (deep): unstated, taken-for-granted. Most visible when challenged.",cat:"L7"},
+  {q:"What are the four quadrants of the Competing Values Framework?",a:"Clan: collaborate, internal + flexible → morale, development, commitment\nAdhocracy: create, external + flexible → innovation, growth\nHierarchy: control, internal + stable → efficiency, timeliness\nMarket: compete, external + stable → market share, profitability",cat:"L7"},
+  {q:"What are the three stages of organizational socialization?",a:"1. Anticipatory socialization: before joining — learning about culture/expectations\n2. Encounter: first contact with org reality; expectations meet actuality\n3. Change and Acquisition: mastery and adaptation; internalized culture",cat:"L7"},
+  {q:"When does strong culture help vs. hurt performance?",a:"Strong culture + adaptability/learning culture = high performance.\nStrong culture without adaptability = underperforms when environment changes.\n\nLiabilities: may misalign with strategy, breeds homogeneity, hard to change.",cat:"L7"},
+  {q:"What are the three forms of organizational change?",a:"Adaptive: 'We've seen this before.' Through normal structures; no-brainers.\nInnovative: 'New for the company.' Moderately difficult; feels like progress.\nRadically Innovative: 'Changes what we do and who we are.' Paradigm-breaking; heavy resistance.",cat:"L8"},
+  {q:"What are the three stages of Lewin's Change Model?",a:"1. Unfreezing: create the motivation to change\n2. Changing: learn new ways of doing things\n3. Refreezing: support and reinforce the change",cat:"L8"},
+  {q:"What is a disruptive technology?",a:"A technology with a different package of attributes from existing tech.\nPerforms worse on dimensions current customers care about.\nAppeals to new markets (hard to judge long-run size).\nAdds pressure on incumbents even while still inferior overall.\n\nTechnologies follow an S-curve: slow → rapid → plateau.",cat:"L8"},
+  {q:"What is the entrepreneurial mindset?",a:"Ability to continuously gather information and make decisions in complex, uncertain, dynamic environments.\n\nFueled by: need for achievement + openness to experience.",cat:"L8"},
+  {q:"Which Big Five trait is the most reliable predictor of job performance?",a:"Conscientiousness.\n\nAssociated with: dependable, responsible, achievement-oriented, persistent.\nMost consistent predictor of performance, leadership, and resilience across virtually all jobs.",cat:"L9"},
+  {q:"What are the four dimensions of emotional intelligence?",a:"Self-Awareness: read your own emotions\nSelf-Management: control emotions; act reliably and adaptably\nSocial Awareness: recognize others' emotions; empathy\nRelationship Management: use awareness to manage relationships\n\nCan be built and improved. High EI → better relationships, well-being, job satisfaction, OCB.",cat:"L9"},
+  {q:"What is the Dark Triad and its connection to leadership?",a:"Three co-occurring traits: Narcissism (grandiosity, entitlement), Machiavellianism (manipulativeness, cynicism), Psychopathy (lack of empathy, impulsivity).\n\nLeaders have a HIGHER likelihood of dark triad traits than the general population.",cat:"L9"},
+  {q:"What is selective perception and the halo effect?",a:"Selective perception: tendency to notice certain things and filter out others (4-stage social perception process).\n\nHalo effect: a general positive impression influences evaluation on a specific dimension (e.g., rating teamwork high because someone is technically skilled).",cat:"L9"},
+  {q:"What is the equity theory formula and what triggers motivation to act?",a:"OP/IP vs. ORP/IRP (your output/input ratio vs. referent's ratio)\n\nMotivation to act is high when the ratios DIFFER (inequity — either under or over-rewarded).\n\nKey: this is social COMPARISON, not just dissatisfaction with absolute pay.",cat:"L10"},
+  {q:"What is the expectancy theory formula?",a:"Motivation = (E→P) × Σ[(P→O) × V]\n\nE→P: effort leads to performance (self-efficacy, training)\nP→O: performance leads to outcome (manager reliability, locus of control)\nV (Valence): value placed on the outcome\n\nAll three must be high.",cat:"L10"},
+  {q:"What is the Job Characteristics Model?",a:"Five core characteristics → three psychological states → work outcomes\n\nSkill variety + Task identity + Task significance → Experienced meaningfulness\nAutonomy → Experienced responsibility\nFeedback → Knowledge of results\n\n→ High motivation, performance, satisfaction; low turnover",cat:"L10"},
+  {q:"Why can financial incentives undermine intrinsic motivation?",a:"Signal the task is 'work,' not 'interesting'\nSignal employer distrust\nShift reasons for working from task to reward\nEncourage narrow cost-benefit thinking\n\nMoney motivates compliance — but compliance may be all you get.",cat:"L11"},
+  {q:"What is procedural fairness and when is it most important?",a:"Fair process in how decisions are made.\n\nMost important when outcomes are UNFAVORABLE — helps people accept outcomes they don't like by showing the process was fair, not arbitrary.",cat:"L11"},
+  {q:"What are the three types of task interdependence?",a:"Pooled: work independently, pool outputs. Least coordination needed. (e.g. sales org)\nSequential: assembly-line; output of one is input to next.\nReciprocal: each member depends on all others at multiple points. Most coordination needed; process is most critical here.",cat:"L12"},
+  {q:"What stage of the group framework does Tuckman's model belong to?",a:"The DEVELOPMENT phase (Context → Design → Development → Outcomes).\n\nThe Development phase encompasses: Tuckman's stages, punctuated equilibrium, norms and values, and ongoing group process.",cat:"L12"},
+  {q:"What is the group performance formula?",a:"Actual Performance = Potential Performance + Process Gains − Process Losses\n\nProcess gains: effective coordination + motivation (synergy, knowledge sharing)\nProcess losses: social loafing, coordination failures",cat:"L12"},
+  {q:"Task conflict vs. relationship conflict?",a:"Task conflict: about the work itself → functional → associated with process GAINS (better decisions, more ideas)\n\nRelationship conflict: about interpersonal issues or style → dysfunctional → associated with process LOSSES",cat:"L12"},
+  {q:"Why does groupthink happen?",a:"Social conformity pressures:\n1. Informational influence: you assume others know something you don't → defer to apparent consensus\n2. Normative influence: you feel you need to act/think a certain way to fit in\n\nStronger when members strongly identify with the group.",cat:"L12"},
+  {q:"What are the three position-based sources of power?",a:"Legitimate: right to command compliance by formal role\nReward: ability to incentivize compliance via promised/granted rewards\nCoercive: ability to force compliance via punishment\n\nAnyone in the role has these. Formal authority is a very limited long-term source.",cat:"L13"},
+  {q:"Why does coercive power weaken other power sources over time?",a:"Coercive power reduces trust, liking, and credibility over time.\n\nThis directly dilutes:\n- Referent power (people no longer want to be like you)\n- Expert power (they question your judgment)\n- Informational power (they stop trusting your arguments)",cat:"L13"},
+  {q:"What are the four behaviors of transformational leadership?",a:"1. Inspirational Motivation: charisma and vision\n2. Idealized Influence: ethicality and focus on the greater good; moral role model\n3. Individualized Consideration: enable follower growth; attend to individual needs\n4. Intellectual Stimulation: challenge followers to think and be creative",cat:"L14"},
+  {q:"Transactional vs. transformational leadership — when to use each?",a:"Transactional: clarify goals, provide rewards/punishments. Necessary BASELINE for day-to-day effectiveness.\n\nTransformational: inspire beyond self-interest. Best for EXCEPTIONAL things — change and innovation.\n\nBoth are needed. Passive (laissez-faire) is the failure mode.",cat:"L14"},
+  {q:"What is LMX (Leader-Member Exchange)?",a:"Leaders have different reciprocal exchange relationships with each subordinate.\n\nHigh-quality (in-group) exchange: more control for subordinate + higher performance and positive behaviors for leader.\n\nSubordinates can influence quality of exchange with their leader.",cat:"L14"},
+  {q:"Is ethnocentrism more attributable to ignorance or conscious prejudice?",a:"IGNORANCE.\n\nEthnocentrism most often stems from lack of cross-cultural awareness, not intentional bias.\n\nCore cause of most cultural misunderstandings: different values and norms.",cat:"L14"},
+  {q:"What are enacted, espoused, and observed values?",a:"Espoused: what the org says it values (mission statements, stated principles)\nEnacted: what actually guides behavior day-to-day\nObserved: what outsiders or newcomers see\n\nGap between espoused and enacted = major source of cultural confusion and mistrust.",cat:"L7"},
+];
+
+// ── QUIZ DATA ──
+const QUIZ=[
+  {q:"'Our numbers aren't looking good and we need a strategy for success.' Which function of management is this?",opts:["Organizing","Leading","Planning","Controlling"],ans:2,exp:"Planning = setting goals and deciding how to achieve them. Recognizing a performance gap and needing a strategy is the foundation of the planning function.",cat:"Foundations"},
+  {q:"As managers rise in the organization, how does their skill emphasis change?",opts:["Technical → Human → Conceptual","Human → Conceptual → Technical","Technical → Conceptual → Human","Conceptual → Technical → Human"],ans:2,exp:"Technical skills dominate at entry-level. As managers rise, emphasis shifts toward Conceptual (systems thinking) and then Human (working with people across the org).",cat:"Foundations"},
+  {q:"Which type of stakeholder is a supplier?",opts:["Internal stakeholder","General environment stakeholder","External value-chain stakeholder","Government regulator"],ans:2,exp:"Suppliers are external stakeholders in the value chain — they directly contribute to producing/delivering the product. The other external category (unions, community, government) does not contribute directly.",cat:"Foundations"},
+  {q:"Which environmental characteristic describes how much this year resembles prior years?",opts:["Dynamism","Complexity","Uncertainty","Stability"],ans:2,exp:"Uncertainty = how predictable the environment is relative to prior years. Dynamism = rate of change. Complexity = number of elements affecting the firm.",cat:"Foundations"},
+  {q:"'Paying women less than men for the same work is wrong, no matter where or when.' This reflects which ethical perspective?",opts:["Relativism","Utilitarianism","Universalism","Justice approach"],ans:2,exp:"Universalism holds that right is right regardless of culture or era. The statement explicitly says 'no matter where or when' — the hallmark of the universalist position.",cat:"Ethics"},
+  {q:"Carroll's Pyramid of CSR from bottom to top is:",opts:["Legal → Economic → Ethical → Philanthropic","Economic → Legal → Ethical → Philanthropic","Ethical → Legal → Economic → Philanthropic","Philanthropic → Ethical → Legal → Economic"],ans:1,exp:"Bottom (required by global capitalism) to top (desired by stakeholders): Economic → Legal → Ethical → Philanthropic.",cat:"Ethics"},
+  {q:"What is greenwashing?",opts:["Investing in renewable energy","Faking environmentally beneficial activities","Reducing a firm's carbon footprint","Reporting environmental metrics to the SEC"],ans:1,exp:"Greenwashing = falsely claiming environmentally beneficial activities. It invites backlash and is a classic example of espoused values not matching enacted values.",cat:"Ethics"},
+  {q:"Which element of the fraud triangle is the ONLY one companies can reduce through internal controls?",opts:["Pressure","Rationalization","Opportunity","Motivation"],ans:2,exp:"Opportunity is the only element companies can reduce through internal controls (segregation of duties, physical controls, etc.). Pressure and rationalization are internal to the person.",cat:"Ethics"},
+  {q:"SWOT analysis belongs in which step of the strategy formulation process?",opts:["Establishing mission and values","Assessing the current reality","Formulating the strategy","Implementing through people"],ans:1,exp:"SWOT is a situation analysis tool — it belongs in Step 2: Assessing the Current Reality. Strategy formulation (Step 3) comes after you understand your situation.",cat:"Strategy"},
+  {q:"In VRIO analysis, which criterion asks 'Can others copy it without incurring great cost?'",opts:["Valuable","Rare","Inimitable","Organization"],ans:2,exp:"Inimitable = the resource is hard to copy due to unique historical conditions, causal ambiguity, or social complexity. Even if a resource is valuable and rare, imitable resources only provide temporary advantage.",cat:"Strategy"},
+  {q:"Which of Porter's Five Forces is most directly affected when important patents expire?",opts:["Bargaining power of buyers","Threat of new entry","Intensity of rivalry","Threat of substitutes"],ans:1,exp:"Patents are a key barrier to entry. When they expire, new competitors can enter with similar products, increasing the threat of new entry.",cat:"Strategy"},
+  {q:"Walmart's strategy of 'lowering the cost of living for everyone' best exemplifies which generic strategy?",opts:["Differentiation","Focus/Differentiation","Cost Leadership","Focus/Cost"],ans:2,exp:"Walmart is the classic example of Cost Leadership — broad market scope with a lower cost competitive advantage.",cat:"Strategy"},
+  {q:"A company serving only the outdoor recreation market with premium products is using which generic strategy?",opts:["Cost Leadership","Differentiation","Focus/Differentiation","Focus/Cost"],ans:2,exp:"REI-style: narrow target (outdoor recreation niche) + differentiation (premium products, outdoor lifestyle identity) = Focus/Differentiation.",cat:"Strategy"},
+  {q:"A company organizes by Marketing, Finance, Production, and HR departments. What structure is this?",opts:["Divisional (M-Form)","Matrix","Functional (U-Form)","Horizontal"],ans:2,exp:"Functional (U-Form) groups people by input — those with similar skills doing similar tasks. Marketing, Finance, Production, HR are functional departments.",cat:"OrgDesign"},
+  {q:"The matrix structure's biggest weakness is:",opts:["Slow response to environment","Reduces economies of scale","Dual authority and unclear accountability","Cannot adapt to multiple products"],ans:2,exp:"The defining weakness of matrix is dual (or more) authority — 'everyone who could fog a mirror thought they were my boss.' This makes it time-consuming and accountability unclear.",cat:"OrgDesign"},
+  {q:"Culture is most visible at which level when it is challenged?",opts:["Artifacts and behaviors","Values and beliefs","Basic assumptions","Organizational norms"],ans:2,exp:"Basic assumptions are the deepest level — unstated, taken-for-granted beliefs about reality, time, and human nature. They are most visible precisely when challenged.",cat:"OrgDesign"},
+  {q:"Zappos has 'Create Fun and a Little Weirdness' as a core value. This is best classified as which level of culture?",opts:["Basic assumption","Artifact","Espoused value","Enacted value"],ans:2,exp:"Stated core values are espoused values — what the org says it values. Whether they become enacted (actually guiding behavior) is a separate question.",cat:"OrgDesign"},
+  {q:"A strong culture without an adaptability/learning culture leads to:",opts:["Higher performance in all environments","Lower performance when the environment changes","More innovation and creativity","Stronger goal alignment always"],ans:1,exp:"Research shows strong culture only improves performance when it also has an adaptability/learning component. Without it, a strong culture underperforms when the environment shifts.",cat:"OrgDesign"},
+  {q:"Which type of organizational change involves paradigm-breaking transformation of structure, culture, and practices?",opts:["Adaptive change","Innovative change","Radically innovative change","Proactive change"],ans:2,exp:"Radically innovative change = paradigm-breaking. It transforms structure, culture, and practices; can involve new products and new markets; encounters heavy resistance.",cat:"Change"},
+  {q:"What is innovation, by definition?",opts:["A novel idea that is documented","A useful idea that could be implemented","A novel and useful idea that is successfully implemented","A technological improvement to an existing product"],ans:2,exp:"Implementation is what distinguishes innovation from just an idea. All three elements — novel, useful, AND implemented — are required.",cat:"Change"},
+  {q:"Disruptive technologies initially:",opts:["Outperform existing products on all dimensions","Appeal to existing customers immediately","Perform worse on dimensions current customers care about","Are adopted by mainstream markets first"],ans:2,exp:"Disruptive technologies perform worse on dimensions that matter to current customers — that's why incumbents initially dismiss them. They appeal to new markets and improve over time to eventually challenge incumbents.",cat:"Change"},
+  {q:"Which Big Five trait is the most reliable predictor of job performance?",opts:["Openness to experience","Extraversion","Conscientiousness","Agreeableness"],ans:2,exp:"Conscientiousness (dependable, responsible, achievement-oriented, persistent) is the most consistent predictor of performance, leadership, and resilience across virtually all jobs.",cat:"People"},
+  {q:"A manager gives an employee a high teamwork rating because that employee is very technically skilled. What bias is this?",opts:["Recency bias","Selective perception","Halo effect","Attribution error"],ans:2,exp:"Halo effect: a general positive impression of a person (technical skill) bleeds into evaluation of a separate, specific dimension (teamwork).",cat:"People"},
+  {q:"If you're dissatisfied with your raise and complain to your manager, is this an illustration of equity theory?",opts:["Yes — equity theory explains all pay dissatisfaction","No — equity theory is specifically about social comparison ratios","Yes — any feelings of unfairness illustrate equity theory","No — equity theory only applies to underpayment"],ans:1,exp:"Equity theory requires comparing your input/output ratio to a relevant social referent's ratio. Simply being unhappy with your absolute pay is not the mechanism equity theory describes.",cat:"People"},
+  {q:"To increase a subordinate's P→O expectancy (instrumentality) in expectancy theory, a manager should:",opts:["Set more difficult goals","Give larger bonuses","Demonstrate a track record of delivering promised rewards","Provide more training to improve effort-to-performance beliefs"],ans:2,exp:"P→O expectancy = belief that performance leads to a valued outcome. Increase it by showing you reliably deliver promised rewards and that you control the relevant resources. Training increases E→P, not P→O.",cat:"People"},
+  {q:"Which approach to motivation is MOST appropriate when managers want employees to go beyond their job description?",opts:["Financial incentives","Extrinsic rewards","Intrinsic motivation","Coercive power"],ans:2,exp:"Intrinsic motivation is associated with extra-role behavior — going beyond what's required. Financial (extrinsic) rewards motivate compliance but may not motivate the discretionary effort organizations need.",cat:"People"},
+  {q:"Procedural fairness is most important when:",opts:["Outcomes are favorable","Outcomes are unfavorable","Compensation is transparent","Goals are difficult"],ans:1,exp:"Fair process matters most when outcomes are unfavorable. It helps people understand that even a bad outcome was not arbitrary, maintaining trust in the system.",cat:"People"},
+  {q:"Why is team process more important for reciprocal interdependence than pooled interdependence?",opts:["Reciprocal teams are always larger","Pooled teams have more task conflict","In reciprocal interdependence, coordination failures cascade and create larger process losses","In pooled interdependence, every member depends on every other member"],ans:2,exp:"In reciprocal interdependence, each member depends on all others at multiple points. One failure cascades across the whole team. In pooled interdependence, members work more independently and failures are more contained.",cat:"Teams"},
+  {q:"Groupthink is caused by which two types of social pressure?",opts:["Informational and normative influence","Coercive and referent power","Task and relationship conflict","Social loafing and diffused responsibility"],ans:0,exp:"Informational influence: you defer because you think others know something you don't. Normative influence: you conform to fit in. Both increase when members strongly identify with the group.",cat:"Teams"},
+  {q:"When would integrating be a better conflict style than compromising?",opts:["When a quick decision is needed","When the issue is minor and the relationship doesn't matter","When the issue is complex and important and a win-win solution may be possible","When both parties are equally powerful"],ans:2,exp:"Integrating is better when: the issue is complex and important, the relationship matters long-term, and a win-win may genuinely exist. Compromising is faster but leads to expedient rather than effective solutions.",cat:"Teams"},
+  {q:"Coercive power weakens a leader's other power sources over time because it:",opts:["Increases legitimate power","Reduces trust, liking, and credibility, diluting referent and expert power","Shifts authority to subordinates","Makes rewards less valuable"],ans:1,exp:"Coercive power may force compliance short-term, but it reduces trust and credibility over time — directly eroding referent power (no longer liked), expert power (judgment questioned), and informational power (arguments distrusted).",cat:"Teams"},
+  {q:"Transformational leadership is most appropriate for:",opts:["Day-to-day performance management","Routine goal-setting and monitoring","Exceptional situations requiring change and inspiring people beyond self-interest","Situations where passive leadership has failed"],ans:2,exp:"Transformational leadership = exceptional things (change, innovation, inspiring beyond self-interest). Transactional leadership handles the necessary day-to-day baseline. Both are needed; passive is the failure mode.",cat:"Teams"},
+];
+
+// ── TOPIC QUIZ DATA ──
+const CQ_BANKS=[
+  // L1-2 Foundations
+  [{q:"Which management function involves monitoring performance and taking corrective action?",opts:["Planning","Organizing","Leading","Controlling"],ans:3,exp:"Controlling = monitoring performance vs. goals and taking corrective action when needed."},
+   {q:"A VP of Marketing is best described as:",opts:["General manager","Functional manager","Line manager","C-suite executive"],ans:1,exp:"VPs of functional areas (marketing, finance, HR) are functional managers — responsible for one area. General managers have cross-functional responsibility."},
+   {q:"Why do organizations care about external stakeholders beyond just shareholders?",opts:["External stakeholders have more money","They may act to influence the org and affect its outcomes","They are required to by SEC regulations","They only matter in non-profits"],ans:1,exp:"Stakeholders with stakes in org activities may be motivated to act in ways that affect the org — positively or negatively. Orgs also have obligations as community citizens."},
+   {q:"The PESTEL framework is used to analyze which environment?",opts:["Task environment","Stakeholder environment","General environment","Competitive environment"],ans:2,exp:"PESTEL (Political, Economic, Sociocultural, Technological, Environmental, Legal) maps the general environment — macro-level forces beyond the task environment."},
+   {q:"Which is true about management skills?",opts:["Technical skills become more important as managers rise","Human skills are innate and cannot be developed","All three skill types can be acquired","Conceptual skills only matter for CEOs"],ans:2,exp:"All three skill types — technical, conceptual, and human — can be acquired and developed. This is a key insight: management skills are learnable."}],
+  // L3 Ethics & CSR
+  [{q:"Which ethical approach asks: 'What produces the greatest good for the greatest number?'",opts:["Individual approach","Moral rights approach","Utilitarian approach","Justice approach"],ans:2,exp:"Utilitarian approach = greatest good for the greatest number. The individual approach focuses on long-term self-interest; moral rights on fundamental rights; justice on impartial fairness."},
+   {q:"A company states it values sustainability but continues to pollute. The gap between stated and actual values is best described as:",opts:["Strong culture","The difference between espoused and enacted values","Adaptive change","Normative influence"],ans:1,exp:"Espoused values = what the org claims to value. Enacted values = what actually guides behavior. A gap between them is a major source of cultural confusion and mistrust."},
+   {q:"Which element of the fraud triangle is the ONLY one companies can reduce through internal controls?",opts:["Pressure","Rationalization","Opportunity","Motivation"],ans:2,exp:"Companies cannot eliminate pressure (external financial stress) or rationalization (internal justification), but they CAN reduce opportunity through segregation of duties, physical controls, and oversight."},
+   {q:"CSR activities are most effective when they:",opts:["Maximize philanthropic giving","Are mandated by government regulation","Reflect a firm's actual identity and strategy","Focus exclusively on environmental issues"],ans:2,exp:"CSR should authentically reflect the firm's identity and strategy. Greenwashing (faking CSR) invites backlash. Effective CSR creates shared value — not just PR spin."},
+   {q:"Which is NOT part of Carroll's Pyramid of CSR?",opts:["Economic responsibility","Technological responsibility","Ethical responsibility","Philanthropic responsibility"],ans:1,exp:"Carroll's Pyramid: Economic → Legal → Ethical → Philanthropic. Technological responsibility is not one of the four levels."}],
+  // L4-5 Strategy
+  [{q:"A company assesses whether its resources enable exploiting opportunities or reducing threats. Which VRIO criterion is this?",opts:["Rare","Inimitable","Valuable","Organization"],ans:2,exp:"Valuable asks: does this resource enable the firm to exploit opportunities or neutralize threats? It's the first criterion — a resource that doesn't do this cannot be a source of competitive advantage."},
+   {q:"BCG Matrix: a product with LOW market share in a HIGH growth market is called a:",opts:["Star","Dog","Cash Cow","New Venture (Question Mark)"],ans:3,exp:"New Venture (Question Mark): high growth but low market share. Risky — may become a Star or a Dog. Invest cautiously."},
+   {q:"BMW positions itself as a premium automaker for quality-focused customers. Which generic strategy is this?",opts:["Cost leadership","Focus/Cost","Differentiation","Focus/Differentiation"],ans:2,exp:"BMW uses Differentiation — broad market scope (not a narrow niche) with a premium, quality-based competitive advantage that increases willingness to pay."},
+   {q:"Five Forces analysis tells you about:",opts:["A specific company's competitive position","The overall attractiveness and structure of an industry","How a company should set its prices","Which resources give a firm SCA"],ans:1,exp:"Five Forces is an industry-level analysis tool — it tells you how big the pie is and who gets what piece, and why. It's about the industry, not any single firm."},
+   {q:"A startup considers manufacturing its own components instead of buying from suppliers. The main strategic reason for this is:",opts:["It will always reduce costs","Vertical integration responds to supply uncertainty and hold-up risk","It increases geographic scope","It always creates synergies"],ans:1,exp:"Vertical integration is primarily a response to uncertainty — high supply uncertainty, small-numbers bargaining/hold-up risk, and information asymmetry. It can also create synergy, but that's secondary."}],
+  // L6-7 Org Design & Culture
+  [{q:"Strategy drives structure means:",opts:["The org chart determines what strategy is possible","The right structure fits and enables the chosen strategy","Culture must match the org chart","All firms in an industry should use the same structure"],ans:1,exp:"'Strategy drives structure' = the structure you choose should fit and enable your strategy. Cost leadership → efficiency-oriented structure. Differentiation → structure enabling innovation and coordination."},
+   {q:"A large consumer goods company runs three independent product divisions (beverages, snacks, personal care) each with its own P&L. This is:",opts:["Functional (U-Form)","Matrix","Divisional (M-Form)","Horizontal"],ans:2,exp:"Divisional (M-Form) = partitioned by output (product, region, market). Each division operates as a profit center. Classic for large firms with multiple distinct product lines."},
+   {q:"Which organizational structure is BEST suited for a complex, high-uncertainty environment with high task interdependence?",opts:["Functional","Simple","Divisional","Matrix"],ans:3,exp:"Matrix = functional AND divisional simultaneously. Best context: complex/moderate uncertainty, high interdependence, non-routine tasks, functional resources in short supply.",cat:"OrgDesign"},
+   {q:"Organizational culture comes from which source primarily?",opts:["The org chart","Formal policies and procedures","Founders' values, shared history, and continual reproduction through interactions","Annual employee surveys"],ans:2,exp:"Culture emerges from shared history, founders' values, industries, professions, and strategy — and is continually reproduced through ongoing interactions, management actions, org systems, and selection/socialization practices.",cat:"OrgDesign"},
+   {q:"Which Competing Values Framework quadrant emphasizes adaptability, creativity, and external focus?",opts:["Clan","Hierarchy","Market","Adhocracy"],ans:3,exp:"Adhocracy: thrust = create, external focus + flexibility, ends = innovation and growth. Examples: startups, R&D firms, creative agencies."}],
+  // L8 Change & Innovation
+  [{q:"63-70% of change efforts fail. The primary reason is:",opts:["Lack of technology","Insufficient budget","The process of managing change is consistently mishandled","Employees are inherently resistant"],ans:2,exp:"The issues relating to the PROCESS of change are consistent across organizations — it's not what changes but HOW change is managed that fails. Change is costly, effortful, and takes longer than expected.",cat:"Change"},
+   {q:"Lewin's 'Refreezing' stage involves:",opts:["Creating the motivation to change","Learning new behaviors and processes","Supporting and reinforcing the change so it sticks","Identifying what needs to change"],ans:2,exp:"Refreezing = the third stage. After change has happened, refreezing means supporting and reinforcing the new behaviors, structures, and culture so the organization doesn't revert.",cat:"Change"},
+   {q:"A company's new ERP system improves existing workflows without changing the business model. This is best classified as:",opts:["Radically innovative change","Innovative change","Adaptive change","Proactive change"],ans:1,exp:"Innovative change = new for the company, moderately difficult, but within normal structures. It doesn't transform who the company is (that's radical). It's not 'we've seen this before' either (that's adaptive).",cat:"Change"},
+   {q:"What makes innovation different from just a good idea?",opts:["It must involve technology","It must be patented","It must be successfully implemented","It must be novel"],ans:2,exp:"Implementation is what separates innovation from just an idea. The definition: a novel and useful idea that is successfully implemented.",cat:"Change"},
+   {q:"The entrepreneurial mindset is fueled by which two traits?",opts:["Conscientiousness and extraversion","Need for achievement and openness to experience","Internal locus of control and self-efficacy","Risk tolerance and agreeableness"],ans:1,exp:"Entrepreneurial mindset = ability to gather information and make decisions in complex, uncertain, dynamic environments. Fueled by: need for achievement (drive) and openness to experience (curiosity, creativity).",cat:"Change"}],
+  // L9-11 Personality & Motivation
+  [{q:"Which Big Five trait predicts performance specifically in leadership and customer service roles?",opts:["Conscientiousness","Agreeableness","Openness to Experience","Emotional Stability (low Neuroticism)"],ans:3,exp:"Emotional Stability (reverse of Neuroticism) predicts performance in roles requiring composure under pressure, like leadership and customer service. Conscientiousness predicts performance most broadly.",cat:"People"},
+   {q:"High Core Self-Evaluation (CSE) is associated with:",opts:["Higher stress and burnout","Lower performance but higher life satisfaction","Good job performance, job/life satisfaction, higher income, lower stress","External locus of control"],ans:2,exp:"High CSE = positive self-assessment across all four components (self-efficacy, self-esteem, internal locus of control, emotional stability) → better outcomes across performance, satisfaction, income, and stress.",cat:"People"},
+   {q:"Under the Job Characteristics Model, which characteristic creates 'experienced responsibility for work outcomes'?",opts:["Skill variety","Task significance","Autonomy","Feedback"],ans:2,exp:"Autonomy → Experienced Responsibility. Skill variety + Task identity + Task significance → Meaningfulness. Feedback → Knowledge of results.",cat:"People"},
+   {q:"Goal-setting theory is most effective when goals are:",opts:["General and aspirational","Easily achievable to build confidence","SMART: Specific, Measurable, Attainable, Results-oriented, Timely","Set by managers without employee input"],ans:2,exp:"SMART goals work because they direct attention, regulate effort, increase persistence, and encourage use of specific strategies and action plans.",cat:"People"},
+   {q:"Money is a powerful extrinsic motivator to produce:",opts:["Creative, innovative behavior","Long-term commitment","Compliance","Extra-role behavior"],ans:2,exp:"Money motivates compliance — doing what's required. But compliance may be all you get. Intrinsic motivation is needed for creativity, innovation, long-term commitment, and extra-role behavior.",cat:"People"}],
+  // L12-14 Teams, Power & Leadership
+  [{q:"In pooled interdependence, team process is LESS critical because:",opts:["Members have more expertise","Members work more independently and failures are contained","The tasks are more complex","There is less social loafing"],ans:1,exp:"In pooled interdependence, members work independently and combine outputs. Coordination failures don't cascade — they're more contained. In reciprocal interdependence, every failure affects everyone.",cat:"Teams"},
+   {q:"Task conflict is associated with process:",opts:["Losses, because it reduces morale","Gains, because it improves decision quality and brings in more perspectives","Losses, because it leads to relationship conflict","Gains, because it always leads to groupthink"],ans:1,exp:"Task conflict (about the work) is functional — it surfaces different perspectives, leads to better decisions, and is associated with process gains. Relationship conflict (interpersonal) is the damaging kind.",cat:"Teams"},
+   {q:"Which is a person-based (informal) source of power?",opts:["Legitimate power","Coercive power","Reward power","Referent power"],ans:3,exp:"Referent power derives from personal characteristics — others like, want to know, or want to be like you. Expert and Informational power are also person-based. Legitimate, Reward, and Coercive are position-based.",cat:"Teams"},
+   {q:"Servant leadership is best described as:",opts:["Leaders who focus on their own growth first","Leaders who use transactional exchanges effectively","Leaders who seek to benefit all stakeholders with care and compassion","Leaders who inspire through vision and charisma"],ans:2,exp:"Servant leadership = care, concern, and compassion for all stakeholders. Positively related to follower positive attitudes, negatively related to burnout and turnover.",cat:"Teams"},
+   {q:"What does the Berkeley cookie experiment demonstrate about power?",opts:["Power reduces work performance","Power holders are more likely to violate norms about equal sharing","Power increases empathy and perspective-taking","Power reduces in-group favoritism"],ans:1,exp:"In the Berkeley cookie experiment, people primed to feel powerful were more likely to violate the norm of equal sharing. Research broadly confirms: power is associated with norm violations, over-claiming credit, and under-claiming responsibility.",cat:"Teams"}],
+];
+
+// ── TAB SWITCH ──
+function sw(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  document.getElementById('panel-'+id).classList.add('on');
+  btn.classList.add('on');
+}
+
+// ── FLASHCARDS ──
+let fcOrd=[...Array(CARDS.length).keys()],fcI=0,fcKn=0;
+function renderFC(){
+  const c=CARDS[fcOrd[fcI]];
+  document.getElementById('fcq').textContent=c.q;
+  document.getElementById('fca').textContent=c.a;
+  document.getElementById('fccat').textContent=c.cat;
+  document.getElementById('fccat2').textContent=c.cat;
+  document.getElementById('fcctr').textContent=(fcI+1)+' / '+CARDS.length;
+  document.getElementById('fcknew').textContent=fcKn+' known';
+  document.getElementById('fcbar').style.width=(fcKn/CARDS.length*100)+'%';
+  document.getElementById('fccard').classList.remove('flipped');
+}
+function flipFC(){document.getElementById('fccard').classList.toggle('flipped');}
+function nextFC(){fcI=(fcI+1)%CARDS.length;renderFC();}
+function prevFC(){fcI=(fcI-1+CARDS.length)%CARDS.length;renderFC();}
+function markFC(k){if(k)fcKn=Math.min(fcKn+1,CARDS.length);nextFC();}
+function shuffleFC(){
+  for(let i=fcOrd.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[fcOrd[i],fcOrd[j]]=[fcOrd[j],fcOrd[i]];}
+  fcI=0;fcKn=0;renderFC();
+}
+renderFC();
+
+// ── PRACTICE QUIZ ──
+let qPool=[],qI=0,qOk=0,qCat='all';
+function setQcat(c,btn){qCat=c;document.querySelectorAll('#panel-quiz .fp').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+function startQuiz(){
+  qPool=qCat==='all'?[...QUIZ]:QUIZ.filter(q=>q.cat===qCat);
+  for(let i=qPool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[qPool[i],qPool[j]]=[qPool[j],qPool[i]];}
+  qI=0;qOk=0;
+  document.getElementById('qsetup').style.display='none';
+  document.getElementById('qresult').style.display='none';
+  document.getElementById('qactive').style.display='block';
+  renderQ();
+}
+function renderQ(){
+  if(qI>=qPool.length){showResult();return;}
+  const q=qPool[qI];
+  document.getElementById('qnum').textContent='Q '+(qI+1)+' of '+qPool.length;
+  document.getElementById('qsc').textContent=qOk+' correct';
+  document.getElementById('qbar').style.width=(qI/qPool.length*100)+'%';
+  document.getElementById('qtext').textContent=q.q;
+  const opts=document.getElementById('qopts');opts.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    const b=document.createElement('button');b.className='opt';b.textContent=o;
+    b.onclick=()=>ansQ(i,b);opts.appendChild(b);
+  });
+  document.getElementById('qexp').className='exp';
+  document.getElementById('qnext').style.display='none';
+}
+function ansQ(i,btn){
+  const q=qPool[qI];
+  document.querySelectorAll('#panel-quiz .opt').forEach(b=>b.disabled=true);
+  if(i===q.ans){btn.classList.add('correct');qOk++;}
+  else{btn.classList.add('wrong');document.querySelectorAll('#panel-quiz .opt')[q.ans].classList.add('correct');}
+  document.getElementById('qexp').textContent=q.exp;
+  document.getElementById('qexp').className='exp on';
+  document.getElementById('qnext').style.display='block';
+  document.getElementById('qsc').textContent=qOk+' correct';
+}
+function nextQ(){qI++;renderQ();}
+function showResult(){
+  document.getElementById('qactive').style.display='none';
+  document.getElementById('qresult').style.display='block';
+  const pct=Math.round(qOk/qPool.length*100);
+  document.getElementById('rpct').textContent=pct+'%';
+  document.getElementById('rmsg').textContent=qOk+' of '+qPool.length+' correct — '+(pct>=90?'Excellent. You\'re ready.':pct>=75?'Good work. Review missed topics.':'Keep reviewing.');
+}
+function resetQuiz(){
+  document.getElementById('qsetup').style.display='block';
+  document.getElementById('qactive').style.display='none';
+  document.getElementById('qresult').style.display='none';
+}
+
+// ── TOPIC QUIZZES ──
+let cqCurrent=0,cqPool=[],cqI=0,cqOk=0;
+function setCQ(i,btn){
+  cqCurrent=i;
+  document.querySelectorAll('#panel-cquiz .fp').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+function startCQ(){
+  cqPool=[...CQ_BANKS[cqCurrent]];
+  cqI=0;cqOk=0;
+  document.getElementById('cq-setup').style.display='none';
+  document.getElementById('cq-result').style.display='none';
+  document.getElementById('cq-active').style.display='block';
+  renderCQ();
+}
+function renderCQ(){
+  if(cqI>=cqPool.length){showCQResult();return;}
+  const q=cqPool[cqI];
+  document.getElementById('cq-num').textContent='Q '+(cqI+1)+' of '+cqPool.length;
+  document.getElementById('cq-sc').textContent=cqOk+' correct';
+  document.getElementById('cq-bar').style.width=(cqI/cqPool.length*100)+'%';
+  document.getElementById('cq-text').textContent=q.q;
+  const opts=document.getElementById('cq-opts');opts.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    const b=document.createElement('button');b.className='opt';b.textContent=o;
+    b.onclick=()=>ansCQ(i,b);opts.appendChild(b);
+  });
+  document.getElementById('cq-exp').className='exp';
+  document.getElementById('cq-next').style.display='none';
+}
+function ansCQ(i,btn){
+  const q=cqPool[cqI];
+  document.querySelectorAll('#cq-opts .opt').forEach(b=>b.disabled=true);
+  if(i===q.ans){btn.classList.add('correct');cqOk++;}
+  else{btn.classList.add('wrong');document.querySelectorAll('#cq-opts .opt')[q.ans].classList.add('correct');}
+  document.getElementById('cq-exp').textContent=q.exp;
+  document.getElementById('cq-exp').className='exp on';
+  document.getElementById('cq-next').style.display='block';
+  document.getElementById('cq-sc').textContent=cqOk+' correct';
+}
+function nextCQ(){cqI++;renderCQ();}
+function showCQResult(){
+  document.getElementById('cq-active').style.display='none';
+  document.getElementById('cq-result').style.display='block';
+  const pct=Math.round(cqOk/cqPool.length*100);
+  document.getElementById('cq-rpct').textContent=pct+'%';
+  document.getElementById('cq-rmsg').textContent=cqOk+' of '+cqPool.length+' correct — '+(pct>=80?'Solid. You know this topic.':pct>=60?'Review the explanations above.':'Go back to lecture notes for this section.');
+}
+function resetCQ(){
+  document.getElementById('cq-setup').style.display='block';
+  document.getElementById('cq-active').style.display='none';
+  document.getElementById('cq-result').style.display='none';
+}
+</script>
+</body>
+</html>
