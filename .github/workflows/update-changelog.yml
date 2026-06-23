@@ -1,0 +1,86 @@
+name: Update Changelog
+
+# Triggers when a PR is closed (merged or not)
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  update-changelog:
+    # Only run if the PR was actually merged AND has the "changelog" label
+    if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'changelog')
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Extract "What's New" section and update whats-new-data.js
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            // Matches the existing data.js convention: a plain JS file at repo root
+            // exposing a `const` array, loaded via <script src="..."> on the page.
+            const dataPath = 'whats-new-data.js';
+            const body = context.payload.pull_request.body || '';
+
+            // Grab text between "## What's New" and the next "## " heading (or end of string)
+            const match = body.match(/## What's New\s*\n([\s\S]*?)(\n## |$)/);
+            const description = match ? match[1].trim() : '';
+
+            if (!description) {
+              core.setFailed(
+                "No content found under '## What's New' in the PR description. " +
+                "Add a plain-language description under that heading and re-merge."
+              );
+              return;
+            }
+
+            const newEntry = {
+              title: context.payload.pull_request.title,
+              date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+              description: description,
+              prNumber: context.payload.pull_request.number
+            };
+
+            let entries = [];
+            if (fs.existsSync(dataPath)) {
+              // Pull the array out of the existing "const CHANGELOG = [...]" file
+              const existing = fs.readFileSync(dataPath, 'utf8');
+              const arrayMatch = existing.match(/const CHANGELOG\s*=\s*(\[[\s\S]*?\]);/);
+              if (arrayMatch) {
+                entries = JSON.parse(arrayMatch[1]);
+              }
+            }
+
+            entries.unshift(newEntry); // newest entry goes first
+
+            const fileContents =
+              `// Auto-updated by .github/workflows/update-changelog.yml — do not edit the array shape by hand\n` +
+              `const CHANGELOG = ${JSON.stringify(entries, null, 2)};\n`;
+
+            fs.writeFileSync(dataPath, fileContents);
+
+            console.log('Updated entry:', newEntry);
+
+      - name: Open a PR with the changelog update (instead of pushing directly to main)
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Update changelog from PR #${{ github.event.pull_request.number }}"
+          branch: changelog/pr-${{ github.event.pull_request.number }}
+          title: "[Changelog] ${{ github.event.pull_request.title }}"
+          body: |
+            Auto-generated update to the What's New page.
+
+            **Source PR:** #${{ github.event.pull_request.number }} — ${{ github.event.pull_request.title }}
+
+            Please review the wording below before merging — this is the text that will appear on the public page.
+          labels: changelog-update
