@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Contact — Adam Geyer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--card:#f8f8f6;--card2:#ffffff;
+  --text:#1a1a1a;--muted:#6b6b6b;--light:#aaa;
+  --accent:#2563eb;--accent-l:#eff6ff;
+  --border:#e5e5e5;--border2:#d0d0d0;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:.9rem 5vw;border-bottom:1px solid var(--border);background:rgba(255,255,255,.95);backdrop-filter:blur(8px)}
+.nav-logo{font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--text)}
+.nav-links{display:flex;gap:1.5rem}
+.nav-link{font-size:14px;color:var(--muted);transition:color .15s}
+.nav-link:hover,.nav-link.active{color:var(--accent)}
+
+/* HERO */
+.hero{padding:6.5rem 5vw 2.5rem;border-bottom:1px solid var(--border)}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,4vw,3rem);margin-bottom:.4rem}
+.hero p{font-size:14px;color:var(--muted)}
+
+/* CONTACT CARDS */
+.wrap{padding:1.75rem 5vw 4rem;max-width:640px}
+.contact-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.3rem;margin-bottom:.85rem;display:flex;align-items:center;justify-content:space-between}
+.contact-label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:.25rem}
+.contact-value{font-family:'DM Mono',monospace;font-size:14px;color:var(--text)}
+.contact-card a.contact-value{color:var(--accent)}
+.contact-go{font-size:13px;color:var(--accent)}
+
+/* FOOTER */
+.footer{padding:2rem 5vw;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;margin-top:1rem}
+.footer-name{font-family:'DM Serif Display',serif;font-size:1rem}
+.footer-note{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">AG</a>
+  <div class="nav-links">
+    <a href="study.html" class="nav-link">Study Hub</a>
+    <a href="whats-new.html" class="nav-link">What's New</a>
+    <a href="contact.html" class="nav-link active">Contact</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>Get in Touch</h1>
+  <p>Happy to connect — reach out through any of these.</p>
+</div>
+
+<div class="wrap">
+
+  <div class="contact-card">
+    <div>
+      <div class="contact-label">Email</div>
+      <a class="contact-value" href="mailto:ajgeyer@ucdavis.edu">yajgeyer@ucdavis.edu</a>
+    </div>
+    <span class="contact-go">Send →</span>
+  </div>
+
+  <div class="contact-card">
+    <div>
+      <div class="contact-label">LinkedIn</div>
+      <a class="contact-value" href="https://linkedin.com/in/adamgeyer" target="_blank" rel="noopener">linkedin.com/in/adamgeyer</a>
+    </div>
+    <span class="contact-go">Visit →</span>
+  </div>
+
+  <div class="contact-card">
+    <div>
+      <div class="contact-label">GitHub</div>
+      <a class="contact-value" href="https://github.com/adamgeyer" target="_blank" rel="noopener">github.com/adamgeyer</a>
+    </div>
+    <span class="contact-go">Visit →</span>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-name">Adam Geyer</div>
+  <div class="footer-note">adamgeyer.com</div>
+</footer>
+
+</body>
+</html>
