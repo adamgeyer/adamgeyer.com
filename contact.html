@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>What's New — Adam Geyer</title>
+<title>Contact — Adam Geyer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
@@ -18,7 +18,7 @@ html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
 a{color:var(--accent);text-decoration:none}
 
-/* NAV — matches mgt011a.html exactly */
+/* NAV */
 .nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:.9rem 5vw;border-bottom:1px solid var(--border);background:rgba(255,255,255,.95);backdrop-filter:blur(8px)}
 .nav-logo{font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--text)}
 .nav-links{display:flex;gap:1.5rem}
@@ -30,15 +30,15 @@ a{color:var(--accent);text-decoration:none}
 .hero h1{font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,4vw,3rem);margin-bottom:.4rem}
 .hero p{font-size:14px;color:var(--muted)}
 
-/* CONTENT */
-.wrap{padding:1.75rem 5vw 4rem;max-width:760px}
-.entry{background:#fff;border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.3rem;margin-bottom:.85rem}
-.entry-date{display:inline-block;font-size:11px;padding:2px 9px;border-radius:20px;background:var(--accent-l);color:var(--accent);margin-bottom:.55rem}
-.entry h2{font-family:'DM Serif Display',serif;font-size:1.15rem;margin-bottom:.4rem;font-weight:400}
-.entry p{font-size:14px;color:var(--muted);line-height:1.7}
-.empty-state{font-size:14px;color:var(--muted);text-align:center;padding:3rem 0}
+/* CONTACT CARDS */
+.wrap{padding:1.75rem 5vw 4rem;max-width:640px}
+.contact-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.3rem;margin-bottom:.85rem;display:flex;align-items:center;justify-content:space-between}
+.contact-label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:.25rem}
+.contact-value{font-family:'DM Mono',monospace;font-size:14px;color:var(--text)}
+.contact-card a.contact-value{color:var(--accent)}
+.contact-go{font-size:13px;color:var(--accent)}
 
-/* FOOTER — matches mgt011a.html */
+/* FOOTER */
 .footer{padding:2rem 5vw;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;margin-top:1rem}
 .footer-name{font-family:'DM Serif Display',serif;font-size:1rem}
 .footer-note{font-size:13px;color:var(--muted)}
@@ -49,55 +49,49 @@ a{color:var(--accent);text-decoration:none}
 <nav class="nav">
   <a href="index.html" class="nav-logo">AG</a>
   <div class="nav-links">
-    <a href="contact.html" class="nav-link">Contact</a>
     <a href="study.html" class="nav-link">Study Hub</a>
-    <a href="whats-new.html" class="nav-link active">What's New</a>
+    <a href="whats-new.html" class="nav-link">What's New</a>
+    <a href="contact.html" class="nav-link active">Contact</a>
   </div>
 </nav>
 
 <div class="hero">
-  <h1>What's New</h1>
-  <p>Recent updates and improvements to this site.</p>
+  <h1>Get in Touch</h1>
+  <p>Happy to connect — reach out through any of these.</p>
 </div>
 
 <div class="wrap">
-  <div id="entries"></div>
+
+  <div class="contact-card">
+    <div>
+      <div class="contact-label">Email</div>
+      <a class="contact-value" href="mailto:ajgeyer@ucdavis.edu">yajgeyer@ucdavis.edu</a>
+    </div>
+    <span class="contact-go">Send →</span>
+  </div>
+
+  <div class="contact-card">
+    <div>
+      <div class="contact-label">LinkedIn</div>
+      <a class="contact-value" href="https://linkedin.com/in/adamgeyer" target="_blank" rel="noopener">linkedin.com/in/adamgeyer</a>
+    </div>
+    <span class="contact-go">Visit →</span>
+  </div>
+
+  <div class="contact-card">
+    <div>
+      <div class="contact-label">GitHub</div>
+      <a class="contact-value" href="https://github.com/adamgeyer" target="_blank" rel="noopener">github.com/adamgeyer</a>
+    </div>
+    <span class="contact-go">Visit →</span>
+  </div>
+
 </div>
 
 <footer class="footer">
   <div class="footer-name">Adam Geyer</div>
   <div class="footer-note">adamgeyer.com</div>
 </footer>
-
-<!-- Same pattern as data.js: plain script include, no fetch needed -->
-<script src="whats-new-data.js"></script>
-<script>
-  const container = document.getElementById('entries');
-
-  if (!CHANGELOG || CHANGELOG.length === 0) {
-    container.innerHTML = '<div class="empty-state">No updates yet. Check back soon.</div>';
-  } else {
-    CHANGELOG.forEach(entry => {
-      const card = document.createElement('div');
-      card.className = 'entry';
-
-      const dateEl = document.createElement('span');
-      dateEl.className = 'entry-date';
-      dateEl.textContent = entry.date;
-
-      const titleEl = document.createElement('h2');
-      titleEl.textContent = entry.title;
-
-      const descEl = document.createElement('p');
-      descEl.textContent = entry.description;
-
-      card.appendChild(dateEl);
-      card.appendChild(titleEl);
-      card.appendChild(descEl);
-      container.appendChild(card);
-    });
-  }
-</script>
 
 </body>
 </html>
