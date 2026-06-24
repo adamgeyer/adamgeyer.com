@@ -1,19 +1,19 @@
 name: Update Changelog
 
-# Triggers when a PR is closed (merged or not)
+# Triggers on every push to main. No PR needed anywhere in this flow —
+# just include a line like "changelog: <description>" in your commit message.
 on:
-  pull_request:
-    types: [closed]
+  push:
+    branches: [main]
 
 jobs:
   update-changelog:
-    # Only run if the PR was actually merged AND has the "changelog" label
-    if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'changelog')
+    # Only runs if the commit message contains "changelog:"
+    if: contains(github.event.head_commit.message, 'changelog:')
     runs-on: ubuntu-latest
 
     permissions:
       contents: write
-      pull-requests: write
 
     steps:
       - name: Checkout repo
@@ -21,43 +21,41 @@ jobs:
         with:
           ref: main
 
-      - name: Extract "What's New" section and update whats-new-data.js
+      - name: Extract changelog line and update whats-new-data.js
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
-            // Matches the existing data.js convention: a plain JS file at repo root
-            // exposing a `const` array, loaded via <script src="..."> on the page.
             const dataPath = 'whats-new-data.js';
-            const body = context.payload.pull_request.body || '';
+            const message = context.payload.head_commit.message;
 
-            // Grab text between "## What's New" and the next "## " heading (or end of string)
-            const match = body.match(/## What's New\s*\n([\s\S]*?)(\n## |$)/);
+            // Look for "changelog: <description>" anywhere in the commit message
+            const match = message.match(/changelog:\s*(.+)/i);
             const description = match ? match[1].trim() : '';
 
             if (!description) {
               core.setFailed(
-                "No content found under '## What's New' in the PR description. " +
-                "Add a plain-language description under that heading and re-merge."
+                "Commit message contained 'changelog:' but no description followed it. " +
+                "Use a format like: 'changelog: Added a dark mode toggle.'"
               );
               return;
             }
 
+            const title = message.split('\n')[0]; // first line of commit message
+            const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
             const newEntry = {
-              title: context.payload.pull_request.title,
-              date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+              title: title,
+              date: date,
               description: description,
-              prNumber: context.payload.pull_request.number
+              commit: context.sha.substring(0, 7)
             };
 
             let entries = [];
             if (fs.existsSync(dataPath)) {
-              // Pull the array out of the existing "const CHANGELOG = [...]" file
               const existing = fs.readFileSync(dataPath, 'utf8');
               const arrayMatch = existing.match(/const CHANGELOG\s*=\s*(\[[\s\S]*?\]);/);
-              if (arrayMatch) {
-                entries = JSON.parse(arrayMatch[1]);
-              }
+              if (arrayMatch) entries = JSON.parse(arrayMatch[1]);
             }
 
             entries.unshift(newEntry); // newest entry goes first
@@ -68,19 +66,13 @@ jobs:
 
             fs.writeFileSync(dataPath, fileContents);
 
-            console.log('Updated entry:', newEntry);
+            console.log('New entry:', newEntry);
 
-      - name: Open a PR with the changelog update (instead of pushing directly to main)
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "Update changelog from PR #${{ github.event.pull_request.number }}"
-          branch: changelog/pr-${{ github.event.pull_request.number }}
-          title: "[Changelog] ${{ github.event.pull_request.title }}"
-          body: |
-            Auto-generated update to the What's New page.
-
-            **Source PR:** #${{ github.event.pull_request.number }} — ${{ github.event.pull_request.title }}
-
-            Please review the wording below before merging — this is the text that will appear on the public page.
-          labels: changelog-update
+      - name: Commit and push directly to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add whats-new-data.js
+          # [skip ci] avoids accidentally re-triggering this same workflow on the bot's own commit
+          git diff --staged --quiet || git commit -m "Update changelog from commit ${{ github.sha }} [skip ci]"
+          git push
